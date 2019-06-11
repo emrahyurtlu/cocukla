@@ -1,4 +1,4 @@
-# cocukla
+# ÇocuklaApp
 
 Hayatı cocuklarla yaşayın.
 
