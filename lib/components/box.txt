@@ -1,0 +1,15 @@
+SafeArea(
+  child: Container(
+    width: double.infinity,
+    height: double.infinity,
+    margin: EdgeInsets.all(10),
+    padding: EdgeInsets.all(10),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
+        border: Border.all(color: Colors.white),
+        color: AppColor.white),
+    child: ListView(
+      children: <Widget>[],
+    ),
+  ),
+)
