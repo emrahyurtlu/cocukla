@@ -1,3 +1,4 @@
+import 'package:cocukla/components/attribute.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -253,7 +254,27 @@ class _HomeState extends State<Home> {
                 ),
                 Column(
                   children: <Widget>[
-                    Text("Fevzi Usta")
+                    Text("Fevzi Usta"),
+                    Row(
+                      children: <Widget>[
+                        Attribute(
+                          icon: Icons.bookmark,
+                          str: "5km mesafe",
+                        ),
+                        Attribute(
+                          icon: Icons.book,
+                          str: "11",
+                        ),
+                        Attribute(
+                          icon: Icons.search,
+                          str: "22",
+                        ),
+                        Attribute(
+                          icon: Icons.tune,
+                          str: "333",
+                        ),
+                      ],
+                    )
                   ],
                 )
               ],
