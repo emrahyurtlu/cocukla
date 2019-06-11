@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Attribute extends StatelessWidget {
-  IconData icon;
-  String str;
+  final IconData icon;
+  final String str;
 
   Attribute({this.icon, this.str});
 
