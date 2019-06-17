@@ -1,4 +1,5 @@
 import 'package:cocukla/components/attribute.dart';
+import 'package:cocukla/components/category.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -113,125 +114,38 @@ class _HomeState extends State<Home> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
-                  width: 75,
-                  height: 80,
-                  child: Column(
-                    verticalDirection: VerticalDirection.down,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/images/place.png",
-                        width: 60,
-                        height: 60,
-                      ),
-                      Text("Mekanlar")
-                    ],
-                  ),
+                Category(
+                  imageUrl: "assets/images/place.png",
+                  title: "Mekanlar",
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
-                  width: 75,
-                  height: 80,
-                  child: Column(
-                    verticalDirection: VerticalDirection.down,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/images/activity.png",
-                        width: 60,
-                        height: 60,
-                      ),
-                      Text("Aktiviteler")
-                    ],
-                  ),
+                Category(
+                  imageUrl: "assets/images/activity.png",
+                  title: "Aktiviteler",
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
-                  width: 75,
-                  height: 80,
-                  child: Column(
-                    verticalDirection: VerticalDirection.down,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/images/health.png",
-                        width: 60,
-                        height: 60,
-                      ),
-                      Text("Sağlık")
-                    ],
-                  ),
+                Category(
+                  imageUrl: "assets/images/health.png",
+                  title: "Sağlık",
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
-                  width: 75,
-                  height: 80,
-                  child: Column(
-                    verticalDirection: VerticalDirection.down,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/images/shopping.png",
-                        width: 60,
-                        height: 60,
-                      ),
-                      Text("Alışveriş")
-                    ],
-                  ),
+                Category(
+                  imageUrl: "assets/images/shopping.png",
+                  title: "Alışveriş",
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
-                  width: 75,
-                  height: 80,
-                  child: Column(
-                    verticalDirection: VerticalDirection.down,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/images/activity.png",
-                        width: 60,
-                        height: 60,
-                      ),
-                      Text("Aktiviteler")
-                    ],
-                  ),
+                Category(
+                  imageUrl: "assets/images/place.png",
+                  title: "Mekanlar",
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
-                  width: 75,
-                  height: 80,
-                  child: Column(
-                    verticalDirection: VerticalDirection.down,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/images/health.png",
-                        width: 60,
-                        height: 60,
-                      ),
-                      Text("Sağlık")
-                    ],
-                  ),
+                Category(
+                  imageUrl: "assets/images/activity.png",
+                  title: "Aktiviteler",
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
-                  width: 75,
-                  height: 80,
-                  child: Column(
-                    verticalDirection: VerticalDirection.down,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/images/shopping.png",
-                        width: 60,
-                        height: 60,
-                      ),
-                      Text("Alışveriş")
-                    ],
-                  ),
-                )
+                Category(
+                  imageUrl: "assets/images/health.png",
+                  title: "Sağlık",
+                ),
+                Category(
+                  imageUrl: "assets/images/shopping.png",
+                  title: "Alışveriş",
+                ),
               ],
             ),
           ),
@@ -248,14 +162,57 @@ class _HomeState extends State<Home> {
                 border: Border.all(color: Colors.white),
                 color: AppColor.white),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Column(
                   children: <Widget>[Image.asset("assets/images/avatar.png")],
+                  mainAxisAlignment: MainAxisAlignment.start,
                 ),
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Fevzi Usta"),
-                    Row(
+                    Container(
+                      width: 200,
+                      height: 85,
+                      padding: EdgeInsets.only(top: 5, left: 10),
+                      child: Stack(
+                        alignment: Alignment.topLeft,
+                        children: <Widget>[
+                          Text(
+                            "Fevzi Usta",
+                            style: TextStyle(
+                                fontFamily: "MontserratLight",
+                                fontSize: 20,
+                                color: AppColor.text_color),
+                          ),
+                        ],
+                      ),
+                    )
+                    /* Padding(
+                      padding: EdgeInsets.only(top: 5, left: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            "Fevzi Usta",
+                            style: TextStyle(
+                                fontFamily: "MontserratLight", fontSize: 20),
+                          ),
+                          Positioned(
+                            width: 20,
+                            height: 20,
+                            top: 0,
+                            right: 0,
+                            child: IconButton(
+                              icon: Icon(Icons.favorite_border),
+                              onPressed: () => print("Added to favorites!"),
+                              padding: EdgeInsets.all(0),
+                            ),
+                          )
+                        ],
+                      ),
+                    )*/
+                    /*Row(
                       children: <Widget>[
                         Attribute(
                           icon: Icons.bookmark,
@@ -274,7 +231,7 @@ class _HomeState extends State<Home> {
                           str: "333",
                         ),
                       ],
-                    )
+                    )*/
                   ],
                 )
               ],

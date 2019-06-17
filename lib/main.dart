@@ -1,3 +1,4 @@
+import 'package:cocukla/screens/component_test.dart';
 import 'package:cocukla/screens/home.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ void main() {
     theme: ThemeData(
         primaryColor: AppColor.white,
         canvasColor: AppColor.light_gray,
-        accentColor: AppColor.pink),
+        accentColor: AppColor.pink,
+        fontFamily: "MontserratRegular"),
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -24,7 +26,8 @@ class CocuklaApp extends StatefulWidget {
 class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
-    return Home();
+    //return Home();
+    return ComponentTest();
     //Original Code
     /*return SplashScreen(
       seconds: 3,
