@@ -9,4 +9,5 @@ class AppColor {
   static const Color light_gray = Color.fromRGBO(245, 245, 245, 1);
   static const Color facebook = Color.fromRGBO(60, 90, 153, 1);
   static const Color google = Color.fromRGBO(219, 68, 55, 1);
+  static const Color yellow = Color.fromRGBO(241, 224, 0, 1);
 }
