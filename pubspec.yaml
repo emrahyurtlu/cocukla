@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   connectivity:
   splashscreen: ^1.2.0
+  flutter_rating_bar: ^1.2.0
 
 dev_dependencies:
   flutter_test:
