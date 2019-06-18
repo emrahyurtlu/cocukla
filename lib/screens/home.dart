@@ -1,5 +1,6 @@
 import 'package:cocukla/components/attribute.dart';
 import 'package:cocukla/components/category.dart';
+import 'package:cocukla/components/product.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,6 +12,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentTab = 0;
+  static List<Attribute> attributes = [
+    Attribute(Icons.access_time, "Açık", AppColor.green),
+    Attribute(Icons.location_on, "5.6km"),
+    Attribute(Icons.restaurant_menu, "Çocuk menüsü"),
+    Attribute(Icons.child_friendly, "Bebek bakım odası"),
+    Attribute(Icons.child_care, "Oyun odası")
+  ];
 
   final List<Widget> _tabContents = [
     //HomeScreen
@@ -151,93 +159,48 @@ class _HomeState extends State<Home> {
           ),
           //End Categories
 
-          //Card 1
-          Container(
-            width: double.infinity,
-            height: 100,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                border: Border.all(color: Colors.white),
-                color: AppColor.white),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[Image.asset("assets/images/avatar.png")],
-                  mainAxisAlignment: MainAxisAlignment.start,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: 200,
-                      height: 85,
-                      padding: EdgeInsets.only(top: 5, left: 10),
-                      child: Stack(
-                        alignment: Alignment.topLeft,
-                        children: <Widget>[
-                          Text(
-                            "Fevzi Usta",
-                            style: TextStyle(
-                                fontFamily: "MontserratLight",
-                                fontSize: 20,
-                                color: AppColor.text_color),
-                          ),
-                        ],
-                      ),
-                    )
-                    /* Padding(
-                      padding: EdgeInsets.only(top: 5, left: 10),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            "Fevzi Usta",
-                            style: TextStyle(
-                                fontFamily: "MontserratLight", fontSize: 20),
-                          ),
-                          Positioned(
-                            width: 20,
-                            height: 20,
-                            top: 0,
-                            right: 0,
-                            child: IconButton(
-                              icon: Icon(Icons.favorite_border),
-                              onPressed: () => print("Added to favorites!"),
-                              padding: EdgeInsets.all(0),
-                            ),
-                          )
-                        ],
-                      ),
-                    )*/
-                    /*Row(
-                      children: <Widget>[
-                        Attribute(
-                          icon: Icons.bookmark,
-                          str: "5km mesafe",
-                        ),
-                        Attribute(
-                          icon: Icons.book,
-                          str: "11",
-                        ),
-                        Attribute(
-                          icon: Icons.search,
-                          str: "22",
-                        ),
-                        Attribute(
-                          icon: Icons.tune,
-                          str: "333",
-                        ),
-                      ],
-                    )*/
-                  ],
-                )
-              ],
-            ),
-          )
-          //End Card 1
+          //Cards
+          Product(
+            id: 1,
+            title: "Fevzi Usta Köfte&Balık",
+            imageUrl: "assets/images/temp/fevzi_usta.jpeg",
+            rating: 5,
+            attributes: attributes,
+            isFav: true,
+          ),
+          Product(
+            id: 2,
+            title: "Kaşıbeyaz Ataşehir",
+            imageUrl: "assets/images/temp/kasibeyaz_atasehir.jpg",
+            rating: 3,
+            attributes: attributes,
+            isFav: false,
+          ),
+          Product(
+            id: 3,
+            title: "Trilye Restaurant",
+            imageUrl: "assets/images/temp/fevzi_usta.jpeg",
+            rating: 4.5,
+            attributes: attributes,
+            isFav: true,
+          ),
+          Product(
+            id: 4,
+            title: "Mado Bahçelievler",
+            imageUrl: "assets/images/temp/mado.jpg",
+            rating: 3,
+            attributes: attributes,
+            isFav: true,
+          ),
+          Product(
+            id: 5,
+            title: "Fevzi Usta Köfte&Balık",
+            imageUrl: "assets/images/temp/fevzi_usta.jpeg",
+            rating: 5,
+            attributes: attributes,
+            isFav: false,
+          ),
+          //End Cards
         ],
       ),
     ),

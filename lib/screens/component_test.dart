@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+
 class ComponentTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

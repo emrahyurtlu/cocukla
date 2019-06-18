@@ -27,7 +27,7 @@ class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
     //return Home();
-    return ComponentTest();
+    return Home();
     //Original Code
     /*return SplashScreen(
       seconds: 3,
