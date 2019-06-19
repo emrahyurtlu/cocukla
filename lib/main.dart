@@ -1,4 +1,3 @@
-import 'package:cocukla/screens/component_test.dart';
 import 'package:cocukla/screens/home.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ void main() {
         primaryColor: AppColor.white,
         canvasColor: AppColor.light_gray,
         accentColor: AppColor.pink,
-        fontFamily: "MontserratRegular"),
+        fontFamily: "MontserratRegular",),
     debugShowCheckedModeBanner: false,
   ));
 }
