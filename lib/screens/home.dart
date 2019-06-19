@@ -10,8 +10,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  static BuildContext _context;
+class _HomeState extends State<Home> {
   int _currentTab = 0;
 
   static List<Attribute> attributes = [
@@ -21,6 +20,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Attribute(Icons.child_friendly, "Bebek bakım odası"),
     Attribute(Icons.child_care, "Oyun odası")
   ];
+
+  List<String> _titles= ["Çocukla", "Favorilerim", "Keşfet"];
 
   List<Widget> _tabContents = [
     //HomeScreen print
@@ -165,7 +166,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           Expanded(
             child: ListView(
               padding: EdgeInsets.all(0),
-              controller: null,
               children: <Widget>[
                 Product(
                   id: 1,
@@ -254,8 +254,139 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ],
       ),
     ),
-    Text("Favorilerim 1"),
-    Text("Favorilerim 2"),
+
+    //Favorites
+    SafeArea(
+      child: Column(
+        children: <Widget>[
+          //Search
+          Container(
+            width: double.infinity,
+            height: 70,
+            margin: EdgeInsets.only(top: 10, bottom: 5, right: 10, left: 10),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
+                border: Border.all(color: Colors.white),
+                color: AppColor.white),
+            child: Row(
+              children: <Widget>[
+                Form(
+                  key: GlobalKey(),
+                  child: Center(
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 280,
+                            height: 48,
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 0, top: 0),
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: AppColor.light_gray,
+                                    ),
+                                    child: TextFormField(
+                                      controller: null,
+                                      keyboardType: TextInputType.text,
+                                      decoration: new InputDecoration(
+                                        labelStyle:
+                                        TextStyle(color: AppColor.text_color),
+                                        labelText: "Mekan arayın",
+                                        //hintText: "Ara",
+                                        border: InputBorder.none,
+                                        contentPadding:
+                                        EdgeInsets.only(left: 25, top: 5),
+                                        prefixIcon: Icon(Icons.search),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+                SizedBox(
+                  width: 10,
+                  height: 40,
+                ),
+                SizedBox(
+                    width: 60,
+                    height: 40,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: AppColor.pink,
+                      ),
+                      child: Container(
+                        width: 60,
+                        height: 40,
+                        child: FlatButton(
+                          color: AppColor.pink,
+                          textColor: AppColor.white,
+                          onPressed: () => {print("From Filter Button")},
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(50.0)),
+                          child: Icon(
+                            Icons.tune,
+                            color: AppColor.white,
+                          ),
+                        ),
+                      ),
+                    ))
+              ],
+            ),
+          ),
+          //End Search
+
+          //Product List
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.all(0),
+              children: <Widget>[
+                Product(
+                  id: 1,
+                  title:  "Fevzi Usta Köfte&Balık",
+                  imageUrl: "assets/images/temp/fevzi_usta.jpeg",
+                  rating: 5,
+                  attributes: attributes,
+                  isFav: true,
+                ),
+                Product(
+                  id: 2,
+                  title: "Kaşıbeyaz Ataşehir",
+                  imageUrl: "assets/images/temp/kasibeyaz_atasehir.jpg",
+                  rating: 3,
+                  attributes: attributes,
+                  isFav: true,
+                ),
+                Product(
+                  id: 3,
+                  title: "Trilye Restaurant",
+                  imageUrl: "assets/images/temp/fevzi_usta.jpeg",
+                  rating: 4.5,
+                  attributes: attributes,
+                  isFav: true,
+                ),
+                Product(
+                  id: 4,
+                  title: "Mado Bahçelievler",
+                  imageUrl: "assets/images/temp/mado.jpg",
+                  rating: 3,
+                  attributes: attributes,
+                  isFav: true,
+                ),
+              ],
+            ),
+          ),
+          //Product List
+        ],
+      ),
+    ),
     Text("Keşfet"),
     //Profile(),
   ];
@@ -269,14 +400,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
 
-    setState(() {
-      _context = context;
-    });
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Mekanlar",
+          title: Text(_titles[_currentTab],
               style: TextStyle(
                   color: AppColor.text_color, fontFamily: "MontserratRegular")),
           backgroundColor: AppColor.white,
@@ -306,10 +433,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
             BottomNavigationBarItem(
                 icon: Icon(Icons.explore), title: Text('Keşfet')),
-            /*BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle),
-                title: Text('Profilim')
-            )*/
           ],
           backgroundColor: AppColor.white,
           selectedItemColor: AppColor.pink,
