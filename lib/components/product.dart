@@ -4,24 +4,28 @@ import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class Product extends StatelessWidget {
+class Product extends StatefulWidget {
   final int id;
   final String title;
   final String imageUrl;
   final double rating;
   final List<Attribute> attributes;
-  final bool isFav;
+  bool isFav;
 
-  const Product(
-      {Key key, this.id, this.title, this.imageUrl, this.rating, this.attributes, this.isFav})
-      : super(key: key);
+  Product({Key key, this.id, this.title, this.imageUrl, this.rating, this.attributes, this.isFav}) : super(key: key);
 
+
+  @override
+  _ProductState createState() => _ProductState();
+}
+
+class _ProductState extends State<Product> {
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: 87,
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.only(top: 5, bottom: 5, right: 10, left: 10),
       padding: EdgeInsets.all(0),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
@@ -34,14 +38,17 @@ class Product extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    this.imageUrl,
-                    width: 85,
-                    height: 85,
-                    fit: BoxFit.cover,
-                  ))
+              GestureDetector(
+                onTap: () => print("IMAGE: Your Product's Id is "+widget.id.toString()),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      widget.imageUrl,
+                      width: 85,
+                      height: 85,
+                      fit: BoxFit.cover,
+                    )),
+              )
             ],
           ),
 
@@ -53,19 +60,22 @@ class Product extends StatelessWidget {
               //Title Section
               Container(
                 width:
-                    DimensionUtility(context, EdgeInsets.only(top: 5, left: 10))
-                        .setWidthRel(subtract: 100),
+                DimensionUtility(context, EdgeInsets.only(top: 5, left: 10))
+                    .setWidthRel(subtract: 100),
                 height: 30,
                 padding: EdgeInsets.only(top: 5, left: 10),
                 child: Stack(
                   children: <Widget>[
-                    Text(
-                      this.title,
-                      maxLines: 2,
-                      style: TextStyle(
-                          fontFamily: "MontserratLight",
-                          fontSize: 18,
-                          color: AppColor.text_color),
+                    GestureDetector(
+                      onTap: () => print("TITLE: Your Product's Id is "+widget.id.toString()),
+                      child: Text(
+                        widget.title,
+                        maxLines: 2,
+                        style: TextStyle(
+                            fontFamily: "MontserratLight",
+                            fontSize: 18,
+                            color: AppColor.text_color),
+                      ),
                     ),
                     Positioned(
                       width: 30,
@@ -74,10 +84,10 @@ class Product extends StatelessWidget {
                         color: Colors.white,
                         child: IconButton(
                           icon: Icon(
-                              isFav ? Icons.favorite : Icons.favorite_border),
+                              widget.isFav ? Icons.favorite : Icons.favorite_border),
                           iconSize: 24,
                           padding: EdgeInsets.all(0),
-                          onPressed: () => print("Fav id is $id"),
+                          onPressed: favOnPress,
                           color: AppColor.pink,
                         ),
                       ),
@@ -92,7 +102,7 @@ class Product extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     FlutterRatingBarIndicator(
-                      rating: this.rating,
+                      rating: widget.rating,
                       itemCount: 5,
                       itemSize: 15,
                       emptyColor: AppColor.dark_gray,
@@ -105,12 +115,15 @@ class Product extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(left: 10),
                 width: 304,
-                child: Wrap(
-                  direction: Axis.horizontal,
-                  alignment: WrapAlignment.start,
-                  runSpacing: 0,
-                  spacing: 3,
-                  children: this.attributes,
+                child: GestureDetector(
+                  onTap: () => print("ATTRIBUTES: Your Product's Id is "+widget.id.toString()),
+                  child: Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.start,
+                    runSpacing: 0,
+                    spacing: 3,
+                    children: widget.attributes,
+                  ),
                 ),
               )
             ],
@@ -118,5 +131,12 @@ class Product extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void favOnPress(){
+    print("Fav id is "+widget.id.toString());
+    setState(() {
+      widget.isFav = !widget.isFav;
+    });
   }
 }

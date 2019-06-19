@@ -2,6 +2,7 @@ import 'package:cocukla/components/attribute.dart';
 import 'package:cocukla/components/category.dart';
 import 'package:cocukla/components/product.dart';
 import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -11,6 +12,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  static BuildContext _context;
+  BuildContext context2;
   int _currentTab = 0;
   static List<Attribute> attributes = [
     Attribute(Icons.access_time, "Açık", AppColor.green),
@@ -21,7 +24,7 @@ class _HomeState extends State<Home> {
   ];
 
   final List<Widget> _tabContents = [
-    //HomeScreen
+    //HomeScreen print
     SafeArea(
       child: Column(
         children: <Widget>[
@@ -29,7 +32,7 @@ class _HomeState extends State<Home> {
           Container(
             width: double.infinity,
             height: 70,
-            margin: EdgeInsets.all(10),
+            margin: EdgeInsets.only(top: 10, bottom: 5, right: 10, left: 10),
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
@@ -113,7 +116,7 @@ class _HomeState extends State<Home> {
           Container(
             width: double.infinity,
             height: 90,
-            margin: EdgeInsets.all(10),
+            margin: EdgeInsets.only(top: 5, bottom: 5, right: 10, left: 10),
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
@@ -158,49 +161,60 @@ class _HomeState extends State<Home> {
             ),
           ),
           //End Categories
+          //Product List
 
-          //Cards
-          Product(
-            id: 1,
-            title: "Fevzi Usta Köfte&Balık",
-            imageUrl: "assets/images/temp/fevzi_usta.jpeg",
-            rating: 5,
-            attributes: attributes,
-            isFav: true,
+          Container(
+            width: double.infinity,
+            height: 460,
+            child: ListView(
+              padding: EdgeInsets.all(0),
+              controller: null,
+              children: <Widget>[
+                Product(
+                  id: 1,
+                  title: "Fevzi Usta Köfte&Balık",
+                  imageUrl: "assets/images/temp/fevzi_usta.jpeg",
+                  rating: 5,
+                  attributes: attributes,
+                  isFav: true,
+                ),
+                Product(
+                  id: 2,
+                  title: "Kaşıbeyaz Ataşehir",
+                  imageUrl: "assets/images/temp/kasibeyaz_atasehir.jpg",
+                  rating: 3,
+                  attributes: attributes,
+                  isFav: false,
+                ),
+                Product(
+                  id: 3,
+                  title: "Trilye Restaurant",
+                  imageUrl: "assets/images/temp/fevzi_usta.jpeg",
+                  rating: 4.5,
+                  attributes: attributes,
+                  isFav: true,
+                ),
+                Product(
+                  id: 4,
+                  title: "Mado Bahçelievler",
+                  imageUrl: "assets/images/temp/mado.jpg",
+                  rating: 3,
+                  attributes: attributes,
+                  isFav: true,
+                ),
+                Product(
+                  id: 5,
+                  title: "Fevzi Usta Köfte&Balık",
+                  imageUrl: "assets/images/temp/fevzi_usta.jpeg",
+                  rating: 5,
+                  attributes: attributes,
+                  isFav: false,
+                ),
+              ],
+            ),
           ),
-          Product(
-            id: 2,
-            title: "Kaşıbeyaz Ataşehir",
-            imageUrl: "assets/images/temp/kasibeyaz_atasehir.jpg",
-            rating: 3,
-            attributes: attributes,
-            isFav: false,
-          ),
-          Product(
-            id: 3,
-            title: "Trilye Restaurant",
-            imageUrl: "assets/images/temp/fevzi_usta.jpeg",
-            rating: 4.5,
-            attributes: attributes,
-            isFav: true,
-          ),
-          Product(
-            id: 4,
-            title: "Mado Bahçelievler",
-            imageUrl: "assets/images/temp/mado.jpg",
-            rating: 3,
-            attributes: attributes,
-            isFav: true,
-          ),
-          Product(
-            id: 5,
-            title: "Fevzi Usta Köfte&Balık",
-            imageUrl: "assets/images/temp/fevzi_usta.jpeg",
-            rating: 5,
-            attributes: attributes,
-            isFav: false,
-          ),
-          //End Cards
+
+          //Product List
         ],
       ),
     ),
@@ -218,6 +232,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+    setState(() {
+      _context = context;
+      context2 = context;
+    });
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -234,7 +254,6 @@ class _HomeState extends State<Home> {
         body: _tabContents[_currentTab],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentTab,
-          //fixedColor: AppColor.pink,
           unselectedItemColor: AppColor.dark_gray,
           showUnselectedLabels: true,
           showSelectedLabels: true,

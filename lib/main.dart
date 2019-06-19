@@ -26,9 +26,11 @@ class CocuklaApp extends StatefulWidget {
 class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
-    //return Home();
+//    return ComponentTest();
     return Home();
+
     //Original Code
+    //DO NOT DELETE
     /*return SplashScreen(
       seconds: 3,
       navigateAfterSeconds: SignInScreen(),
