@@ -1,6 +1,7 @@
 import 'package:cocukla/components/attribute.dart';
 import 'package:cocukla/components/category.dart';
 import 'package:cocukla/components/product.dart';
+import 'package:cocukla/screens/home_explore.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -21,10 +22,10 @@ class _HomeState extends State<Home> {
     Attribute(Icons.child_care, "Oyun odası")
   ];
 
-  List<String> _titles= ["Çocukla", "Favorilerim", "Keşfet"];
+  List<String> _titles = ["Çocukla", "Favorilerim", "Keşfet"];
 
   List<Widget> _tabContents = [
-    //HomeScreen print
+    //HomeScreen
     SafeArea(
       child: Column(
         children: <Widget>[
@@ -169,7 +170,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Product(
                   id: 1,
-                  title:  "Fevzi Usta Köfte&Balık",
+                  title: "Fevzi Usta Köfte&Balık",
                   imageUrl: "assets/images/temp/fevzi_usta.jpeg",
                   rating: 5,
                   attributes: attributes,
@@ -209,7 +210,7 @@ class _HomeState extends State<Home> {
                 ),
                 Product(
                   id: 6,
-                  title:  "Fevzi Usta Köfte&Balık",
+                  title: "Fevzi Usta Köfte&Balık",
                   imageUrl: "assets/images/temp/fevzi_usta.jpeg",
                   rating: 2,
                   attributes: attributes,
@@ -275,40 +276,40 @@ class _HomeState extends State<Home> {
                   key: GlobalKey(),
                   child: Center(
                       child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            width: 280,
-                            height: 48,
-                            child: Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 0, top: 0),
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: AppColor.light_gray,
-                                    ),
-                                    child: TextFormField(
-                                      controller: null,
-                                      keyboardType: TextInputType.text,
-                                      decoration: new InputDecoration(
-                                        labelStyle:
+                    children: <Widget>[
+                      SizedBox(
+                        width: 280,
+                        height: 48,
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 0, top: 0),
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: AppColor.light_gray,
+                                ),
+                                child: TextFormField(
+                                  controller: null,
+                                  keyboardType: TextInputType.text,
+                                  decoration: new InputDecoration(
+                                    labelStyle:
                                         TextStyle(color: AppColor.text_color),
-                                        labelText: "Mekan arayın",
-                                        //hintText: "Ara",
-                                        border: InputBorder.none,
-                                        contentPadding:
+                                    labelText: "Mekan arayın",
+                                    //hintText: "Ara",
+                                    border: InputBorder.none,
+                                    contentPadding:
                                         EdgeInsets.only(left: 25, top: 5),
-                                        prefixIcon: Icon(Icons.search),
-                                      ),
-                                    ),
+                                    prefixIcon: Icon(Icons.search),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
                 ),
                 SizedBox(
                   width: 10,
@@ -350,7 +351,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Product(
                   id: 1,
-                  title:  "Fevzi Usta Köfte&Balık",
+                  title: "Fevzi Usta Köfte&Balık",
                   imageUrl: "assets/images/temp/fevzi_usta.jpeg",
                   rating: 5,
                   attributes: attributes,
@@ -387,7 +388,9 @@ class _HomeState extends State<Home> {
         ],
       ),
     ),
-    Text("Keşfet"),
+
+    //Explore
+    HomeExplore()
     //Profile(),
   ];
 
@@ -399,7 +402,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

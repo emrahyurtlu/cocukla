@@ -26,6 +26,8 @@ dependencies:
   connectivity:
   splashscreen: ^1.2.0
   flutter_rating_bar: ^1.2.0
+  google_maps_flutter:
+  location:
 
 dev_dependencies:
   flutter_test:
