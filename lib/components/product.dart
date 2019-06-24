@@ -1,4 +1,6 @@
 import 'package:cocukla/components/attribute.dart';
+import 'package:cocukla/models/product_model.dart';
+import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +69,14 @@ class _ProductState extends State<Product> {
                 child: Stack(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () => print("TITLE: Your Product's Id is "+widget.id.toString()),
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetail(ProductModel(title: "Kaşıbeyaz Ataşehir", ))),
+                        )
+                      },
                       child: Text(
                         widget.title,
                         maxLines: 2,

@@ -9,10 +9,11 @@ void main() {
   runApp(MaterialApp(
     home: CocuklaApp(),
     theme: ThemeData(
-        primaryColor: AppColor.white,
-        canvasColor: AppColor.light_gray,
-        accentColor: AppColor.pink,
-        fontFamily: "MontserratRegular",),
+      primaryColor: AppColor.white,
+      canvasColor: AppColor.light_gray,
+      accentColor: AppColor.pink,
+      fontFamily: "MontserratRegular",
+    ),
     debugShowCheckedModeBanner: false,
   ));
 }

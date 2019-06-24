@@ -1,6 +1,7 @@
+import 'package:cocukla/utilities/data.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 
 class HomeExplore extends StatefulWidget {
   @override
@@ -8,57 +9,37 @@ class HomeExplore extends StatefulWidget {
 }
 
 class _HomeExploreState extends State<HomeExplore> {
-  var location = new Location();
-  Map<String, double> currentLocation;
-
   List<Marker> allMarkers = [];
-  GoogleMapController _controller;
+  Position currentLocation;
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
+    locateUser();
     allMarkers.add(Marker(
-        markerId: MarkerId("my_marker"),
-        draggable: false,
-        onTap: () => print("Tapped to marker"),
-        position: LatLng(39.915047, 32.819284),
-        visible: true,
-        infoWindow: InfoWindow(
-            title: "Hazine Bahçesi",
-            snippet: "Burası Hazine ve Maliye Bakanlığı bahçesidir.",
-            onTap: () => print("Infowindow okundu."))));
-
-    location.onLocationChanged().listen((value) {
-      setState(() {
-        currentLocation = value as Map<String, double>;
-      });
-    });
+      markerId: MarkerId("my_marker"),
+      draggable: false,
+      onTap: () => print("Tapped to marker"),
+      position: LatLng(39.915047, 32.819284),
+      visible: true,
+    ));
   }
 
-  void mapCreated(controller) {
-    setState(() {
-      _controller = controller;
-    });
+  Future<Position> locateUser() async {
+    await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position value) => Data.position = value);
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Stack(
-        children: <Widget>[
-          //Map
-          Expanded(
-            child: GoogleMap(
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(currentLocation["latitude"],
-                      currentLocation["longitude"]),
-                  zoom: 14.0),
-              markers: Set.from(allMarkers),
-              onMapCreated: mapCreated,
-            ),
-          ),
-        ],
+      child: Container(
+        child: GoogleMap(
+          initialCameraPosition:
+              CameraPosition(target: LatLng(39.915047, 32.819284), zoom: 14.0),
+          markers: Set.from(allMarkers),
+          onMapCreated: null,
+        ),
       ),
     );
   }
