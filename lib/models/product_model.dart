@@ -10,7 +10,8 @@ class ProductModel {
   List<CommentModel> comments;
   List<PhotoModel> photos;
   bool isFav;
-  int editor_id;
+  String editor_id;
+  String category_id;
   String phone_number;
   String address;
   String city;
