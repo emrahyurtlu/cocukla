@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
+
 class PropertyModel {
   int turn;
-  String icon;
+  Icon icon;
   String text;
+
+  PropertyModel({this.turn, this.icon, this.text});
 }
