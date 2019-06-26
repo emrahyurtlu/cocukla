@@ -1,3 +1,4 @@
+import 'package:cocukla/components/custom_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,13 +9,12 @@ class ComponentTest extends StatefulWidget {
 }
 
 class _ComponentTestState extends State<ComponentTest> {
-  LatLng _center;
+  /*LatLng _center;
 
   Position currentLocation;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUserLocation();
   }
@@ -39,6 +39,29 @@ class _ComponentTestState extends State<ComponentTest> {
       child: Scaffold(
         body: Container(
           child: Text("Hello World!!"),
+        ),
+      ),
+    );
+  }*/
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          child: CustomTab(
+            tabs: <Tab>[
+              Tab(text: "Tab 1",),
+              Tab(text: "Tab 2",),
+              Tab(text: "Tab 3",),
+            ],
+            content: <Widget>[
+              Text("Page 1"),
+              Text("Page 2"),
+              Text("Page 3"),
+            ],
+          ),
+
         ),
       ),
     );

@@ -1,5 +1,7 @@
+import 'package:cocukla/models/photo_model.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/models/property_model.dart';
+import 'package:cocukla/screens/component_test.dart';
 import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +47,9 @@ class _CocuklaAppState extends State<CocuklaApp> {
             "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
         address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
         comments: null,
-        photos: null,
+        photos: [
+         PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg")
+        ],
         properties: [
           PropertyModel(turn: 1, icon: Icon(Icons.access_time), text: "Açık"),
           PropertyModel(turn: 2, icon: Icon(Icons.location_on), text: "5.6km"),
@@ -53,8 +57,9 @@ class _CocuklaAppState extends State<CocuklaApp> {
           PropertyModel(turn: 4, icon: Icon(Icons.child_friendly), text: "Bebek bakım odası"),
           PropertyModel(turn: 5, icon: Icon(Icons.child_care), text: "Oyun odası"),
         ]);
-    return ProductDetail(model);
+    //return ProductDetail(model);
 //    return Home();
+  return ComponentTest();
 
     //Original Code
     //DO NOT DELETE
