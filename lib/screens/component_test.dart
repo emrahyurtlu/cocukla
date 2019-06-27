@@ -51,14 +51,16 @@ class _ComponentTestState extends State<ComponentTest> {
         body: Container(
           child: CustomTab(
             tabs: <Tab>[
-              Tab(text: "Tab 1",),
-              Tab(text: "Tab 2",),
-              Tab(text: "Tab 3",),
+              Tab(text: "Özellikler",),
+              Tab(text: "Fotoğraflar",),
+              Tab(text: "Yorumlar",),
+              Tab(text: "Hakkımızda",),
             ],
             content: <Widget>[
               Text("Page 1"),
               Text("Page 2"),
               Text("Page 3"),
+              Text("Page 4"),
             ],
           ),
 
