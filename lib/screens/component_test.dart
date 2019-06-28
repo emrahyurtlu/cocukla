@@ -1,4 +1,4 @@
-import 'package:cocukla/components/custom_tab.dart';
+import 'package:cocukla/components/smart_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -49,7 +49,7 @@ class _ComponentTestState extends State<ComponentTest> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          child: CustomTab(
+          child: SmartTab(
             tabs: <Tab>[
               Tab(text: "Özellikler",),
               Tab(text: "Fotoğraflar",),

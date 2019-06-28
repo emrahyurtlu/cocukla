@@ -3,31 +3,32 @@ import 'dart:core';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 
-class CustomTab extends StatefulWidget {
+class SmartTab extends StatefulWidget {
   TabController controller;
   List<Tab> tabs;
   List<Widget> content;
 
-  CustomTab({this.controller, @required this.tabs, @required this.content})
+  SmartTab({this.controller, @required this.tabs, @required this.content})
       : assert(tabs.isNotEmpty, "Tab length is equal to 0"),
         assert(content.isNotEmpty, "Tab content length is equal to 0"),
         assert(tabs.length == content.length,
             "Tab count and content count must be the same");
 
   @override
-  _CustomTabState createState() => _CustomTabState();
+  _SmartTabState createState() => _SmartTabState();
 }
 
-class _CustomTabState extends State<CustomTab>
+class _SmartTabState extends State<SmartTab>
     with SingleTickerProviderStateMixin {
   int _index;
-  ScrollController _scrollController;
+  Offset initial;
+  Offset latest;
 
   @override
   void initState() {
     super.initState();
     _index = 0;
-    _scrollController = ScrollController();
+    initial = latest = Offset(0, 0);
   }
 
   @override
@@ -51,9 +52,38 @@ class _CustomTabState extends State<CustomTab>
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: 10),
-                child: widget.content.elementAt(_index),
+              Expanded(
+                child: IntrinsicHeight(
+                  key: GlobalKey(),
+                  child: GestureDetector(
+                      key: GlobalKey(),
+                      child: Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        padding: EdgeInsets.only(top: 10),
+                        child: widget.content.elementAt(_index),
+                      ),
+                      onHorizontalDragStart: (DragStartDetails start) => {
+                            initial = start.globalPosition,
+                          },
+                      onHorizontalDragUpdate: (DragUpdateDetails update) =>
+                          {latest = update.globalPosition},
+                      onHorizontalDragEnd: (DragEndDetails end) => {
+                            print("Initial: " + this.initial.toString()),
+                            print("Latest: " + this.latest.toString()),
+                            if (this.latest.dx - this.initial.dx > 0)
+                              {
+                                //print("Sağa doğru hareket")
+                                this.saveState(
+                                    (_index + 1) % widget.content.length)
+                              }
+                            else
+                              {
+                                //print("Sola doğru hareket")
+                                this.saveState(
+                                    (_index - 1) % widget.content.length)
+                              }
+                          }),
+                ),
               )
             ],
           )
@@ -99,7 +129,6 @@ class _CustomTabState extends State<CustomTab>
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 }

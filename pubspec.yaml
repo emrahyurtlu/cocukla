@@ -28,7 +28,6 @@ dependencies:
   flutter_rating_bar: ^1.2.0
   google_maps_flutter:
   geolocator: '^5.0.0'
-  flutter_swiper :
 
 dev_dependencies:
   flutter_test:
