@@ -1,3 +1,4 @@
+import 'package:cocukla/components/smart_tab.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
@@ -128,43 +129,37 @@ class _ProductDetailState extends State<ProductDetail>
                     //Tabs
                     Container(
                       margin: EdgeInsets.only(top: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Bu alana tab gelecek!"),
-                          Expanded(
-                            child: TabBar(
-                              controller: _tabBarController,
-                              isScrollable: true,
-                              tabs: <Widget>[
-                                Tab(
-                                  text: "Özellikler",
-                                ),
-                                Tab(
-                                  text: "Fotoğraflar",
-                                ),
-                                Tab(
-                                  text: "Yorumlar",
-                                ),
-                                Tab(
-                                  text: "Hakkında",
-                                ),
-                              ],
+                      child: Expanded(
+                        child: SmartTab(
+                          tabs: <Tab>[
+                            Tab(
+                              text: "Özellikler",
                             ),
-                          ),
-                          Expanded(
-                            child: TabBarView(
-                              controller: _tabBarController,
-                              children: <Widget>[
-                                Text("Özellikler"),
-                                Text("Fotoğraflar"),
-                                Text("Yorumlar"),
-                                Text("Hakkında"),
-                              ],
+                            Tab(
+                              text: "Fotoğraflar",
                             ),
-                          )
-                        ],
+                            Tab(
+                              text: "Yorumlar",
+                            ),
+                            Tab(
+                              text: "Hakkımızda",
+                            ),
+                          ],
+                          pages: <Page>[
+                            Page(
+                              child: Text("Page 1"),
+                            ),
+                            Page(
+                              child: Text("Page 2"),
+                            ),
+                            Page(
+                              child: Text("Page 3"),
+                            ),
+                            Page(
+                              child: Text("Page 4"),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                     //End Tabs

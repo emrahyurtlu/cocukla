@@ -1,7 +1,5 @@
 import 'package:cocukla/components/smart_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ComponentTest extends StatefulWidget {
   @override
@@ -51,19 +49,34 @@ class _ComponentTestState extends State<ComponentTest> {
         body: Container(
           child: SmartTab(
             tabs: <Tab>[
-              Tab(text: "Özellikler",),
-              Tab(text: "Fotoğraflar",),
-              Tab(text: "Yorumlar",),
-              Tab(text: "Hakkımızda",),
+              Tab(
+                text: "Özellikler",
+              ),
+              Tab(
+                text: "Fotoğraflar",
+              ),
+              Tab(
+                text: "Yorumlar",
+              ),
+              Tab(
+                text: "Hakkımızda",
+              ),
             ],
-            content: <Widget>[
-              Text("Page 1"),
-              Text("Page 2"),
-              Text("Page 3"),
-              Text("Page 4"),
+            pages: <Page>[
+              Page(
+                child: Text("Page 1"),
+              ),
+              Page(
+                child: Text("Page 2"),
+              ),
+              Page(
+                child: Text("Page 3"),
+              ),
+              Page(
+                child: Text("Page 4"),
+              ),
             ],
           ),
-
         ),
       ),
     );
