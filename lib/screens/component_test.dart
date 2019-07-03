@@ -46,37 +46,35 @@ class _ComponentTestState extends State<ComponentTest> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          child: SmartTab(
-            tabs: <Tab>[
-              Tab(
-                text: "Özellikler",
-              ),
-              Tab(
-                text: "Fotoğraflar",
-              ),
-              Tab(
-                text: "Yorumlar",
-              ),
-              Tab(
-                text: "Hakkımızda",
-              ),
-            ],
-            pages: <Page>[
-              Page(
-                child: Text("Page 1"),
-              ),
-              Page(
-                child: Text("Page 2"),
-              ),
-              Page(
-                child: Text("Page 3"),
-              ),
-              Page(
-                child: Text("Page 4"),
-              ),
-            ],
-          ),
+        body: SmartTab(
+          tabs: <Tab>[
+            Tab(
+              text: "Özellikler",
+            ),
+            Tab(
+              text: "Fotoğraflar",
+            ),
+            Tab(
+              text: "Yorumlar",
+            ),
+            Tab(
+              text: "Hakkımızda",
+            ),
+          ],
+          pages: <Page>[
+            Page(
+              child: Text("Page 1"),
+            ),
+            Page(
+              child: Text("Page 2"),
+            ),
+            Page(
+              child: Text("Page 3"),
+            ),
+            Page(
+              child: Text("Page 4"),
+            ),
+          ],
         ),
       ),
     );

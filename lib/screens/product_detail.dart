@@ -1,3 +1,4 @@
+import 'package:cocukla/components/attribute.dart';
 import 'package:cocukla/components/smart_tab.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/ui/app_color.dart';
@@ -16,13 +17,6 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail>
     with SingleTickerProviderStateMixin {
-  TabController _tabBarController;
-
-  @override
-  void initState() {
-    _tabBarController = TabController(initialIndex: 0, length: 4, vsync: this);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,6 +36,7 @@ class _ProductDetailState extends State<ProductDetail>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               //Image
               Container(
@@ -67,9 +62,13 @@ class _ProductDetailState extends State<ProductDetail>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  verticalDirection: VerticalDirection.down,
+                  key: GlobalKey(),
                   children: <Widget>[
                     //Title and favorite button
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
                           width: DimensionUtility(context)
@@ -111,6 +110,7 @@ class _ProductDetailState extends State<ProductDetail>
 
                     //Rating
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
                           child: FlutterRatingBarIndicator(
@@ -127,45 +127,66 @@ class _ProductDetailState extends State<ProductDetail>
                     //End Rating
 
                     //Tabs
-                    Container(
-                      margin: EdgeInsets.only(top: 20),
-                      child: Expanded(
-                        child: SmartTab(
-                          tabs: <Tab>[
-                            Tab(
-                              text: "Özellikler",
+                    Column(
+                      children: <Widget>[
+                        Container(
+                            constraints: BoxConstraints(
+                                maxHeight: double.infinity,
+                                maxWidth: double.infinity,
+                                minWidth: double.infinity,
+                                minHeight: 400.0
                             ),
-                            Tab(
-                              text: "Fotoğraflar",
-                            ),
-                            Tab(
-                              text: "Yorumlar",
-                            ),
-                            Tab(
-                              text: "Hakkımızda",
-                            ),
-                          ],
-                          pages: <Page>[
-                            Page(
-                              child: Text("Page 1"),
-                            ),
-                            Page(
-                              child: Text("Page 2"),
-                            ),
-                            Page(
-                              child: Text("Page 3"),
-                            ),
-                            Page(
-                              child: Text("Page 4"),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
+                            height: 0,
+                            child: Column(
+                              children: <Widget>[
+                                Expanded(
+                                  child: SmartTab(
+                                    tabs: <Tab>[
+                                      Tab(
+                                        text: "Özellikler",
+                                      ),
+                                      Tab(
+                                        text: "Fotoğraflar",
+                                      ),
+                                      Tab(
+                                        text: "Yorumlar",
+                                      ),
+                                      Tab(
+                                        text: "Hakkımızda",
+                                      ),
+                                    ],
+                                    pages: <Page>[
+                                      Page(
+                                        child: ListView.builder(
+                                            itemCount: widget.model.properties.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                          return Attribute(IconData(0xe895), widget.model.properties[index].text);
+                                        }),
+                                      ),
+                                      Page(
+                                        child: Text("Page 2"),
+                                      ),
+                                      Page(
+                                        child: Text("Page 3"),
+                                      ),
+                                      Page(
+                                        child: Text("Page 4"),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                        )
+                      ],
+                    ),
+
                     //End Tabs
                   ],
                 ),
-              )
+              ),
+
+
             ],
           ),
         ),

@@ -16,13 +16,10 @@ class Attribute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var icon = Icon(Icons.launch, size: this.size, color: this.color,);
     return Wrap(
       children: <Widget>[
-        Icon(
-          icon,
-          size: size,
-          color: color,
-        ),
+        icon,
         Text(
           str,
           style: TextStyle(color: color),

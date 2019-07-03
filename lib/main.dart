@@ -1,13 +1,10 @@
 import 'package:cocukla/models/photo_model.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/models/property_model.dart';
-import 'package:cocukla/screens/component_test.dart';
 import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'components/attribute.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations(
@@ -48,18 +45,23 @@ class _CocuklaAppState extends State<CocuklaApp> {
         address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
         comments: null,
         photos: [
-         PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg")
+          PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg")
         ],
         properties: [
           PropertyModel(turn: 1, icon: Icon(Icons.access_time), text: "Açık"),
           PropertyModel(turn: 2, icon: Icon(Icons.location_on), text: "5.6km"),
-          PropertyModel(turn: 3, icon: Icon(Icons.restaurant_menu), text: "Çocuk menüsü"),
-          PropertyModel(turn: 4, icon: Icon(Icons.child_friendly), text: "Bebek bakım odası"),
-          PropertyModel(turn: 5, icon: Icon(Icons.child_care), text: "Oyun odası"),
+          PropertyModel(
+              turn: 3, icon: Icon(Icons.restaurant_menu), text: "Çocuk menüsü"),
+          PropertyModel(
+              turn: 4,
+              icon: Icon(Icons.child_friendly),
+              text: "Bebek bakım odası"),
+          PropertyModel(
+              turn: 5, icon: Icon(Icons.child_care), text: "Oyun odası"),
         ]);
-    //return ProductDetail(model);
+    return ProductDetail(model);
 //    return Home();
-  return ComponentTest();
+//  return ComponentTest();
 
     //Original Code
     //DO NOT DELETE
