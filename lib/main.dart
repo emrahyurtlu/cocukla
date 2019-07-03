@@ -57,9 +57,9 @@ class _CocuklaAppState extends State<CocuklaApp> {
           PropertyModel(turn: 4, icon: Icon(Icons.child_friendly), text: "Bebek bakım odası"),
           PropertyModel(turn: 5, icon: Icon(Icons.child_care), text: "Oyun odası"),
         ]);
-    return ProductDetail(model);
+    //return ProductDetail(model);
 //    return Home();
-//  return ComponentTest();
+  return ComponentTest();
 
     //Original Code
     //DO NOT DELETE

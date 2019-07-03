@@ -16,7 +16,8 @@ class SmartTab extends StatefulWidget {
   _SmartTabState createState() => _SmartTabState();
 }
 
-class _SmartTabState extends State<SmartTab> with SingleTickerProviderStateMixin {
+class _SmartTabState extends State<SmartTab>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
@@ -30,7 +31,6 @@ class _SmartTabState extends State<SmartTab> with SingleTickerProviderStateMixin
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      verticalDirection: VerticalDirection.down,
       children: <Widget>[
         TabBar(
             controller: _tabController, isScrollable: true, tabs: widget.tabs),
