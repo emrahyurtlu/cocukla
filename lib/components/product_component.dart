@@ -11,7 +11,7 @@ class Product extends StatefulWidget {
   final String title;
   final String imageUrl;
   final double rating;
-  final List<Attribute> attributes;
+  final List<PropertyComponent> attributes;
   bool isFav;
 
   Product({Key key, this.id, this.title, this.imageUrl, this.rating, this.attributes, this.isFav}) : super(key: key);

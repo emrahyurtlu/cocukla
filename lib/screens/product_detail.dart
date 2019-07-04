@@ -5,6 +5,7 @@ import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class ProductDetail extends StatefulWidget {
   ProductModel model;
@@ -134,14 +135,16 @@ class _ProductDetailState extends State<ProductDetail>
                                 maxHeight: double.infinity,
                                 maxWidth: double.infinity,
                                 minWidth: double.infinity,
-                                minHeight: 400.0
-                            ),
-                            height: 0,
+                                minHeight: 100.0),
+                            height: 400,
                             child: Column(
                               children: <Widget>[
                                 Expanded(
                                   child: SmartTab(
                                     tabs: <Tab>[
+                                      Tab(
+                                        text: "Hakkımızda",
+                                      ),
                                       Tab(
                                         text: "Özellikler",
                                       ),
@@ -151,24 +154,100 @@ class _ProductDetailState extends State<ProductDetail>
                                       Tab(
                                         text: "Yorumlar",
                                       ),
-                                      Tab(
-                                        text: "Hakkımızda",
-                                      ),
                                     ],
                                     pages: <Page>[
+                                      //Hakkımızda
+                                      Page(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              widget.model.text,
+                                              softWrap: true,
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(top: 20),
+                                              width: double.infinity,
+                                              child: PropertyComponent(
+                                                icon_name: "phone",
+                                                content: "0850 441 2020",
+                                                padding:
+                                                    EdgeInsets.only(left: 10),
+                                                font_size: 18,
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(top: 10),
+                                              width: double.infinity,
+                                              child: PropertyComponent(
+                                                icon_name: "print",
+                                                content: "0212 441 2040",
+                                                padding:
+                                                    EdgeInsets.only(left: 10),
+                                                font_size: 18,
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(top: 10),
+                                              width: double.infinity,
+                                              child: PropertyComponent(
+                                                icon_name: "location_on",
+                                                content:
+                                                    "Barbaros Mah. Şebboy Sok. No:2 \nWatergarden İş Merkezi \nAtaşehir/İstanbul",
+                                                padding:
+                                                    EdgeInsets.only(left: 10),
+                                                font_size: 18,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+
+                                      //Özellikler
                                       Page(
                                         child: ListView.builder(
-                                            itemCount: widget.model.properties.length,
-                                            itemBuilder: (BuildContext context, int index) {
-                                          return Row(children: <Widget>[Attribute(widget.model.properties[index].icon_name, widget.model.properties[index].text)],);
-                                        }),
+                                            itemCount:
+                                                widget.model.properties.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              var property = widget
+                                                  .model.properties[index];
+                                              return Container(
+                                                width: double.infinity,
+                                                margin: EdgeInsets.only(
+                                                    top: 5, bottom: 5),
+                                                child: PropertyComponent(
+                                                    icon_name:
+                                                        property.icon_name,
+                                                    content: property.text,
+                                                    color: property.color,
+                                                    font_size: 18,
+                                                    padding: EdgeInsets.only(
+                                                        left: 5)),
+                                              );
+                                            }),
                                       ),
+
+                                      //Fotoğraflar
                                       Page(
-                                        child: Text("Page 2"),
+                                        child: Swiper(
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Image.asset(
+                                              widget.model.photos[index]
+                                                  .imageLink,
+                                              fit: BoxFit.fill,
+                                            );
+                                          },
+                                          itemCount: widget.model.photos.length,
+                                          pagination: SwiperPagination(),
+                                        ),
                                       ),
-                                      Page(
-                                        child: Text("Page 3"),
-                                      ),
+
+                                      //Yorumlar
                                       Page(
                                         child: Text("Page 4"),
                                       ),
@@ -176,8 +255,7 @@ class _ProductDetailState extends State<ProductDetail>
                                   ),
                                 )
                               ],
-                            )
-                        )
+                            ))
                       ],
                     ),
 
@@ -185,10 +263,12 @@ class _ProductDetailState extends State<ProductDetail>
                   ],
                 ),
               ),
-
-
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.phone),
+          onPressed: () => print(widget.model.phone_number + " is calling..."),
         ),
       ),
     );

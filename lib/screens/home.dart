@@ -1,6 +1,6 @@
-import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/components/category_component.dart';
 import 'package:cocukla/components/product_component.dart';
+import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/screens/home_explore.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +14,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentTab = 0;
 
-  static List<Attribute> attributes = [
-    Attribute("access_time", "Açık", AppColor.green),
-    Attribute("location_on", "5.6km"),
-    Attribute("restaurant_menu", "Çocuk menüsü"),
-    Attribute("child_friendly", "Bebek bakım odası"),
-    Attribute("child_care", "Oyun odası")
+  static List<PropertyComponent> attributes = [
+    PropertyComponent(
+        icon_name: "access_time", content: "Açık", color: AppColor.green),
+    PropertyComponent(icon_name: "location_on", content: "5.6km"),
+    PropertyComponent(icon_name: "restaurant_menu", content: "Çocuk menüsü"),
+    PropertyComponent(icon_name: "child_friendly", content: "Bebek bakım odası"),
+    PropertyComponent(icon_name: "child_care", content: "Oyun odası")
   ];
 
   List<String> _titles = ["Çocukla", "Favorilerim", "Keşfet"];

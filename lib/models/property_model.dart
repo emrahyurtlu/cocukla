@@ -7,11 +7,13 @@ class PropertyModel {
   String text;
   double size;
   Color color;
+  EdgeInsets padding;
 
   PropertyModel(
       {this.turn,
       this.icon_name,
       this.text,
       this.size = 14,
-      this.color = AppColor.dark_gray});
+      this.color = AppColor.dark_gray,
+      this.padding = const EdgeInsets.all(0)});
 }

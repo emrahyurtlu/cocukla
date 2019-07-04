@@ -45,16 +45,43 @@ class _CocuklaAppState extends State<CocuklaApp> {
         address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
         comments: null,
         photos: [
-          PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg")
+          PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg"),
+          PhotoModel(imageLink: "assets/images/temp/gha_3325.jpg"),
+          PhotoModel(imageLink: "assets/images/temp/gha_3336.jpg"),
+          PhotoModel(imageLink: "assets/images/temp/gha_3371.jpg"),
+          PhotoModel(imageLink: "assets/images/temp/gha_3512.jpg"),
+          PhotoModel(imageLink: "assets/images/temp/gha_3606.jpg"),
         ],
         properties: [
-          PropertyModel(icon_name: "access_time", text: "Açık", color: AppColor.green),
-          PropertyModel(icon_name: "location_on", text: "5.6km"),
-          PropertyModel(icon_name: "restaurant_menu", text: "Çocuk menüsü"),
-          PropertyModel(icon_name: "child_friendly", text: "Bebek bakım odası"),
-          PropertyModel(icon_name: "child_care", text: "Oyun odası"),
-        ]
-    );
+          PropertyModel(
+              icon_name: "access_time",
+              text: "10:00-00:00 arası hizmet vermektedir",
+              color: AppColor.green),
+          PropertyModel(
+              icon_name: "location_on",
+              text: "5.6km",
+              color: AppColor.dark_gray),
+          PropertyModel(
+              icon_name: "restaurant_menu",
+              text: "Çocuk menüsü",
+              color: AppColor.dark_gray),
+          PropertyModel(
+              icon_name: "child_friendly",
+              text: "Bebek bakım odası",
+              color: AppColor.dark_gray),
+          PropertyModel(
+              icon_name: "child_care",
+              text: "Oyun odası",
+              color: AppColor.dark_gray),
+          PropertyModel(
+              icon_name: "calendar_today",
+              text: "Randevu ile gidilir",
+              color: AppColor.dark_gray),
+          PropertyModel(
+              icon_name: "cake",
+              text: "Organizasyon yapılır",
+              color: AppColor.dark_gray),
+        ]);
     return ProductDetail(model);
 //    return Home();
 //  return ComponentTest();
