@@ -29,7 +29,7 @@ class CocuklaApp extends StatefulWidget {
 class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
-    ProductModel model = ProductModel(
+    var model = ProductModel(
         id: "1",
         title: "Kaşıbeyaz Ataşehir",
         city: "İstanbul",
@@ -48,17 +48,13 @@ class _CocuklaAppState extends State<CocuklaApp> {
           PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg")
         ],
         properties: [
-          PropertyModel(turn: 1, icon: Icon(Icons.access_time), text: "Açık"),
-          PropertyModel(turn: 2, icon: Icon(Icons.location_on), text: "5.6km"),
-          PropertyModel(
-              turn: 3, icon: Icon(Icons.restaurant_menu), text: "Çocuk menüsü"),
-          PropertyModel(
-              turn: 4,
-              icon: Icon(Icons.child_friendly),
-              text: "Bebek bakım odası"),
-          PropertyModel(
-              turn: 5, icon: Icon(Icons.child_care), text: "Oyun odası"),
-        ]);
+          PropertyModel(icon_name: "access_time", text: "Açık", color: AppColor.green),
+          PropertyModel(icon_name: "location_on", text: "5.6km"),
+          PropertyModel(icon_name: "restaurant_menu", text: "Çocuk menüsü"),
+          PropertyModel(icon_name: "child_friendly", text: "Bebek bakım odası"),
+          PropertyModel(icon_name: "child_care", text: "Oyun odası"),
+        ]
+    );
     return ProductDetail(model);
 //    return Home();
 //  return ComponentTest();

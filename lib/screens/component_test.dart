@@ -1,4 +1,4 @@
-import 'package:cocukla/components/smart_tab.dart';
+import 'package:cocukla/components/smart_tab_component.dart';
 import 'package:flutter/material.dart';
 
 class ComponentTest extends StatefulWidget {

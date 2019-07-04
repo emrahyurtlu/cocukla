@@ -1,5 +1,5 @@
-import 'package:cocukla/components/attribute.dart';
-import 'package:cocukla/components/smart_tab.dart';
+import 'package:cocukla/components/property_component.dart';
+import 'package:cocukla/components/smart_tab_component.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
@@ -160,7 +160,7 @@ class _ProductDetailState extends State<ProductDetail>
                                         child: ListView.builder(
                                             itemCount: widget.model.properties.length,
                                             itemBuilder: (BuildContext context, int index) {
-                                          return Attribute(IconData(0xe895), widget.model.properties[index].text);
+                                          return Row(children: <Widget>[Attribute(widget.model.properties[index].icon_name, widget.model.properties[index].text)],);
                                         }),
                                       ),
                                       Page(

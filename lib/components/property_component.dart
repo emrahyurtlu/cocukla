@@ -1,14 +1,17 @@
 import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/utilities/icon_utility.dart';
 import 'package:flutter/material.dart';
 
 class Attribute extends StatelessWidget {
-  final IconData icon;
+  IconData _iconData;
+  Icon _icon;
+  final String icon_name;
   final String str;
   final double size;
   final Color color;
 
   Attribute(
-    this.icon,
+    this.icon_name,
     this.str, [
     this.color = AppColor.dark_gray,
     this.size = 14,
@@ -16,10 +19,15 @@ class Attribute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var icon = Icon(Icons.launch, size: this.size, color: this.color,);
+    this._iconData = getMaterialIconByName(icon_name: icon_name);
+    this._icon = Icon(
+      _iconData,
+      size: this.size,
+      color: this.color,
+    );
     return Wrap(
       children: <Widget>[
-        icon,
+        _icon,
         Text(
           str,
           style: TextStyle(color: color),

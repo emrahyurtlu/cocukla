@@ -1,4 +1,4 @@
-import 'package:cocukla/components/attribute.dart';
+import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/ui/app_color.dart';
