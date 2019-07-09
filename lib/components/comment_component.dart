@@ -17,9 +17,7 @@ class _CommentComponentState extends State<CommentComponent> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10, bottom: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -37,11 +35,11 @@ class _CommentComponentState extends State<CommentComponent> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               //Comment Name
-              Padding(
-                padding: EdgeInsets.only(left: 10),
+              Container(
+                margin: EdgeInsets.only(left: 50),
                 child: Text(widget.model.name,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -49,8 +47,8 @@ class _CommentComponentState extends State<CommentComponent> {
                         fontFamily: "MontserratRegular")),
               ),
               //Comment Rating
-              Padding(
-                padding: EdgeInsets.only(left: 10),
+              Container(
+                margin: EdgeInsets.only(left: 50),
                 child: FlutterRatingBarIndicator(
                   rating: widget.model.rating,
                   itemCount: 5,
@@ -61,8 +59,8 @@ class _CommentComponentState extends State<CommentComponent> {
                 ),
               ),
               //Comment Text
-              Padding(
-                  padding: EdgeInsets.only(left: 10),
+              Container(
+                  margin: EdgeInsets.only(left: 50),
                   child: Text(widget.model.text,
                       softWrap: true,
                       textAlign: TextAlign.left,

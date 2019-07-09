@@ -46,36 +46,47 @@ class _ComponentTestState extends State<ComponentTest> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SmartTab(
-          tabs: <Tab>[
-            Tab(
-              text: "Özellikler",
+        body: CustomScrollView(
+          slivers: <Widget>[
+            const SliverAppBar(
+              pinned: true,
+              expandedHeight: 250.0,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text('Demo'),
+              ),
             ),
-            Tab(
-              text: "Fotoğraflar",
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200.0,
+                mainAxisSpacing: 10.0,
+                crossAxisSpacing: 10.0,
+                childAspectRatio: 4.0,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return Container(
+                    alignment: Alignment.center,
+                    color: Colors.teal[100 * (index % 9)],
+                    child: Text('grid item $index'),
+                  );
+                },
+                childCount: 20,
+              ),
             ),
-            Tab(
-              text: "Yorumlar",
-            ),
-            Tab(
-              text: "Hakkımızda",
+            SliverFixedExtentList(
+              itemExtent: 50.0,
+              delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return Container(
+                    alignment: Alignment.center,
+                    color: Colors.lightBlue[100 * (index % 9)],
+                    child: Text('list item $index'),
+                  );
+                },
+              ),
             ),
           ],
-          pages: <Page>[
-            Page(
-              child: Text("Page 1"),
-            ),
-            Page(
-              child: Text("Page 2"),
-            ),
-            Page(
-              child: Text("Page 3"),
-            ),
-            Page(
-              child: Text("Page 4"),
-            ),
-          ],
-        ),
+        )
       ),
     );
   }

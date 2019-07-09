@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class SmartTab extends StatefulWidget {
@@ -45,7 +46,7 @@ class _SmartTabState extends State<SmartTab>
             child: Container(
               padding: EdgeInsets.only(top: 10),
               child: TabBarView(
-                  controller: _tabController, children: widget.pages),
+                  controller: _tabController, children: widget.pages,),
             ),
           )
         ],

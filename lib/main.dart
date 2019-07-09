@@ -2,6 +2,7 @@ import 'package:cocukla/models/comment_model.dart';
 import 'package:cocukla/models/photo_model.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/models/property_model.dart';
+import 'package:cocukla/screens/component_test.dart';
 import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
