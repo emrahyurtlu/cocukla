@@ -1,6 +1,7 @@
 class CommentModel{
+  String imageLink;
   String name;
   String text;
-  double star;
+  double rating;
   DateTime date;
 }
