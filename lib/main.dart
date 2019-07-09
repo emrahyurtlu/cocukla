@@ -1,3 +1,4 @@
+import 'package:cocukla/models/comment_model.dart';
 import 'package:cocukla/models/photo_model.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/models/property_model.dart';
@@ -43,7 +44,36 @@ class _CocuklaAppState extends State<CocuklaApp> {
         text:
             "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
         address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
-        comments: null,
+        comments: [
+          CommentModel(
+              imageLink: "assets/images/avatar.png",
+              name: "Abdullah OSKAY",
+              rating: 4,
+              text:
+                  "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+              date: DateTime.now()),
+          CommentModel(
+              imageLink: "assets/images/avatar.png",
+              name: "Mehmet SARAÇ",
+              rating: 5,
+              text:
+                  "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+              date: DateTime.now()),
+          CommentModel(
+              imageLink: "assets/images/avatar.png",
+              name: "Bayram TUNÇBİLEK",
+              rating: 3,
+              text:
+                  "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+              date: DateTime.now()),
+          CommentModel(
+              imageLink: "assets/images/avatar.png",
+              name: "Emrah YURTLU",
+              rating: 5,
+              text:
+                  "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+              date: DateTime.now()),
+        ],
         photos: [
           PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg"),
           PhotoModel(imageLink: "assets/images/temp/gha_3325.jpg"),

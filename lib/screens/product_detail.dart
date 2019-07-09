@@ -1,9 +1,11 @@
 import 'package:cocukla/components/comment_component.dart';
+import 'package:cocukla/components/comment_form_component.dart';
 import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/components/smart_tab_component.dart';
 import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -264,126 +266,22 @@ class _ProductDetailState extends State<ProductDetail>
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            //RatingBar
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                FlutterRatingBar(
-                                                  initialRating: 0,
-                                                  itemCount: 5,
-                                                  itemPadding: EdgeInsets.only(
-                                                      left: 3, right: 3),
-                                                  itemSize: 25,
-                                                  borderColor:
-                                                      AppColor.dark_gray,
-                                                  fullRatingWidget: Icon(
-                                                    Icons.star,
-                                                    size: 25,
-                                                    color: AppColor.yellow,
-                                                  ),
-                                                  noRatingWidget: Icon(
-                                                    Icons.star_border,
-                                                    size: 25,
-                                                    color: AppColor.dark_gray,
-                                                  ),
-                                                  halfRatingWidget: Icon(
-                                                    Icons.star,
-                                                    size: 25,
-                                                    color: AppColor.yellow,
-                                                  ),
-                                                  fillColor: AppColor.yellow,
-                                                  onRatingUpdate:
-                                                      (double rating) => print(
-                                                          "Rated as " +
-                                                              rating
-                                                                  .ceil()
-                                                                  .toString()),
-                                                )
-                                              ],
+                                            CommentFormComponent(
+                                              textEditingController:
+                                                  _textEditingController,
                                             ),
-
-                                            //Textarea
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Expanded(
-                                                  child: Container(
-                                                    padding: EdgeInsets.all(10),
-                                                    margin: EdgeInsets.only(
-                                                        top: 10, bottom: 10),
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            AppColor.light_gray,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
-                                                    child: TextField(
-                                                      controller:
-                                                          _textEditingController,
-                                                      maxLines: 2,
-                                                      decoration: InputDecoration(
-                                                          hintText:
-                                                              "Yorum yapın...",
-                                                          border:
-                                                              InputBorder.none),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-
-                                            //SubmitButton
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                FlatButton(
-                                                  color: AppColor.pink,
-                                                  textColor: AppColor.white,
-                                                  onPressed: () => {
-                                                    Scaffold.of(context)
-                                                        .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          "Uygulamaya giriş yaptınız!"),
-                                                    ))
-                                                  },
-                                                  shape:
-                                                      new RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              new BorderRadius
-                                                                      .circular(
-                                                                  50.0)),
-                                                  child: Text(
-                                                    "Kaydet",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            "Montserrat",
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-
                                             Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
+                                                //Head
                                                 Container(
                                                   margin: EdgeInsets.only(
                                                       top: 10, bottom: 10),
                                                   width: double.infinity,
-                                                  height: 30,
+                                                  height: 20,
                                                   child: Text(
                                                     "Yorumlar",
                                                     style: TextStyle(
@@ -392,95 +290,22 @@ class _ProductDetailState extends State<ProductDetail>
                                                         fontSize: 16),
                                                   ),
                                                 ),
-                                                ListView.builder(
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return CommentComponent(
-                                                        model: widget.model
-                                                            .comments[index]);
-                                                  },
-                                                  itemCount: widget.model.comments.length,
-                                                )
-                                                //CommentComponent
-                                                /*Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        Image.asset(
-                                                          "assets/images/avatar.png",
-                                                          width: 40,
-                                                          height: 40,
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 10),
-                                                          child: Text(
-                                                              "Melinda Trump",
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 14,
-                                                                  fontFamily:
-                                                                      "MontserratRegular")),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 10),
-                                                          child:
-                                                              FlutterRatingBarIndicator(
-                                                            rating: 4,
-                                                            itemCount: 5,
-                                                            itemSize: 12,
-                                                            emptyColor: AppColor
-                                                                .dark_gray,
-                                                            fillColor:
-                                                                AppColor.yellow,
-                                                            itemPadding:
-                                                                EdgeInsets.only(
-                                                                    right: 2),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 10),
-                                                            child: Text(
-                                                                "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-                                                                softWrap: true,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontFamily:
-                                                                        "MontserratLight"))),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                )*/
+                                                //Comments
+                                                Container(
+                                                  width: double.infinity,
+                                                  height: 100,
+                                                  child: ListView.builder(
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return CommentComponent(
+                                                          model: widget.model
+                                                              .comments[index]);
+                                                    },
+                                                    itemCount: widget
+                                                        .model.comments.length,
+                                                  ),
+                                                ),
                                               ],
                                             )
                                           ],
