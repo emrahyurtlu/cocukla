@@ -263,6 +263,7 @@ class _ProductDetailState extends State<ProductDetail>
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                           children: <Widget>[
+                                            //RatingBar
                                             Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -303,6 +304,8 @@ class _ProductDetailState extends State<ProductDetail>
                                                 )
                                               ],
                                             ),
+
+                                            //Textarea
                                             Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -311,7 +314,7 @@ class _ProductDetailState extends State<ProductDetail>
                                               children: <Widget>[
                                                 Expanded(
                                                   child: Container(
-                                                    height: 100,
+                                                    //height: 200,
                                                     padding: EdgeInsets.all(10),
                                                     margin: EdgeInsets.only(
                                                         top: 10, bottom: 10),
@@ -335,6 +338,8 @@ class _ProductDetailState extends State<ProductDetail>
                                                 ),
                                               ],
                                             ),
+
+                                            //SubmitButton
                                             Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -368,6 +373,71 @@ class _ProductDetailState extends State<ProductDetail>
                                                         fontSize: 14),
                                                   ),
                                                 ),
+                                              ],
+                                            ),
+
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .start,
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      top: 10, bottom: 10),
+                                                  width: double.infinity,
+                                                  height: 30,
+                                                  child: Text("Yorumlar",
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight
+                                                            .bold,
+                                                        fontSize: 16
+                                                    ),),
+                                                ),
+
+                                                //CommentComponent
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .start,
+                                                  crossAxisAlignment: CrossAxisAlignment
+                                                      .start,
+                                                  children: <Widget>[
+                                                    Column(
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .start,
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .start,
+                                                      children: <Widget>[
+                                                        Image.asset(
+                                                          "assets/images/avatar.png",
+                                                          width: 40,
+                                                          height: 40,
+                                                          fit: BoxFit.cover,)
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .start,
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .start,
+                                                      children: <Widget>[
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .only(left: 10),
+                                                          child: Text(
+                                                              "Melinda Trump",
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight
+                                                                      .bold,
+                                                                  fontSize: 14,
+                                                                  fontFamily: "MontserratRegular"
+                                                              )),
+                                                        ),
+
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
                                               ],
                                             )
                                           ],
