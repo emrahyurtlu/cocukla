@@ -48,9 +48,8 @@ class _CocuklaAppState extends State<CocuklaApp> {
           PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg"),
           PhotoModel(imageLink: "assets/images/temp/gha_3325.jpg"),
           PhotoModel(imageLink: "assets/images/temp/gha_3336.jpg"),
-          PhotoModel(imageLink: "assets/images/temp/gha_3371.jpg"),
-          PhotoModel(imageLink: "assets/images/temp/gha_3512.jpg"),
-          PhotoModel(imageLink: "assets/images/temp/gha_3606.jpg"),
+          PhotoModel(imageLink: "assets/images/temp/gha_3499.jpg"),
+          PhotoModel(imageLink: "assets/images/temp/gha_3612.jpg"),
         ],
         properties: [
           PropertyModel(

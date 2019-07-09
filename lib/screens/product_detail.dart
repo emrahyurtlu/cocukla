@@ -4,6 +4,7 @@ import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -18,6 +19,13 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail>
     with SingleTickerProviderStateMixin {
+  TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    _textEditingController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -160,9 +168,9 @@ class _ProductDetailState extends State<ProductDetail>
                                       Page(
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
                                               widget.model.text,
@@ -175,7 +183,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                 icon_name: "phone",
                                                 content: "0850 441 2020",
                                                 padding:
-                                                    EdgeInsets.only(left: 10),
+                                                EdgeInsets.only(left: 10),
                                                 font_size: 18,
                                               ),
                                             ),
@@ -186,7 +194,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                 icon_name: "print",
                                                 content: "0212 441 2040",
                                                 padding:
-                                                    EdgeInsets.only(left: 10),
+                                                EdgeInsets.only(left: 10),
                                                 font_size: 18,
                                               ),
                                             ),
@@ -196,9 +204,9 @@ class _ProductDetailState extends State<ProductDetail>
                                               child: PropertyComponent(
                                                 icon_name: "location_on",
                                                 content:
-                                                    "Barbaros Mah. Şebboy Sok. No:2 \nWatergarden İş Merkezi \nAtaşehir/İstanbul",
+                                                "Barbaros Mah. Şebboy Sok. No:2 \nWatergarden İş Merkezi \nAtaşehir/İstanbul",
                                                 padding:
-                                                    EdgeInsets.only(left: 10),
+                                                EdgeInsets.only(left: 10),
                                                 font_size: 18,
                                               ),
                                             )
@@ -210,7 +218,7 @@ class _ProductDetailState extends State<ProductDetail>
                                       Page(
                                         child: ListView.builder(
                                             itemCount:
-                                                widget.model.properties.length,
+                                            widget.model.properties.length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
                                               var property = widget
@@ -221,7 +229,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                     top: 5, bottom: 5),
                                                 child: PropertyComponent(
                                                     icon_name:
-                                                        property.icon_name,
+                                                    property.icon_name,
                                                     content: property.text,
                                                     color: property.color,
                                                     font_size: 18,
@@ -250,16 +258,16 @@ class _ProductDetailState extends State<ProductDetail>
                                       //Yorumlar
                                       Page(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .start,
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .start,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment
-                                                  .start,
-                                              crossAxisAlignment: CrossAxisAlignment
-                                                  .start,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 FlutterRatingBar(
                                                   initialRating: 0,
@@ -267,24 +275,99 @@ class _ProductDetailState extends State<ProductDetail>
                                                   itemPadding: EdgeInsets.only(
                                                       left: 3, right: 3),
                                                   itemSize: 25,
-                                                  borderColor: AppColor
-                                                      .dark_gray,
+                                                  borderColor:
+                                                  AppColor.dark_gray,
                                                   fullRatingWidget: Icon(
-                                                    Icons.star, size: 25,
-                                                    color: AppColor.yellow,),
+                                                    Icons.star,
+                                                    size: 25,
+                                                    color: AppColor.yellow,
+                                                  ),
                                                   noRatingWidget: Icon(
-                                                    Icons.star_border, size: 25,
-                                                    color: AppColor.dark_gray,),
+                                                    Icons.star_border,
+                                                    size: 25,
+                                                    color: AppColor.dark_gray,
+                                                  ),
                                                   halfRatingWidget: Icon(
-                                                    Icons.star, size: 25,
-                                                    color: AppColor.yellow,),
+                                                    Icons.star,
+                                                    size: 25,
+                                                    color: AppColor.yellow,
+                                                  ),
                                                   fillColor: AppColor.yellow,
-                                                  onRatingUpdate: (
-                                                      double rating) => print(
-                                                      "Rated as " +
-                                                          rating.ceil()
-                                                              .toString()),
+                                                  onRatingUpdate:
+                                                      (double rating) =>
+                                                      print(
+                                                          "Rated as " +
+                                                              rating
+                                                                  .ceil()
+                                                                  .toString()),
                                                 )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Container(
+                                                    height: 100,
+                                                    padding: EdgeInsets.all(10),
+                                                    margin: EdgeInsets.only(
+                                                        top: 10, bottom: 10),
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                        AppColor.light_gray,
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(10)),
+                                                    child: TextField(
+                                                      controller:
+                                                      _textEditingController,
+                                                      maxLines: 3,
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                          "Yorum yapın...",
+                                                          border:
+                                                          InputBorder.none),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                FlatButton(
+                                                  color: AppColor.pink,
+                                                  textColor: AppColor.white,
+                                                  onPressed: () =>
+                                                  {
+                                                    Scaffold.of(context)
+                                                        .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              "Uygulamaya giriş yaptınız!"),
+                                                        ))
+                                                  },
+                                                  shape:
+                                                  new RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      new BorderRadius
+                                                          .circular(
+                                                          50.0)),
+                                                  child: Text(
+                                                    "Kaydet",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                        "Montserrat",
+                                                        fontSize: 14),
+                                                  ),
+                                                ),
                                               ],
                                             )
                                           ],
