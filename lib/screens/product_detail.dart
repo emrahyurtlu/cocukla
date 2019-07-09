@@ -249,7 +249,46 @@ class _ProductDetailState extends State<ProductDetail>
 
                                       //Yorumlar
                                       Page(
-                                        child: Text("Page 4"),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .start,
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .start,
+                                          children: <Widget>[
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .start,
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                FlutterRatingBar(
+                                                  initialRating: 0,
+                                                  itemCount: 5,
+                                                  itemPadding: EdgeInsets.only(
+                                                      left: 3, right: 3),
+                                                  itemSize: 25,
+                                                  borderColor: AppColor
+                                                      .dark_gray,
+                                                  fullRatingWidget: Icon(
+                                                    Icons.star, size: 25,
+                                                    color: AppColor.yellow,),
+                                                  noRatingWidget: Icon(
+                                                    Icons.star_border, size: 25,
+                                                    color: AppColor.dark_gray,),
+                                                  halfRatingWidget: Icon(
+                                                    Icons.star, size: 25,
+                                                    color: AppColor.yellow,),
+                                                  fillColor: AppColor.yellow,
+                                                  onRatingUpdate: (
+                                                      double rating) => print(
+                                                      "Rated as " +
+                                                          rating.ceil()
+                                                              .toString()),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
