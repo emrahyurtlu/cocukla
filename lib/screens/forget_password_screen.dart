@@ -28,6 +28,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       ),
       body: SafeArea(
         child: Container(
+          color: AppColor.white,
           child: ListView(
             children: <Widget>[
               Padding(

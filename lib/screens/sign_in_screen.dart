@@ -23,6 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     return Scaffold(
       body: Container(
+        color: AppColor.white,
         child: ListView(
           children: <Widget>[
             Padding(
@@ -53,7 +54,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             child: TextFormField(
                               controller: null,
                               keyboardType: TextInputType.emailAddress,
-                              decoration: new InputDecoration(
+                              decoration: InputDecoration(
                                 labelStyle:
                                     TextStyle(color: AppColor.text_color),
                                 labelText: 'Eposta',

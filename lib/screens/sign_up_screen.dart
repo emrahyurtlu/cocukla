@@ -30,6 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
       body: SafeArea(
         child: Container(
+          color: AppColor.white,
           child: ListView(
             children: <Widget>[
               Padding(

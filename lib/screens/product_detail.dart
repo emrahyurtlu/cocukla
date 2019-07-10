@@ -1,15 +1,12 @@
-import 'dart:io';
-
 import 'package:cocukla/components/comment_component.dart';
-import 'package:cocukla/components/comment_form_component.dart';
 import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/components/smart_tab_component.dart';
 import 'package:cocukla/models/product_model.dart';
+import 'package:cocukla/screens/comment_screen.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -30,11 +27,12 @@ class _ProductDetailState extends State<ProductDetail>
   @override
   void initState() {
     _textEditingController = TextEditingController();
-    _scrollController.addListener(_listen);
   }
 
-  void _listen(){
-    print(" ===> Sliver is listenning");
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _textEditingController.dispose();
   }
 
   @override
@@ -45,11 +43,17 @@ class _ProductDetailState extends State<ProductDetail>
           controller: _scrollController,
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * 0.35,
+              expandedHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.35,
               flexibleSpace: Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.35,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.35,
                 decoration: BoxDecoration(color: AppColor.light_gray),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -62,7 +66,7 @@ class _ProductDetailState extends State<ProductDetail>
                     },
                     itemCount: widget.model.photos.length,
                     pagination:
-                        SwiperPagination(builder: SwiperPagination.dots),
+                    SwiperPagination(builder: SwiperPagination.dots),
                   ),
                 ),
               ),
@@ -71,7 +75,10 @@ class _ProductDetailState extends State<ProductDetail>
               child: Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.65,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.65,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -82,7 +89,7 @@ class _ProductDetailState extends State<ProductDetail>
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           borderRadius:
-                              BorderRadius.all(Radius.elliptical(10, 10)),
+                          BorderRadius.all(Radius.elliptical(10, 10)),
                           border: Border.all(color: Colors.white),
                           color: AppColor.white),
                       child: Column(
@@ -166,17 +173,11 @@ class _ProductDetailState extends State<ProductDetail>
                                             Tab(
                                               text: "Hakkımızda",
                                             ),
-
                                             Tab(
                                               text: "Özellikler",
                                             ),
-
                                             Tab(
                                               text: "Yorumlar",
-                                            ),
-
-                                            Tab(
-                                              text: "Yorum yapın",
                                             ),
                                           ],
                                           pages: <Page>[
@@ -219,7 +220,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                     child: PropertyComponent(
                                                       icon_name: "location_on",
                                                       content:
-                                                          "Barbaros Mah. Şebboy Sok. No:2 \nWatergarden İş Merkezi \nAtaşehir/İstanbul",
+                                                      "Barbaros Mah. Şebboy Sok. No:2 \nWatergarden İş Merkezi \nAtaşehir/İstanbul",
                                                       padding: EdgeInsets.only(
                                                           left: 10),
                                                       font_size: 18,
@@ -237,7 +238,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                       .model.properties.length,
                                                   itemBuilder:
                                                       (BuildContext context,
-                                                          int index) {
+                                                      int index) {
                                                     var property = widget.model
                                                         .properties[index];
                                                     return Container(
@@ -248,12 +249,12 @@ class _ProductDetailState extends State<ProductDetail>
                                                           icon_name: property
                                                               .icon_name,
                                                           content:
-                                                              property.text,
+                                                          property.text,
                                                           color: property.color,
                                                           font_size: 18,
                                                           padding:
-                                                              EdgeInsets.only(
-                                                                  left: 5)),
+                                                          EdgeInsets.only(
+                                                              left: 5)),
                                                     );
                                                   }),
                                             ),
@@ -262,12 +263,58 @@ class _ProductDetailState extends State<ProductDetail>
                                             Page(
                                               child: Column(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                MainAxisAlignment.start,
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: <Widget>[
-
+                                                  SizedBox(
+                                                    width: double.infinity,
+                                                    height: 60,
+                                                    child: Column(
+                                                      children: <Widget>[
+                                                        Container(
+                                                          width:
+                                                          double.infinity,
+                                                          height: 50,
+                                                          child: FlatButton(
+                                                            color:
+                                                            AppColor.pink,
+                                                            textColor:
+                                                            AppColor.white,
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (
+                                                                        context) =>
+                                                                        CommentScreen(
+                                                                          model: widget
+                                                                              .model,
+                                                                        )),
+                                                              );
+                                                            },
+                                                            shape: new RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                new BorderRadius
+                                                                    .circular(
+                                                                    50.0)),
+                                                            child: Text(
+                                                              "Yorum yapın",
+                                                              textAlign:
+                                                              TextAlign
+                                                                  .center,
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                  "Montserrat",
+                                                                  fontSize: 14),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                                   Column(
                                                     children: <Widget>[
                                                       //Comments
@@ -277,8 +324,8 @@ class _ProductDetailState extends State<ProductDetail>
                                                         shrinkWrap: true,
                                                         itemBuilder:
                                                             (BuildContext
-                                                                    context,
-                                                                int index) {
+                                                        context,
+                                                            int index) {
                                                           return Expanded(
                                                             child: CommentComponent(
                                                                 model: widget
@@ -290,23 +337,6 @@ class _ProductDetailState extends State<ProductDetail>
                                                       ),
                                                     ],
                                                   )
-                                                ],
-                                              ),
-                                            ),
-
-                                            //Yorum yapın
-                                            Page(
-                                              child: Column(
-                                                children: <Widget>[
-                                                  //Head
-                                                  Padding(
-                                                    padding: EdgeInsets.only(bottom: 20),
-                                                    child: Text("Yorumlarınız bizim için çok değerlidir. Lütfen görüş bildiriniz.", softWrap: true,),
-                                                  ),
-                                                  CommentFormComponent(
-                                                    textEditingController:
-                                                    _textEditingController,
-                                                  ),
                                                 ],
                                               ),
                                             ),
