@@ -17,8 +17,6 @@ class _CommentFormComponentState extends State<CommentFormComponent> {
       direction: Axis.vertical,
       children: <Widget>[
         Row(
-          mainAxisAlignment:
-          MainAxisAlignment.start,
           crossAxisAlignment:
           CrossAxisAlignment.start,
           children: <Widget>[
@@ -58,8 +56,6 @@ class _CommentFormComponentState extends State<CommentFormComponent> {
 
         //Textarea
         Row(
-          mainAxisAlignment:
-          MainAxisAlignment.start,
           crossAxisAlignment:
           CrossAxisAlignment.start,
           children: <Widget>[
@@ -78,6 +74,7 @@ class _CommentFormComponentState extends State<CommentFormComponent> {
                   controller: widget.textEditingController,
                   maxLines: 2,
                   decoration: InputDecoration(
+                    labelText: "Yorum yapın...",
                       hintText:
                       "Yorum yapın...",
                       border:
@@ -90,21 +87,13 @@ class _CommentFormComponentState extends State<CommentFormComponent> {
 
         //SubmitButton
         Row(
-          mainAxisAlignment:
-          MainAxisAlignment.start,
           crossAxisAlignment:
           CrossAxisAlignment.start,
           children: <Widget>[
             FlatButton(
               color: AppColor.pink,
               textColor: AppColor.white,
-              onPressed: () => {
-                Scaffold.of(context)
-                    .showSnackBar(SnackBar(
-                  content: Text(
-                      "Uygulamaya giriş yaptınız!"),
-                ))
-              },
+              onPressed: () => print("Comment is sumbitted!"),
               shape:
               new RoundedRectangleBorder(
                   borderRadius:

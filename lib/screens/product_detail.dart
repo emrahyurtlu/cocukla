@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cocukla/components/comment_component.dart';
 import 'package:cocukla/components/comment_form_component.dart';
 import 'package:cocukla/components/property_component.dart';
@@ -23,10 +25,16 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail>
     with SingleTickerProviderStateMixin {
   TextEditingController _textEditingController;
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     _textEditingController = TextEditingController();
+    _scrollController.addListener(_listen);
+  }
+
+  void _listen(){
+    print(" ===> Sliver is listenning");
   }
 
   @override
@@ -34,15 +42,15 @@ class _ProductDetailState extends State<ProductDetail>
     return SafeArea(
       child: Scaffold(
         body: CustomScrollView(
+          controller: _scrollController,
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * 0.4,
+              expandedHeight: MediaQuery.of(context).size.height * 0.35,
               flexibleSpace: Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.4,
-                decoration: BoxDecoration(
-                    color: AppColor.light_gray),
+                height: MediaQuery.of(context).size.height * 0.35,
+                decoration: BoxDecoration(color: AppColor.light_gray),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Swiper(
@@ -53,7 +61,8 @@ class _ProductDetailState extends State<ProductDetail>
                       );
                     },
                     itemCount: widget.model.photos.length,
-                    pagination: SwiperPagination(builder: SwiperPagination.dots),
+                    pagination:
+                        SwiperPagination(builder: SwiperPagination.dots),
                   ),
                 ),
               ),
@@ -62,9 +71,8 @@ class _ProductDetailState extends State<ProductDetail>
               child: Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height * 0.65,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
@@ -78,15 +86,11 @@ class _ProductDetailState extends State<ProductDetail>
                           border: Border.all(color: Colors.white),
                           color: AppColor.white),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        verticalDirection: VerticalDirection.down,
                         key: GlobalKey(),
                         children: <Widget>[
                           //Title and favorite button
                           Row(
-                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Container(
                                 width: DimensionUtility(context)
@@ -129,7 +133,6 @@ class _ProductDetailState extends State<ProductDetail>
 
                           //Rating
                           Row(
-                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Container(
                                 child: FlutterRatingBarIndicator(
@@ -163,12 +166,15 @@ class _ProductDetailState extends State<ProductDetail>
                                             Tab(
                                               text: "Hakkımızda",
                                             ),
+
                                             Tab(
                                               text: "Özellikler",
                                             ),
+
                                             Tab(
                                               text: "Yorumlar",
                                             ),
+
                                             Tab(
                                               text: "Yorum yapın",
                                             ),
@@ -252,7 +258,6 @@ class _ProductDetailState extends State<ProductDetail>
                                                   }),
                                             ),
 
-
                                             //Yorumlar
                                             Page(
                                               child: Column(
@@ -274,11 +279,13 @@ class _ProductDetailState extends State<ProductDetail>
                                                             (BuildContext
                                                                     context,
                                                                 int index) {
-                                                          return CommentComponent(
-                                                              model: widget
-                                                                      .model
-                                                                      .comments[
-                                                                  index]);
+                                                          return Expanded(
+                                                            child: CommentComponent(
+                                                                model: widget
+                                                                    .model
+                                                                    .comments[
+                                                                index]),
+                                                          );
                                                         },
                                                       ),
                                                     ],

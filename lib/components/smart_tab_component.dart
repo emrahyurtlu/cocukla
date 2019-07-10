@@ -29,28 +29,23 @@ class _SmartTabState extends State<SmartTab>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          TabBar(
-            controller: _tabController,
-            isScrollable: true,
-            tabs: widget.tabs,
-            key: GlobalKey(),
-            labelPadding: EdgeInsets.only(left: 5, right: 5),
+    return Column(
+      children: <Widget>[
+        TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          tabs: widget.tabs,
+          key: GlobalKey(),
+          labelPadding: EdgeInsets.only(left: 5, right: 5),
+        ),
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.only(top: 10),
+            child: TabBarView(
+              controller: _tabController, children: widget.pages,),
           ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(top: 10),
-              child: TabBarView(
-                  controller: _tabController, children: widget.pages,),
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 
