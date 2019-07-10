@@ -36,22 +36,26 @@ class _ProductDetailState extends State<ProductDetail>
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * 0.3,
+              expandedHeight: MediaQuery.of(context).size.height * 0.4,
               flexibleSpace: Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.4,
                 decoration: BoxDecoration(
-                    /*borderRadius:
-                    BorderRadius.all(Radius.elliptical(10, 10)),*/
-                    //border: Border.all(color: Colors.white),
                     color: AppColor.light_gray),
                 child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child: Image.asset(
-                      widget.model.photos[0].imageLink,
-                      fit: BoxFit.cover,
-                    )),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: Swiper(
+                    itemBuilder: (BuildContext context, int index) {
+                      return Image.asset(
+                        widget.model.photos[index].imageLink,
+                        fit: BoxFit.fill,
+                      );
+                    },
+                    itemCount: widget.model.photos.length,
+                    pagination: SwiperPagination(builder: SwiperPagination.dots),
+                  ),
+                ),
               ),
             ),
             SliverFillRemaining(
@@ -163,10 +167,10 @@ class _ProductDetailState extends State<ProductDetail>
                                               text: "Özellikler",
                                             ),
                                             Tab(
-                                              text: "Fotoğraflar",
+                                              text: "Yorumlar",
                                             ),
                                             Tab(
-                                              text: "Yorumlar",
+                                              text: "Yorum yapın",
                                             ),
                                           ],
                                           pages: <Page>[
@@ -222,7 +226,7 @@ class _ProductDetailState extends State<ProductDetail>
                                             //Özellikler
                                             Page(
                                               child: ListView.builder(
-                                                shrinkWrap: true,
+                                                  shrinkWrap: true,
                                                   itemCount: widget
                                                       .model.properties.length,
                                                   itemBuilder:
@@ -248,23 +252,6 @@ class _ProductDetailState extends State<ProductDetail>
                                                   }),
                                             ),
 
-                                            //Fotoğraflar
-                                            Page(
-                                              child: Swiper(
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return Image.asset(
-                                                    widget.model.photos[index]
-                                                        .imageLink,
-                                                    fit: BoxFit.fill,
-                                                  );
-                                                },
-                                                itemCount:
-                                                    widget.model.photos.length,
-                                                pagination: SwiperPagination(),
-                                              ),
-                                            ),
 
                                             //Yorumlar
                                             Page(
@@ -275,28 +262,9 @@ class _ProductDetailState extends State<ProductDetail>
                                                     CrossAxisAlignment.start,
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: <Widget>[
-                                                  CommentFormComponent(
-                                                    textEditingController:
-                                                        _textEditingController,
-                                                  ),
+
                                                   Column(
                                                     children: <Widget>[
-                                                      //Head
-                                                      Container(
-                                                        margin: EdgeInsets.only(
-                                                            top: 10,
-                                                            bottom: 10),
-                                                        width: double.infinity,
-                                                        //height: 20,
-                                                        child: Text(
-                                                          "Yorumlar",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 16),
-                                                        ),
-                                                      ),
                                                       //Comments
                                                       ListView.builder(
                                                         itemCount: widget.model
@@ -315,6 +283,23 @@ class _ProductDetailState extends State<ProductDetail>
                                                       ),
                                                     ],
                                                   )
+                                                ],
+                                              ),
+                                            ),
+
+                                            //Yorum yapın
+                                            Page(
+                                              child: Column(
+                                                children: <Widget>[
+                                                  //Head
+                                                  Padding(
+                                                    padding: EdgeInsets.only(bottom: 20),
+                                                    child: Text("Yorumlarınız bizim için çok değerlidir. Lütfen görüş bildiriniz.", softWrap: true,),
+                                                  ),
+                                                  CommentFormComponent(
+                                                    textEditingController:
+                                                    _textEditingController,
+                                                  ),
                                                 ],
                                               ),
                                             ),
