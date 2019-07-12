@@ -1,4 +1,5 @@
 import 'package:cocukla/components/smart_tab_component.dart';
+import 'package:cocukla/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class ComponentTest extends StatefulWidget {

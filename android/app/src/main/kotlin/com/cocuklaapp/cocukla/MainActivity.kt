@@ -1,4 +1,4 @@
-package com.cocuklaapp.cocukla
+package com.cocukla.app
 
 import android.os.Bundle
 

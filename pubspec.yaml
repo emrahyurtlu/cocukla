@@ -29,6 +29,9 @@ dependencies:
   google_maps_flutter:
   geolocator: '^5.0.0'
   flutter_swiper:
+  cloud_firestore:
+  firebase_auth:
+  google_sign_in:
 
 dev_dependencies:
   flutter_test:

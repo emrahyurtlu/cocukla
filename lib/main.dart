@@ -1,16 +1,10 @@
-import 'package:cocukla/models/comment_model.dart';
-import 'package:cocukla/models/photo_model.dart';
-import 'package:cocukla/models/product_model.dart';
-import 'package:cocukla/models/property_model.dart';
-import 'package:cocukla/screens/comment_screen.dart';
-import 'package:cocukla/screens/component_test.dart';
-import 'package:cocukla/screens/product_detail.dart';
-import 'package:cocukla/screens/profile.dart';
+import 'package:cocukla/screens/forget_password_screen.dart';
+import 'package:cocukla/screens/home.dart';
 import 'package:cocukla/screens/sign_in_screen.dart';
+import 'package:cocukla/screens/sign_up_screen.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:splashscreen/splashscreen.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations(
@@ -23,6 +17,12 @@ void main() {
       accentColor: AppColor.pink,
       fontFamily: "MontserratRegular",
     ),
+    routes: {
+      "/home": (context) => Home(),
+      "/sign-in": (context) => SignInScreen(),
+      "/sign-up": (context) => SignUpScreen(),
+      "/forget-password": (context) => ForgetPasswordScreen(),
+    },
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -35,7 +35,7 @@ class CocuklaApp extends StatefulWidget {
 class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
-    var model = ProductModel(
+    /*var model = ProductModel(
         id: "1",
         title: "Kaşıbeyaz Ataşehir",
         city: "İstanbul",
@@ -115,11 +115,8 @@ class _CocuklaAppState extends State<CocuklaApp> {
               icon_name: "cake",
               text: "Organizasyon yapılır",
               color: AppColor.dark_gray),
-        ]);
-    return ProductDetail(model);
-//    return Home();
-//  return ComponentTest();
-//  return CommentScreen(model: model,);
+        ]);*/
+    return SignInScreen();
 
     //Original Code
     //DO NOT DELETE

@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/components/category_component.dart';
 import 'package:cocukla/components/product_component.dart';
 import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/screens/home_explore.dart';
+import 'package:cocukla/services/helpers/current_user.dart';
 import 'package:cocukla/ui/app_color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -13,10 +18,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentTab = 0;
+  CurrentUserHelper _currentUserHelper;
+  FirebaseUser user;
+
 
   static List<PropertyComponent> attributes = [
-    PropertyComponent(
-        icon_name: "access_time", content: "Açık", color: AppColor.green),
+    PropertyComponent(icon_name: "access_time", content: "Açık", color: AppColor.green),
     PropertyComponent(icon_name: "location_on", content: "5.6km"),
     PropertyComponent(icon_name: "restaurant_menu", content: "Çocuk menüsü"),
     PropertyComponent(icon_name: "child_friendly", content: "Bebek bakım odası"),
@@ -24,6 +31,8 @@ class _HomeState extends State<Home> {
   ];
 
   List<String> _titles = ["Çocukla", "Favorilerim", "Keşfet"];
+
+
 
   List<Widget> _tabContents = [
     //HomeScreen
@@ -402,6 +411,14 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    _currentUserHelper = CurrentUserHelper();
+    _currentUserHelper.getCurrentUser().then((FirebaseUser result){
+      user = result;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -414,7 +431,29 @@ class _HomeState extends State<Home> {
           iconTheme: IconThemeData(color: AppColor.text_color),
         ),
         drawer: Drawer(
-          child: Text("Menü içeriği burada yer alacak!"),
+          child: ListView(
+              padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text("Emrah YURTLU",style: TextStyle(color: AppColor.white),),
+                accountEmail: Text("emrahyurtlu@gmail.com", style: TextStyle(color: AppColor.white)),
+                currentAccountPicture: Image.asset(
+                  "assets/images/avatar.png",
+                  width: 86,
+                  height: 86,
+                ),
+                decoration: BoxDecoration(color: AppColor.pink),
+              ),
+              ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text("Çıkış"),
+                onTap: (){
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushNamed("/sign-in");
+                },
+              )
+            ],
+          ),
         ),
         body: _tabContents[_currentTab],
         bottomNavigationBar: BottomNavigationBar(
