@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<resources>
+    <string name="app_name">Çocukla</string>
+    <string name="facebook_app_id">612151265972925</string>
+    <string name="fb_login_protocol_scheme">fb612151265972925</string>
+</resources>

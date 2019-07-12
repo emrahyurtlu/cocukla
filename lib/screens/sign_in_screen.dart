@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cocukla/services/login_service.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _SignInScreenState extends State<SignInScreen> {
   String _email, _password;
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+  //GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
   void initState() {
@@ -232,9 +233,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             color: AppColor.facebook,
                             textColor: AppColor.white,
                             onPressed: () {
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text("Facebook ile giriş yaptınız!"),
-                              ));
+                              loginWithFacebook();
                             },
                             shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(50.0)),
@@ -271,7 +270,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   fontFamily: "Montserrat", fontSize: 14),
                             ),
                             onPressed: () {
-                              _loginWithGoogle().then((FirebaseUser result){
+                              loginWithGoogle().then((FirebaseUser result){
                                 UserUpdateInfo info = UserUpdateInfo();
                                 info.photoUrl = result.photoUrl;
                                 info.displayName = info.displayName;
@@ -330,18 +329,5 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
-  }
-
-  Future<FirebaseUser> _loginWithGoogle() async{
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn() as GoogleSignInAccount;
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication as GoogleSignInAuthentication;
-
-    AuthCredential credential = await GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    FirebaseUser user = await FirebaseAuth.instance.signInWithCredential(credential) as FirebaseUser;
-    return user;
   }
 }

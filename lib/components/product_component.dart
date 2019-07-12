@@ -41,7 +41,7 @@ class _ProductState extends State<Product> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               GestureDetector(
-                onTap: () => print("IMAGE: Your Product's Id is "+widget.id.toString()),
+                onTap: () => Navigator.of(context).pushNamed("/product-detail"),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
@@ -69,14 +69,7 @@ class _ProductState extends State<Product> {
                 child: Stack(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductDetail(ProductModel(title: "Kaşıbeyaz Ataşehir", ))),
-                        )
-                      },
+                      onTap: () => Navigator.of(context).pushNamed("/product-detail"),
                       child: Text(
                         widget.title,
                         maxLines: 2,
@@ -125,7 +118,7 @@ class _ProductState extends State<Product> {
                 padding: EdgeInsets.only(left: 10),
                 width: 304,
                 child: GestureDetector(
-                  onTap: () => print("ATTRIBUTES: Your Product's Id is "+widget.id.toString()),
+                  onTap: () => Navigator.of(context).pushNamed("/product-detail"),
                   child: Wrap(
                     direction: Axis.horizontal,
                     alignment: WrapAlignment.start,

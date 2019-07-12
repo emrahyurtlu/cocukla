@@ -32,10 +32,20 @@ dependencies:
   cloud_firestore:
   firebase_auth:
   google_sign_in:
+  flutter_facebook_login:
+  http:
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons:
+
+flutter_icons:
+  image_path: "assets/images/cocukla_launcher.png"
+  android: true
+  ios: true
 
 
 # For information on the generic Dart part of this file, see the
