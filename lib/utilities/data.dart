@@ -1,5 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 
-class Data {
+class AppData {
   static Position position;
+  static Map<String, dynamic> user;
 }

@@ -27,7 +27,7 @@ class _HomeExploreState extends State<HomeExplore> {
   Future<Position> locateUser() async {
     await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position value) => Data.position = value);
+        .then((Position value) => AppData.position = value);
   }
 
   @override

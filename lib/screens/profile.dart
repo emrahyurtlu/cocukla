@@ -1,23 +1,26 @@
 import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/utilities/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Profile extends StatelessWidget {
-  final _formKey = GlobalKey();
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   Profile() {
-    nameController.text = "John Doe";
-    emailController.text = "john@gmail.com";
-    passwordController.text = "12***33";
+    nameController.text = AppData.user["name"];
+    emailController.text = AppData.user["email"];
+    passwordController.text = AppData.user["password"];
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Profilim",
               style: TextStyle(
@@ -38,6 +41,7 @@ class Profile extends StatelessWidget {
                 color: AppColor.white),
             child: ListView(
               children: <Widget>[
+                //Image Upload
                 Padding(
                   padding: EdgeInsets.only(top: 60, bottom: 40),
                   child: Stack(
@@ -65,6 +69,7 @@ class Profile extends StatelessWidget {
                   child: Center(
                       child: Column(
                     children: <Widget>[
+                      //Name Surname
                       SizedBox(
                         width: 300,
                         height: 60,
@@ -94,6 +99,8 @@ class Profile extends StatelessWidget {
                           ],
                         ),
                       ),
+
+                      //Email
                       SizedBox(
                         width: 300,
                         height: 60,
@@ -110,6 +117,7 @@ class Profile extends StatelessWidget {
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: new InputDecoration(
+                                    enabled: false,
                                     labelStyle:
                                         TextStyle(color: AppColor.text_color),
                                     labelText: 'Eposta',

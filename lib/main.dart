@@ -4,6 +4,7 @@ import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/screens/profile.dart';
 import 'package:cocukla/screens/sign_in_screen.dart';
 import 'package:cocukla/screens/sign_up_screen.dart';
+import 'package:cocukla/screens/test.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -129,11 +130,12 @@ class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
 
+    //return ComponentTest();
 
     //Original Code
     //DO NOT DELETE
     return SplashScreen(
-      seconds: 3,
+      seconds: 2,
       navigateAfterSeconds: SignInScreen(),
       title: Text(
         'Hayatı Çocukla Yaşayın',

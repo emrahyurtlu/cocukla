@@ -13,4 +13,9 @@ class UserModel {
       this.password,
       this.isActive,
       this.role});
+
+  @override
+  String toString() {
+    return 'UserModel{uid: $uid, name: $name, email: $email, password: $password, isActive: $isActive, role: $role}';
+  }
 }

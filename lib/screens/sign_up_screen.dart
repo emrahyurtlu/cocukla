@@ -1,5 +1,10 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as prefix0;
+import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/ui/app_color.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -30,9 +35,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -182,24 +184,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 var name = _nameController.text;
                                 var email = _emailController.text;
                                 var password = _passwordController.text;
+                                Map<String, dynamic> data;
 
-                                if(name.isNotEmpty && email.isNotEmpty && (password.isNotEmpty && password.length >= 6)){
-                                  FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((FirebaseUser user){
-                                    UserUpdateInfo info = UserUpdateInfo();
-                                    info.displayName = name;
-                                    user.updateProfile(info).then((result){
-                                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Üyelik işleminiz tamamlandı!"),));
-                                    }).catchError((){
-                                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Hata oluştu!"),));
-                                    });
+                                if (name.isNotEmpty &&
+                                    email.isNotEmpty &&
+                                    password.isNotEmpty) {
+                                  data = {
+                                    "name": name,
+                                    "email": email,
+                                    "password": password,
+                                    "role": 0,
+                                    "isActive": true
+                                  };
 
-                                    Navigator.of(context).pushNamed("/sign-in");
-                                  }).catchError((e){
-                                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Veritabanına ulaşılamadı!"),));
-                                    //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(e.toString()),));
+                                  //Check is Unique
+                                  Firestore.instance.collection(Collection.Users).where("email", isEqualTo: email).snapshots().first.then((result){
+                                    if(result.documents.length == 0){
+                                      //Email is unique
+                                      Firestore.instance
+                                          .collection(Collection.Users)
+                                          .add(data)
+                                          .then((ref) {
+                                        _scaffoldKey.currentState
+                                            .showSnackBar(SnackBar(
+                                          content:
+                                          Text("Üyelik işleminiz tamamlandı!"),
+                                        ));
+                                      }).catchError((e) {
+                                        _scaffoldKey.currentState
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "Üyelik esnasında bir hata oluştu!"),
+                                        ));
+                                      });
+                                    }else{
+                                      //Email is used!
+                                      _scaffoldKey.currentState
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            "Girilen eposta kullanımda, lütfen başka bir eposta giriniz!"),
+                                      ));
+                                    }
                                   });
-                                }else{
-                                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Alanlar boş olamaz! Şifre en az 6 karakterden oluşmalıdır!"),));
+
+
+                                } else {
+                                  _scaffoldKey.currentState
+                                      .showSnackBar(SnackBar(
+                                    content: Text("Alanlar boş olamaz!"),
+                                  ));
                                 }
                               },
                             ),

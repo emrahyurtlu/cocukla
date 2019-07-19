@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/business/login_service.dart';
+import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/screens/forget_password_screen.dart';
 import 'package:cocukla/screens/sign_up_screen.dart';
 import 'package:cocukla/ui/app_color.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/utilities/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:cocukla/services/login_service.dart';
+import 'package:flutter/material.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _SignInScreenState extends State<SignInScreen> {
   String _email, _password;
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   //GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
@@ -25,6 +27,9 @@ class _SignInScreenState extends State<SignInScreen> {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     //_googleSignIn = GoogleSignIn();
+    if (AppData.user != null) {
+      Navigator.of(context).pushNamed("/home");
+    }
   }
 
   @override
@@ -36,7 +41,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     /*WidgetsBinding.instance.addPostFrameCallback((callBack) {
       if (FirebaseAuth.instance.currentUser() != null)
         Navigator.of(context).pushNamed("/home");
@@ -138,24 +142,25 @@ class _SignInScreenState extends State<SignInScreen> {
                             color: AppColor.pink,
                             textColor: AppColor.white,
                             onPressed: () {
-                              _email = emailController.text;
-                              _password = passwordController.text;
+                              _email = emailController.text.trim();
+                              _password = passwordController.text.trim();
 
                               if (_email.isNotEmpty && _password.isNotEmpty) {
-                                FirebaseAuth.instance
-                                    .signInWithEmailAndPassword(
-                                        email: _email, password: _password)
+                                Firestore.instance
+                                    .collection(Collection.Users)
+                                    .where("email", isEqualTo: _email)
+                                    .where("password", isEqualTo: _password)
+                                    .snapshots()
+                                    .first
                                     .then((user) {
-                                  print(user.toString());
-                                  Navigator.of(context).pushNamed("/home");
-                                }).catchError((e) {
-                                  _scaffoldKey.currentState
-                                      .showSnackBar(SnackBar(
-                                    content: Text(
-                                        "Eposta veya şifre bilgisi yanlış!"),
-                                  ));
-                                  /*print(" Hata ==> "+e.toString());
-                                  Navigator.of(context).pushNamed("/sign-up");*/
+                                  if (user.documents.length > 0) {
+                                    AppData.user = user.documents[0].data;
+                                    Navigator.of(context).pushNamed("/home");
+                                  } else {
+                                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                        content: Text(
+                                            "Eposta veya şifre bilgisi yanlış!")));
+                                  }
                                 });
                               } else {
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -214,7 +219,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
 
-
                   SizedBox(
                     width: 300,
                     height: 30,
@@ -270,18 +274,19 @@ class _SignInScreenState extends State<SignInScreen> {
                                   fontFamily: "Montserrat", fontSize: 14),
                             ),
                             onPressed: () {
-                              loginWithGoogle().then((FirebaseUser result){
+                              loginWithGoogle().then((FirebaseUser result) {
                                 UserUpdateInfo info = UserUpdateInfo();
                                 info.photoUrl = result.photoUrl;
                                 info.displayName = info.displayName;
 
                                 result.updateProfile(info);
                                 Navigator.of(context).pushNamed("/home");
-
-                              }).catchError((e){
-                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Google ile giriş yapamadınız."),));
+                              }).catchError((e) {
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                  content:
+                                      Text("Google ile giriş yapamadınız."),
+                                ));
                               });
-
                             },
                           ),
                         ),
