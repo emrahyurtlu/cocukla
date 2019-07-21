@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/business/login_service.dart';
+import 'package:cocukla/components/button_component.dart';
+import 'package:cocukla/components/text_input_component.dart';
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/screens/forget_password_screen.dart';
 import 'package:cocukla/screens/sign_up_screen.dart';
@@ -41,10 +43,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    /*WidgetsBinding.instance.addPostFrameCallback((callBack) {
-      if (FirebaseAuth.instance.currentUser() != null)
-        Navigator.of(context).pushNamed("/home");
-    });*/
 
     return Scaffold(
       key: _scaffoldKey,
@@ -66,122 +64,48 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Column(
                 children: <Widget>[
                   //Email TextField
-                  SizedBox(
-                    width: 300,
-                    height: 60,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: AppColor.light_gray,
-                            ),
-                            child: TextFormField(
-                              controller: emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                //errorText: "Bu alan boş olamaz",
-                                labelStyle:
-                                    TextStyle(color: AppColor.text_color),
-                                labelText: 'Eposta',
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(
-                                    left: 25, top: 5, bottom: 5, right: 5),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  TextInputComponent(
+                    emailController,
+                    labelText: "Eposta",
                   ),
-
                   //Password TextField
-                  SizedBox(
-                    width: 300,
-                    height: 60,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: AppColor.light_gray,
-                            ),
-                            child: TextFormField(
-                              controller: passwordController,
-                              obscureText: true,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                //errorText: "Bu alan boş olamaz",
-                                labelStyle:
-                                    TextStyle(color: AppColor.text_color),
-                                labelText: 'Şifre',
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(
-                                    left: 25, top: 5, bottom: 5, right: 5),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  TextInputComponent(
+                    passwordController,
+                    labelText: "Şifre",
+                    obscureText: true,
                   ),
-                  //LoginButton
-                  SizedBox(
-                    width: 300,
-                    height: 60,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50,
-                          child: FlatButton(
-                            color: AppColor.pink,
-                            textColor: AppColor.white,
-                            onPressed: () {
-                              _email = emailController.text.trim();
-                              _password = passwordController.text.trim();
 
-                              if (_email.isNotEmpty && _password.isNotEmpty) {
-                                Firestore.instance
-                                    .collection(Collection.Users)
-                                    .where("email", isEqualTo: _email)
-                                    .where("password", isEqualTo: _password)
-                                    .snapshots()
-                                    .listen((user) {
-                                  if (user.documents.length > 0) {
-                                    AppData.user = user.documents[0].data;
-                                    loginLog(_email);
-                                    Navigator.of(context).pushNamed("/home");
-                                  } else {
-                                    _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                        content: Text(
-                                            "Eposta veya şifre bilgisi yanlış!")));
-                                  }
-                                });
-                              } else {
-                                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  //LoginButton
+                  ButtonComponent(
+                      text: "Giriş Yap",
+                      onPressed: () {
+                        _email = emailController.text.trim();
+                        _password = passwordController.text.trim();
+
+                        if (_email.isNotEmpty && _password.isNotEmpty) {
+                          Firestore.instance
+                              .collection(Collection.Users)
+                              .where("email", isEqualTo: _email)
+                              .where("password", isEqualTo: _password)
+                              .snapshots()
+                              .listen((user) {
+                            if (user.documents.length > 0) {
+                              AppData.user = user.documents[0].data;
+                              loginLog(_email);
+                              Navigator.of(context).pushNamed("/home");
+                            } else {
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
                                   content: Text(
-                                      "Eposta veya şifre alanı boş olamaz!"),
-                                ));
-                              }
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0)),
-                            child: Text(
-                              "Giriş Yap",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: "Montserrat", fontSize: 14),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                                      "Eposta veya şifre bilgisi yanlış!")));
+                            }
+                          });
+                        } else {
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content:
+                                Text("Eposta veya şifre alanı boş olamaz!"),
+                          ));
+                        }
+                      }),
 
                   //Forget Password
                   SizedBox(
@@ -225,73 +149,35 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
 
                   //Facebook
-                  SizedBox(
-                    width: 300,
-                    height: 60,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50,
-                          child: FlatButton(
-                            color: AppColor.facebook,
-                            textColor: AppColor.white,
-                            onPressed: () {
-                              loginWithFacebook();
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0)),
-                            child: Text(
-                              "Facebook ile giriş yap",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: "Montserrat", fontSize: 14),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  ButtonComponent(
+                    text: "Facebook ile giriş yap",
+                    color: AppColor.facebook,
+                    textColor: AppColor.white,
+                    onPressed: () {
+                      loginWithFacebook();
+                    },
                   ),
 
                   //Google
-                  SizedBox(
-                    width: 300,
-                    height: 60,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width: 300,
-                          height: 50,
-                          child: FlatButton(
-                            color: AppColor.google,
-                            textColor: AppColor.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0)),
-                            child: Text(
-                              "Google ile giriş yap",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: "Montserrat", fontSize: 14),
-                            ),
-                            onPressed: () {
-                              loginWithGoogle().then((FirebaseUser result) {
-                                UserUpdateInfo info = UserUpdateInfo();
-                                info.photoUrl = result.photoUrl;
-                                info.displayName = info.displayName;
+                  ButtonComponent(
+                    text: "Google ile giriş yap",
+                    color: AppColor.google,
+                    textColor: AppColor.white,
+                    onPressed: () {
+                      loginWithGoogle().then((FirebaseUser result) {
+                        UserUpdateInfo info = UserUpdateInfo();
+                        info.photoUrl = result.photoUrl;
+                        info.displayName = info.displayName;
 
-                                result.updateProfile(info);
-                                Navigator.of(context).pushNamed("/home");
-                              }).catchError((e) {
-                                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                  content:
-                                      Text("Google ile giriş yapamadınız."),
-                                ));
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                        result.updateProfile(info);
+                        Navigator.of(context).pushNamed("/home");
+                      }).catchError((e) {
+                        _scaffoldKey.currentState.showSnackBar(SnackBar(
+                          content:
+                          Text("Google ile giriş yapamadınız."),
+                        ));
+                      });
+                    },
                   ),
 
                   //Sign Up
