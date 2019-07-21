@@ -1,4 +1,5 @@
 import 'package:cocukla/business/helpers/current_user.dart';
+import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/components/category_component.dart';
 import 'package:cocukla/components/product_component.dart';
 import 'package:cocukla/components/property_component.dart';
@@ -534,8 +535,15 @@ class _HomeState extends State<Home> {
                 leading: Icon(Icons.supervised_user_circle),
                 title: Text("Profilim"),
                 onTap: () {
-                  FirebaseAuth.instance.signOut();
                   Navigator.of(context).pushNamed("/my-profile");
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.place),
+                title: Text("Mekanlarım"),
+                onTap: () {
+                  Navigator.of(context).pushNamed("/my-places");
                 },
               ),
               Divider(),
@@ -543,7 +551,8 @@ class _HomeState extends State<Home> {
                 leading: Icon(Icons.exit_to_app),
                 title: Text("Çıkış"),
                 onTap: () {
-                  FirebaseAuth.instance.signOut();
+                  logoutLog(AppData.user["email"]);
+                  AppData.user = null;
                   Navigator.of(context).pushNamed("/sign-in");
                 },
               ),

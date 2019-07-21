@@ -131,6 +131,7 @@ class Profile extends StatelessWidget {
                           ],
                         ),
                       ),
+
                       SizedBox(
                         width: 300,
                         height: 60,
@@ -161,6 +162,7 @@ class Profile extends StatelessWidget {
                           ],
                         ),
                       ),
+
                       SizedBox(
                         width: 300,
                         height: 60,

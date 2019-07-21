@@ -1,6 +1,7 @@
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/datalayer/data_layer.dart';
 import 'package:cocukla/models/user_model.dart';
+import 'package:cocukla/utilities/image_uploader.dart';
 import 'package:flutter/material.dart';
 
 class ComponentTest extends StatefulWidget {
@@ -54,7 +55,15 @@ class _ComponentTestState extends State<ComponentTest> {
       child: Scaffold(
           body: ListView(
         children: <Widget>[
-          RaisedButton(
+          Center(
+            child: RaisedButton(
+              child: Text("File Upload"),
+              onPressed: (){
+                var result = uploadImage();
+              },
+            ),
+          )
+          /*RaisedButton(
             child: Text("INSERT"),
             onPressed: () {
               _service.insert(Collection.Users, insert);
@@ -86,7 +95,7 @@ class _ComponentTestState extends State<ComponentTest> {
               _service.getList(Collection.Users).then((onValue) => print(
                   "Data is retrived as list! " + onValue.documents[3]["name"]));
             },
-          ),
+          ),*/
         ],
       )),
     );

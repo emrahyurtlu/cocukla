@@ -1,5 +1,7 @@
 import 'package:cocukla/screens/forget_password_screen.dart';
 import 'package:cocukla/screens/home.dart';
+import 'package:cocukla/screens/place_form.dart';
+import 'package:cocukla/screens/places_screen.dart';
 import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/screens/profile.dart';
 import 'package:cocukla/screens/sign_in_screen.dart';
@@ -115,6 +117,8 @@ void main() {
       "/forget-password": (context) => ForgetPasswordScreen(),
       "/product-detail": (context) => ProductDetail(model),
       "/my-profile": (context) => Profile(),
+      "/my-places": (context) => Places(),
+      "/add-place": (context) => PlaceForm(),
     },
     debugShowCheckedModeBanner: false,
   ));
@@ -130,12 +134,12 @@ class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
 
-    //return ComponentTest();
+    return ComponentTest();
 
     //Original Code
     //DO NOT DELETE
-    return SplashScreen(
-      seconds: 2,
+    /*return SplashScreen(
+      seconds: 1,
       navigateAfterSeconds: SignInScreen(),
       title: Text(
         'Hayatı Çocukla Yaşayın',
@@ -148,6 +152,6 @@ class _CocuklaAppState extends State<CocuklaApp> {
       photoSize: 100.0,
       onClick: () => print("Waiting"),
       loaderColor: AppColor.pink,
-    );
+    );*/
   }
 }

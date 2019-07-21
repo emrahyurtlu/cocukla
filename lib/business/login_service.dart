@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/datalayer/collections.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -45,4 +47,12 @@ Future<FirebaseUser> loginWithFacebook() async{
 
 
   return null;
+}
+
+Future<void> loginLog(String email) async {
+  Firestore.instance.collection(Collection.UserLogins).add({"email": email, "action_date": DateTime.now(), "type": "login"});
+}
+
+Future<void> logoutLog(String email) async {
+  Firestore.instance.collection(Collection.UserLogins).add({"email": email, "action_date": DateTime.now(), "type": "logout"});
 }

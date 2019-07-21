@@ -23,7 +23,6 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
-#  connectivity:
   splashscreen: ^1.2.0
   flutter_rating_bar: ^1.2.0
   google_maps_flutter:
@@ -31,9 +30,14 @@ dependencies:
   flutter_swiper:
   cloud_firestore:
   firebase_auth:
+  firebase_storage:
   google_sign_in:
   flutter_facebook_login:
   http:
+  #image_picker:
+  path:
+  uuid:
+  multi_image_picker:
 
 
 dev_dependencies:

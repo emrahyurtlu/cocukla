@@ -151,10 +151,10 @@ class _SignInScreenState extends State<SignInScreen> {
                                     .where("email", isEqualTo: _email)
                                     .where("password", isEqualTo: _password)
                                     .snapshots()
-                                    .first
-                                    .then((user) {
+                                    .listen((user) {
                                   if (user.documents.length > 0) {
                                     AppData.user = user.documents[0].data;
+                                    loginLog(_email);
                                     Navigator.of(context).pushNamed("/home");
                                   } else {
                                     _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -169,8 +169,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ));
                               }
                             },
-                            shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(50.0)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0)),
                             child: Text(
                               "Giriş Yap",
                               textAlign: TextAlign.center,
@@ -239,8 +239,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             onPressed: () {
                               loginWithFacebook();
                             },
-                            shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(50.0)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0)),
                             child: Text(
                               "Facebook ile giriş yap",
                               textAlign: TextAlign.center,
@@ -265,8 +265,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: FlatButton(
                             color: AppColor.google,
                             textColor: AppColor.white,
-                            shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(50.0)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0)),
                             child: Text(
                               "Google ile giriş yap",
                               textAlign: TextAlign.center,
@@ -307,9 +307,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: FlatButton(
                             textColor: AppColor.text_color,
                             onPressed: () {
-                              /*Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: Text("Hesabınız yoksa. Üye Olun!"),
-                                  ))*/
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
