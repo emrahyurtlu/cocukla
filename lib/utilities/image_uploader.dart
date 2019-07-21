@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -7,30 +9,36 @@ import 'package:uuid/uuid.dart';
 
 File file;
 var assets = List<Asset>();
+var links = List<String>();
 
-Future uploadImage() async {
+Future<List<String>> uploadPickedImages() async {
   assets = await MultiImagePicker.pickImages(maxImages: 5, enableCamera: true);
   print(" ------------------------------------------------------------ ");
-  print(assets);
+  print("Files are selected!");
+  print(assets.length);
   print(" ------------------------------------------------------------ ");
 
-  for(var asset in assets){
-
+  for (var asset in assets) {
+    var result = _upload(asset);
+    result.then((value) {
+      links.add(value);
+    });
   }
+
+  return links;
 }
 
-_upload(File file) async {
-  String extension = path.extension(file.path);
-  var newName = Uuid().v1().toString() + extension;
-  FirebaseStorage.instance.ref().child(newName).putFile(file);
-}
+Future<dynamic> _upload(Asset asset) async {
+  ByteData byteData = await asset.requestOriginal();
 
-Future<dynamic> postImage(Asset imageFile) async {
-  await imageFile.requestOriginal();
-  String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-  StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
-  //StorageUploadTask uploadTask = reference.putData();
-  //StorageUploadTask uploadTask = reference.putData(imageFile.imageData.buffer.asUint8List());
-  //StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-  //return storageTaskSnapshot.ref.getDownloadURL();
+  String extension = path.extension(asset.name);
+  var fileName = Uuid().v1().toString() + extension;
+
+  StorageReference ref = FirebaseStorage.instance.ref().child(fileName);
+
+  StorageUploadTask task = ref.putData(byteData.buffer.asUint8List());
+
+  StorageTaskSnapshot storageTaskSnapshot = await task.onComplete;
+  
+  return storageTaskSnapshot.ref.getDownloadURL();
 }

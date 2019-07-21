@@ -1,7 +1,9 @@
-import 'package:cocukla/datalayer/collections.dart';
+import 'dart:core';
+import 'dart:math';
+
 import 'package:cocukla/datalayer/data_layer.dart';
 import 'package:cocukla/models/user_model.dart';
-import 'package:cocukla/utilities/image_uploader.dart';
+import 'package:cocukla/utilities/device_location.dart';
 import 'package:flutter/material.dart';
 
 class ComponentTest extends StatefulWidget {
@@ -51,15 +53,24 @@ class _ComponentTestState extends State<ComponentTest> {
 
   @override
   Widget build(BuildContext context) {
+    String label = "Get Device Location";
     return SafeArea(
       child: Scaffold(
           body: ListView(
         children: <Widget>[
           Center(
             child: RaisedButton(
-              child: Text("File Upload"),
-              onPressed: (){
-                var result = uploadImage();
+              child: Text("Get Device Location"),
+              onPressed: () async {
+                var location = await getLocation();
+                print("Your latitude is: " + location.latitude.toString());
+                print("Your longitude is: " + location.longitude.toString());
+
+                var cityName = await getCityName();
+                print("City name: " + cityName);
+
+                var districtName = await getDistrictName();
+                print("District name: " +districtName);
               },
             ),
           )

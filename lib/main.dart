@@ -8,6 +8,7 @@ import 'package:cocukla/screens/sign_in_screen.dart';
 import 'package:cocukla/screens/sign_up_screen.dart';
 import 'package:cocukla/screens/test.dart';
 import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/font_family.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:splashscreen/splashscreen.dart';
@@ -134,17 +135,17 @@ class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
 
-    return ComponentTest();
+    //return ComponentTest();
 
     //Original Code
     //DO NOT DELETE
-    /*return SplashScreen(
-      seconds: 1,
+    return SplashScreen(
+      seconds: 2,
       navigateAfterSeconds: SignInScreen(),
       title: Text(
         'Hayatı Çocukla Yaşayın',
         style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 20.0, fontFamily: "Kristen"),
+            fontWeight: FontWeight.bold, fontSize: 20.0, fontFamily: FontFamily.Kristen),
       ),
       image: Image.asset('assets/images/cocukla_logo.png'),
       backgroundColor: Colors.white,
@@ -152,6 +153,6 @@ class _CocuklaAppState extends State<CocuklaApp> {
       photoSize: 100.0,
       onClick: () => print("Waiting"),
       loaderColor: AppColor.pink,
-    );*/
+    );
   }
 }

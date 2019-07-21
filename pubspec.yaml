@@ -34,7 +34,7 @@ dependencies:
   google_sign_in:
   flutter_facebook_login:
   http:
-  #image_picker:
+  image_picker:
   path:
   uuid:
   multi_image_picker:

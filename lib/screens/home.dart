@@ -9,7 +9,7 @@ import 'package:cocukla/models/product_model.dart';
 import 'package:cocukla/models/property_model.dart';
 import 'package:cocukla/screens/home_explore.dart';
 import 'package:cocukla/ui/app_color.dart';
-import 'package:cocukla/utilities/data.dart';
+import 'package:cocukla/utilities/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

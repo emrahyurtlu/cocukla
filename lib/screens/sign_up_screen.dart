@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as prefix0;
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/font_family.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         title: Text("Üye Olun",
             style: TextStyle(
-                color: AppColor.text_color, fontFamily: "MontserratRegular")),
+                color: AppColor.text_color, fontFamily: FontFamily.MontserratRegular)),
         backgroundColor: AppColor.white,
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColor.text_color),

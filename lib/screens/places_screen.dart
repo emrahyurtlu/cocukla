@@ -1,5 +1,6 @@
 import 'package:cocukla/components/product_component.dart';
 import 'package:cocukla/components/property_component.dart';
+import 'package:cocukla/screens/place_form.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 
@@ -163,7 +164,12 @@ class _PlacesState extends State<Places> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: (){
-            Navigator.pushNamed(context, "/add-place");
+            var map = Map<String, dynamic>();
+            map = {"name": "Hosta Piknik", "digest": "özet alanı", "insert_date":"", "update_date":"", "phone": "0312 333 4455", "fax":"0312 111 2233", "email": "necatibey@hosta.com", "address": "Necatibey Caddesi ...", "category": "Mekanlar"};
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PlaceForm(map)),
+            );
           },
         ),
       ),

@@ -1,12 +1,22 @@
+import 'dart:core';
+
 import 'package:cocukla/components/button_component.dart';
 import 'package:cocukla/components/dropdown_component.dart';
 import 'package:cocukla/components/text_input_component.dart';
 import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/font_family.dart';
+import 'package:cocukla/utilities/app_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:cocukla/utilities/device_location.dart';
+import 'package:geolocator/geolocator.dart';
 
 class PlaceForm extends StatefulWidget {
+  Map<String, dynamic> data;
+
+  PlaceForm([this.data]);
+
   @override
   _PlaceFormState createState() => _PlaceFormState();
 }
@@ -14,15 +24,44 @@ class PlaceForm extends StatefulWidget {
 class _PlaceFormState extends State<PlaceForm> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _nameController = TextEditingController();
-  final _digestController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _faxController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _cityController = TextEditingController();
-  final _districtController = TextEditingController();
-  final _emailController = TextEditingController();
+  static TextEditingController _nameController = TextEditingController();
+  static TextEditingController _digestController = TextEditingController();
+  static TextEditingController _phoneController = TextEditingController();
+  static TextEditingController _faxController = TextEditingController();
+  static TextEditingController _addressController = TextEditingController();
+  static TextEditingController _cityController = TextEditingController();
+  static TextEditingController _districtController = TextEditingController();
+  static TextEditingController _emailController = TextEditingController();
   String dropdownValue;
+  static Position _location;
+  static List<Placemark> _list;
+  final _owner = AppData.user["email"];
+  final int _rating = 0;
+  final comments = [];
+  static String insert_date;
+  static String update_date;
+
+  var res1 = getLocation().then((pos) => _location = pos);
+  var res2 = getAddrInfo().then((List<Placemark> info){
+    _cityController.text = info[0].administrativeArea;
+    _districtController.text = info[0].subAdministrativeArea;
+  });
+
+  @override
+  void initState() {
+    insert_date = widget.data["insert_date"] != "" ? widget.data["insert_date"] : DateTime.now().toString();
+    update_date = DateTime.now().toString();
+    _nameController.text = widget.data["name"];
+    _digestController.text = widget.data["digest"];
+    _phoneController.text = widget.data["phone"];
+    _faxController.text = widget.data["fax"];
+    _addressController.text = widget.data["address"];
+    _emailController.text = widget.data["email"];
+    dropdownValue = widget.data["category"] ?? "";
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +72,7 @@ class _PlaceFormState extends State<PlaceForm> {
         appBar: AppBar(
           title: Text("Yeni Ekle",
               style: TextStyle(
-                  color: AppColor.text_color, fontFamily: "MontserratRegular")),
+                  color: AppColor.text_color, fontFamily: FontFamily.MontserratRegular)),
           backgroundColor: AppColor.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: AppColor.text_color),
@@ -50,29 +89,6 @@ class _PlaceFormState extends State<PlaceForm> {
                 color: AppColor.white),
             child: ListView(
               children: <Widget>[
-                //Image Upload
-                Container(
-                  padding: EdgeInsets.only(top: 60, bottom: 40),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50))),
-                        child: Image.asset(
-                          "assets/images/avatar.png",
-                          width: 86,
-                          height: 86,
-                        ),
-                      ),
-                      Icon(
-                        Icons.add,
-                        color: AppColor.white,
-                      )
-                    ],
-                  ),
-                ),
                 Form(
                   key: _formKey,
                   child: Center(
@@ -166,11 +182,3 @@ class _PlaceFormState extends State<PlaceForm> {
     );
   }
 }
-
-/*
-class PlaceForm extends StatelessWidget {
-
-
-
-}
-*/

@@ -4,7 +4,7 @@ import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/screens/forget_password_screen.dart';
 import 'package:cocukla/screens/sign_up_screen.dart';
 import 'package:cocukla/ui/app_color.dart';
-import 'package:cocukla/utilities/data.dart';
+import 'package:cocukla/utilities/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
