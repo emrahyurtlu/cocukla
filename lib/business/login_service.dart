@@ -8,8 +8,8 @@ import 'dart:convert';
 
 Future<FirebaseUser> loginWithGoogle() async{
   GoogleSignIn _googleSignIn = GoogleSignIn();
-  GoogleSignInAccount googleUser = await _googleSignIn.signIn() as GoogleSignInAccount;
-  GoogleSignInAuthentication googleAuth = await googleUser.authentication as GoogleSignInAuthentication;
+  GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+  GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
   AuthCredential credential = await GoogleAuthProvider.getCredential(
     accessToken: googleAuth.accessToken,

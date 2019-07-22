@@ -50,40 +50,40 @@ class _PlacesState extends State<Places> {
                     key: GlobalKey(),
                     child: Center(
                         child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 280,
-                              height: 48,
-                              child: Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 0, top: 0),
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: AppColor.light_gray,
-                                      ),
-                                      child: TextFormField(
-                                        controller: null,
-                                        keyboardType: TextInputType.text,
-                                        decoration: new InputDecoration(
-                                          labelStyle:
+                      children: <Widget>[
+                        SizedBox(
+                          width: 280,
+                          height: 48,
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 0, top: 0),
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: AppColor.light_gray,
+                                  ),
+                                  child: TextFormField(
+                                    controller: null,
+                                    keyboardType: TextInputType.text,
+                                    decoration: new InputDecoration(
+                                      labelStyle:
                                           TextStyle(color: AppColor.text_color),
-                                          labelText: "Mekan arayın",
-                                          //hintText: "Ara",
-                                          border: InputBorder.none,
-                                          contentPadding:
+                                      labelText: "Mekan arayın",
+                                      //hintText: "Ara",
+                                      border: InputBorder.none,
+                                      contentPadding:
                                           EdgeInsets.only(left: 25, top: 5),
-                                          prefixIcon: Icon(Icons.search),
-                                        ),
-                                      ),
+                                      prefixIcon: Icon(Icons.search),
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ],
-                        )),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )),
                   ),
                   SizedBox(
                     width: 10,
@@ -163,9 +163,23 @@ class _PlacesState extends State<Places> {
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: (){
+          onPressed: () {
             var map = Map<String, dynamic>();
-            map = {"name": "Hosta Piknik", "digest": "özet alanı", "insert_date":"", "update_date":"", "phone": "0312 333 4455", "fax":"0312 111 2233", "email": "necatibey@hosta.com", "address": "Necatibey Caddesi ...", "category": "Mekanlar"};
+            map = {
+              "name": "Hosta Piknik",
+              "digest": "özet alanı",
+              "insert_date": "",
+              "update_date": "",
+              "phone": "0312 333 4455",
+              "fax": "0312 111 2233",
+              "email": "necatibey@hosta.com",
+              "address": "Necatibey Caddesi ...",
+              "category": "Mekanlar",
+              "city": "Ankara",
+              "district": "Çankaya",
+              "isApproved": false,
+              "coordinate": ""
+            };
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => PlaceForm(map)),

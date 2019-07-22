@@ -11,6 +11,16 @@ File file;
 var assets = List<Asset>();
 var links = List<String>();
 
+Future<List<Asset>> pickImages() async {
+  assets = await MultiImagePicker.pickImages(maxImages: 5, enableCamera: true);
+  print(" ------------------------------------------------------------ ");
+  print("Files are selected!");
+  print(assets.length);
+  print(" ------------------------------------------------------------ ");
+
+  return assets;
+}
+
 Future<List<String>> uploadPickedImages() async {
   assets = await MultiImagePicker.pickImages(maxImages: 5, enableCamera: true);
   print(" ------------------------------------------------------------ ");

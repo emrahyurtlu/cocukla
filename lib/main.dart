@@ -6,7 +6,6 @@ import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/screens/profile.dart';
 import 'package:cocukla/screens/sign_in_screen.dart';
 import 'package:cocukla/screens/sign_up_screen.dart';
-import 'package:cocukla/screens/test.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/ui/font_family.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ var model = ProductModel(
     email: "atasehir@kasiyeyaz.com",
     fax: "02125554411",
     text:
-    "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
+        "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
     address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
     comments: [
       CommentModel(
@@ -38,28 +37,28 @@ var model = ProductModel(
           name: "Abdullah O.",
           rating: 4,
           text:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
           date: DateTime.now()),
       CommentModel(
           imageLink: "assets/images/avatar.png",
           name: "Mehmet S.",
           rating: 5,
           text:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
           date: DateTime.now()),
       CommentModel(
           imageLink: "assets/images/avatar.png",
           name: "Bayram T.",
           rating: 3,
           text:
-          "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+              "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
           date: DateTime.now()),
       CommentModel(
           imageLink: "assets/images/avatar.png",
           name: "Emrah Y.",
           rating: 5,
           text:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
           date: DateTime.now()),
     ],
     photos: [
@@ -75,9 +74,7 @@ var model = ProductModel(
           text: "10:00-00:00 arası hizmet vermektedir",
           color: AppColor.green),
       PropertyModel(
-          icon_name: "location_on",
-          text: "5.6km",
-          color: AppColor.dark_gray),
+          icon_name: "location_on", text: "5.6km", color: AppColor.dark_gray),
       PropertyModel(
           icon_name: "restaurant_menu",
           text: "Çocuk menüsü",
@@ -131,11 +128,12 @@ class CocuklaApp extends StatefulWidget {
 }
 
 class _CocuklaAppState extends State<CocuklaApp> {
-
   @override
   Widget build(BuildContext context) {
-
+    //return LoadCityTest();
     //return ComponentTest();
+    //return GetCities();
+    //return PropertyTest();
 
     //Original Code
     //DO NOT DELETE
@@ -145,7 +143,9 @@ class _CocuklaAppState extends State<CocuklaApp> {
       title: Text(
         'Hayatı Çocukla Yaşayın',
         style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 20.0, fontFamily: FontFamily.Kristen),
+            fontWeight: FontWeight.bold,
+            fontSize: 20.0,
+            fontFamily: FontFamily.Kristen),
       ),
       image: Image.asset('assets/images/cocukla_logo.png'),
       backgroundColor: Colors.white,
