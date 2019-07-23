@@ -11,8 +11,9 @@ File file;
 var assets = List<Asset>();
 var links = List<String>();
 
-Future<List<Asset>> pickImages() async {
-  assets = await MultiImagePicker.pickImages(maxImages: 5, enableCamera: true);
+Future<List<Asset>> pickImages({int maxImages = 5}) async {
+  assets = await MultiImagePicker.pickImages(
+      maxImages: maxImages, enableCamera: true);
   print(" ------------------------------------------------------------ ");
   print("Files are selected!");
   print(assets.length);
@@ -29,7 +30,7 @@ Future<List<String>> uploadPickedImages() async {
   print(" ------------------------------------------------------------ ");
 
   for (var asset in assets) {
-    var result = _upload(asset);
+    var result = uploadSelectedAsset(asset);
     result.then((value) {
       links.add(value);
     });
@@ -38,17 +39,20 @@ Future<List<String>> uploadPickedImages() async {
   return links;
 }
 
-Future<dynamic> _upload(Asset asset) async {
+Future<dynamic> uploadSelectedAsset(Asset asset,
+    [String folderName = ""]) async {
   ByteData byteData = await asset.requestOriginal();
 
   String extension = path.extension(asset.name);
   var fileName = Uuid().v1().toString() + extension;
 
-  StorageReference ref = FirebaseStorage.instance.ref().child(fileName);
+  StorageReference ref = FirebaseStorage.instance
+      .ref()
+      .child(folderName != "" ? folderName + "/" + fileName : fileName);
 
   StorageUploadTask task = ref.putData(byteData.buffer.asUint8List());
 
   StorageTaskSnapshot storageTaskSnapshot = await task.onComplete;
-  
+
   return storageTaskSnapshot.ref.getDownloadURL();
 }

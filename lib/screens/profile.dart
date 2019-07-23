@@ -1,19 +1,62 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/components/button_component.dart';
+import 'package:cocukla/components/card_component.dart';
+import 'package:cocukla/components/text_input_component.dart';
+import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
+import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:cocukla/utilities/image_uploader.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
+  @override
+  _ProfileState createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  static List<Asset> _assets;
+  static String _imageSelectedInfo;
+  static Image _avatar;
 
-  Profile() {
+  @override
+  void initState() {
     nameController.text = AppData.user["name"];
     emailController.text = AppData.user["email"];
     passwordController.text = AppData.user["password"];
+    _assets = List<Asset>();
+    _imageSelectedInfo = _assets.length == 0
+        ? "Herhangi bir fotoğraf seçilmedi."
+        : "1 adet fotoğraf seçildi.";
+    _avatar = AppData.user.containsKey("avatar") && AppData.user["avatar"] != ""
+        ? Image.network(
+            AppData.user["avatar"],
+            fit: BoxFit.cover,
+            width: 86,
+            height: 86,
+          )
+        : Image.asset(
+            "assets/images/avatar.png",
+            width: 86,
+            height: 86,
+          );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -22,47 +65,53 @@ class Profile extends StatelessWidget {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text("Profilim",
-              style: TextStyle(
-                  color: AppColor.text_color, fontFamily: "MontserratRegular")),
+          title: Text("Profilim", style: AppStyle.AppBarTextStyle),
           backgroundColor: AppColor.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: AppColor.text_color),
         ),
         body: SafeArea(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                border: Border.all(color: Colors.white),
-                color: AppColor.white),
+          child: CardComponent(
             child: ListView(
               children: <Widget>[
                 //Image Upload
                 Padding(
-                  padding: EdgeInsets.only(top: 60, bottom: 40),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50))),
-                        child: Image.asset(
-                          "assets/images/avatar.png",
-                          width: 86,
-                          height: 86,
+                  padding: EdgeInsets.only(top: 60, bottom: 10),
+                  child: GestureDetector(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50))),
+                          child: CircleAvatar(
+                            child: ClipOval(child: _avatar),
+                            radius: 50,
+                            backgroundColor: AppColor.light_gray,
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.add,
-                        color: AppColor.white,
-                      )
-                    ],
+                        Icon(
+                          Icons.add,
+                          color: AppColor.white,
+                        ),
+                      ],
+                    ),
+                    onTap: () async {
+                      var temp = await pickImages(maxImages: 1);
+                      setState(() {
+                        _assets = temp;
+                        _imageSelectedInfo = _assets.length != 0
+                            ? "1 adet fotoğraf seçildi."
+                            : "Herhangi bir fotoğraf seçilmedi";
+                      });
+                      print("Files are selected!");
+                    },
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Center(child: Text(_imageSelectedInfo)),
                 ),
                 Form(
                   key: _formKey,
@@ -70,131 +119,81 @@ class Profile extends StatelessWidget {
                       child: Column(
                     children: <Widget>[
                       //Name Surname
-                      SizedBox(
-                        width: 300,
-                        height: 60,
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 10),
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: AppColor.light_gray,
-                                ),
-                                child: TextFormField(
-                                  controller: nameController,
-                                  keyboardType: TextInputType.text,
-                                  decoration: new InputDecoration(
-                                    labelStyle:
-                                        TextStyle(color: AppColor.text_color),
-                                    labelText: 'Ad Soyad',
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 25, top: 5, bottom: 5, right: 5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      TextInputComponent(
+                        nameController,
+                        labelText: "Ad Soyad",
                       ),
 
                       //Email
-                      SizedBox(
-                        width: 300,
-                        height: 60,
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 10),
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: AppColor.light_gray,
-                                ),
-                                child: TextFormField(
-                                  controller: emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: new InputDecoration(
-                                    enabled: false,
-                                    labelStyle:
-                                        TextStyle(color: AppColor.text_color),
-                                    labelText: 'Eposta',
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 25, top: 5, bottom: 5, right: 5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      TextInputComponent(
+                        emailController,
+                        labelText: "Eposta",
+                        enabled: false,
                       ),
 
-                      SizedBox(
-                        width: 300,
-                        height: 60,
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 10),
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: AppColor.light_gray,
-                                ),
-                                child: TextFormField(
-                                  controller: passwordController,
-                                  obscureText: true,
-                                  keyboardType: TextInputType.text,
-                                  decoration: new InputDecoration(
-                                    labelStyle:
-                                        TextStyle(color: AppColor.text_color),
-                                    labelText: 'Şifre',
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 25, top: 5, bottom: 5, right: 5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      TextInputComponent(
+                        passwordController,
+                        labelText: "Şifre",
+                        obscureText: true,
                       ),
 
-                      SizedBox(
-                        width: 300,
-                        height: 60,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: 300,
-                              height: 50,
-                              child: FlatButton(
-                                color: AppColor.pink,
-                                textColor: AppColor.white,
-                                onPressed: () => {
-                                      print("Güncellendi!")
-                                      /*Scaffold.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content:
-                                            Text("Uygulamaya üye oldunuz!"),
-                                      ))*/
-                                      //Navigator.pop(context)
-                                    },
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(50.0)),
-                                child: Text(
-                                  "Güncelle",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "Montserrat", fontSize: 14),
-                                ),
-                              ),
-                            ),
-                          ],
+                      ButtonComponent(
+                        text: "Güncelle",
+                        onPressed: () async {
+                          var name = nameController.text.trim();
+                          var email = emailController.text.trim();
+                          var password = passwordController.text.trim();
+                          AppData.user["name"] = name;
+                          AppData.user["password"] = password;
+                          var tempUrl = "";
+                          if (_assets.length != 0) {
+                            tempUrl = await uploadSelectedAsset(
+                                _assets[0], "avatars");
+                            AppData.user["avatar"] = tempUrl;
+                            _assets.removeAt(0);
+                          }
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: Row(
+                                    children: <Widget>[
+                                      CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                AppColor.pink),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Text("İşleminiz devam ediyor"),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              });
+
+                          Firestore.instance
+                              .collection(Collection.Users)
+                              .document(AppData.documentID)
+                              .updateData(AppData.user)
+                              .then((value) {
+                            setState(() {
+                              _avatar = Image.network(
+                                AppData.user["avatar"],
+                                fit: BoxFit.cover,
+                                width: 86,
+                                height: 86,
+                              );
+                              _assets = List<Asset>();
+                            });
+                          }).whenComplete(() => Navigator.of(context).pop());
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          "Not: Eposta adresi güncellenmemektedir.",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],

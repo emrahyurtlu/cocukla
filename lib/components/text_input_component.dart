@@ -9,6 +9,7 @@ class TextInputComponent extends StatefulWidget {
   final EdgeInsetsGeometry contentPadding;
   final int maxLines;
   final bool obscureText;
+  final bool enabled;
 
   TextInputComponent(this.controller,
       {this.width = 300,
@@ -18,6 +19,7 @@ class TextInputComponent extends StatefulWidget {
       this.hintText,
       this.maxLines = 1,
       this.obscureText = false,
+      this.enabled = true,
       this.contentPadding =
           const EdgeInsets.only(left: 25, top: 5, bottom: 5, right: 5)});
 
@@ -45,6 +47,7 @@ class _TextInputComponentState extends State<TextInputComponent> {
                 keyboardType: widget.inputType,
                 maxLines: widget.maxLines,
                 obscureText: widget.obscureText,
+                enabled: widget.enabled,
                 decoration: InputDecoration(
                   labelStyle: TextStyle(color: AppColor.text_color),
                   labelText: widget.labelText,

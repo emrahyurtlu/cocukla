@@ -524,10 +524,18 @@ class _HomeState extends State<Home> {
                 ),
                 accountEmail: Text(AppData.user["email"],
                     style: TextStyle(color: AppColor.white)),
-                currentAccountPicture: Image.asset(
-                  "assets/images/avatar.png",
-                  width: 86,
-                  height: 86,
+                currentAccountPicture:
+                CircleAvatar(
+                  child: ClipOval(child: Image.network(
+                    AppData.user.containsKey("avatar")
+                        ? AppData.user["avatar"]
+                        : "assets/images/avatar.png",
+                    width: 86,
+                    height: 86,
+                  )),
+                  radius: 50,
+                  backgroundColor: AppColor.light_gray,
+
                 ),
                 decoration: BoxDecoration(color: AppColor.pink),
               ),

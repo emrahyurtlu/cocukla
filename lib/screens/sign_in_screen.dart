@@ -91,6 +91,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               .listen((user) {
                             if (user.documents.length > 0) {
                               AppData.user = user.documents[0].data;
+                              AppData.documentID= user.documents[0].documentID;
                               loginLog(_email);
                               Navigator.of(context).pushNamed("/home");
                             } else {
