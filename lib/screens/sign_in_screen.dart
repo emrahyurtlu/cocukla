@@ -43,7 +43,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
@@ -89,10 +88,13 @@ class _SignInScreenState extends State<SignInScreen> {
                               .where("password", isEqualTo: _password)
                               .snapshots()
                               .listen((user) {
+                            //processing(context, dismiss: dismiss);
+
                             if (user.documents.length > 0) {
                               AppData.user = user.documents[0].data;
-                              AppData.documentID= user.documents[0].documentID;
+                              AppData.documentID = user.documents[0].documentID;
                               loginLog(_email);
+
                               Navigator.of(context).pushNamed("/home");
                             } else {
                               _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -101,6 +103,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             }
                           });
                         } else {
+                          setState(() {});
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
                             content:
                                 Text("Eposta veya şifre alanı boş olamaz!"),
@@ -174,8 +177,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Navigator.of(context).pushNamed("/home");
                       }).catchError((e) {
                         _scaffoldKey.currentState.showSnackBar(SnackBar(
-                          content:
-                          Text("Google ile giriş yapamadınız."),
+                          content: Text("Google ile giriş yapamadınız."),
                         ));
                       });
                     },

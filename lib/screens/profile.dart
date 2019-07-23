@@ -7,6 +7,7 @@ import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,7 +25,6 @@ class _ProfileState extends State<Profile> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   static List<Asset> _assets;
-  static String _imageSelectedInfo;
   static Image _avatar;
 
   @override
@@ -32,22 +32,11 @@ class _ProfileState extends State<Profile> {
     nameController.text = AppData.user["name"];
     emailController.text = AppData.user["email"];
     passwordController.text = AppData.user["password"];
-    _assets = List<Asset>();
-    _imageSelectedInfo = _assets.length == 0
-        ? "Herhangi bir fotoğraf seçilmedi."
-        : "1 adet fotoğraf seçildi.";
-    _avatar = AppData.user.containsKey("avatar") && AppData.user["avatar"] != ""
-        ? Image.network(
-            AppData.user["avatar"],
-            fit: BoxFit.cover,
-            width: 86,
-            height: 86,
-          )
-        : Image.asset(
-            "assets/images/avatar.png",
-            width: 86,
-            height: 86,
-          );
+    _assets = null;
+    _avatar = Image.network(
+      AppData.user["avatar"],
+      width: 86,
+    );
     super.initState();
   }
 
@@ -76,7 +65,7 @@ class _ProfileState extends State<Profile> {
               children: <Widget>[
                 //Image Upload
                 Padding(
-                  padding: EdgeInsets.only(top: 60, bottom: 10),
+                  padding: EdgeInsets.only(top: 60, bottom: 20),
                   child: GestureDetector(
                     child: Stack(
                       alignment: Alignment.center,
@@ -99,19 +88,14 @@ class _ProfileState extends State<Profile> {
                     ),
                     onTap: () async {
                       var temp = await pickImages(maxImages: 1);
+                      var bytes = await temp[0].requestOriginal();
                       setState(() {
                         _assets = temp;
-                        _imageSelectedInfo = _assets.length != 0
-                            ? "1 adet fotoğraf seçildi."
-                            : "Herhangi bir fotoğraf seçilmedi";
+                        _avatar = Image.memory(bytes.buffer.asUint8List(),width: 86,);
                       });
                       print("Files are selected!");
                     },
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Center(child: Text(_imageSelectedInfo)),
                 ),
                 Form(
                   key: _formKey,
@@ -140,37 +124,19 @@ class _ProfileState extends State<Profile> {
                       ButtonComponent(
                         text: "Güncelle",
                         onPressed: () async {
-                          var name = nameController.text.trim();
-                          var email = emailController.text.trim();
-                          var password = passwordController.text.trim();
-                          AppData.user["name"] = name;
-                          AppData.user["password"] = password;
+                          var dismiss = false;
+                          processing(context, dismiss: dismiss);
+
+                          AppData.user["name"] = nameController.text.trim();
+                          AppData.user["password"] = passwordController.text.trim();
+
                           var tempUrl = "";
-                          if (_assets.length != 0) {
+                          if (_assets != null && _assets.length != 0) {
                             tempUrl = await uploadSelectedAsset(
                                 _assets[0], "avatars");
                             AppData.user["avatar"] = tempUrl;
-                            _assets.removeAt(0);
+                            _assets.clear();
                           }
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  content: Row(
-                                    children: <Widget>[
-                                      CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                AppColor.pink),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text("İşleminiz devam ediyor"),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              });
 
                           Firestore.instance
                               .collection(Collection.Users)
@@ -180,13 +146,12 @@ class _ProfileState extends State<Profile> {
                             setState(() {
                               _avatar = Image.network(
                                 AppData.user["avatar"],
-                                fit: BoxFit.cover,
                                 width: 86,
-                                height: 86,
                               );
-                              _assets = List<Asset>();
+                              dismiss = true;
                             });
-                          }).whenComplete(() => Navigator.of(context).pop());
+                          }).whenComplete(() => dismiss = true);
+
                         },
                       ),
                       Padding(

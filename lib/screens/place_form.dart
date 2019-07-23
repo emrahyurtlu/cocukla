@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:cocukla/components/button_component.dart';
+import 'package:cocukla/components/card_component.dart';
 import 'package:cocukla/components/dropdown_component.dart';
 import 'package:cocukla/components/header_component.dart';
 import 'package:cocukla/components/property_component.dart';
@@ -132,15 +133,7 @@ class _PlaceFormState extends State<PlaceForm> {
           iconTheme: IconThemeData(color: AppColor.text_color),
         ),
         body: SafeArea(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                border: Border.all(color: Colors.white),
-                color: AppColor.white),
+          child: CardComponent(
             child: ListView(
               children: <Widget>[
                 Form(

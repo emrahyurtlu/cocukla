@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocukla/business/helpers/current_user.dart';
 import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/components/category_component.dart';
@@ -219,22 +220,6 @@ class _HomeState extends State<Home> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                Category(
-                  imageUrl: "assets/images/place.png",
-                  title: "Mekanlar",
-                ),
-                Category(
-                  imageUrl: "assets/images/activity.png",
-                  title: "Aktiviteler",
-                ),
-                Category(
-                  imageUrl: "assets/images/health.png",
-                  title: "Sağlık",
-                ),
-                Category(
-                  imageUrl: "assets/images/shopping.png",
-                  title: "Alışveriş",
-                ),
                 Category(
                   imageUrl: "assets/images/place.png",
                   title: "Mekanlar",
@@ -526,12 +511,12 @@ class _HomeState extends State<Home> {
                     style: TextStyle(color: AppColor.white)),
                 currentAccountPicture:
                 CircleAvatar(
-                  child: ClipOval(child: Image.network(
-                    AppData.user.containsKey("avatar")
-                        ? AppData.user["avatar"]
-                        : "assets/images/avatar.png",
+                  child: ClipOval(child: CachedNetworkImage(
+                    imageUrl: AppData.user["avatar"],
                     width: 86,
                     height: 86,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   )),
                   radius: 50,
                   backgroundColor: AppColor.light_gray,
