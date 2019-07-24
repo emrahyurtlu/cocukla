@@ -12,7 +12,7 @@ class ButtonComponent extends StatefulWidget {
       {this.width = 300,
       this.height = 60,
       this.text = "Button",
-      this.onPressed,
+      @required this.onPressed,
       this.color = AppColor.pink,
       this.textColor = AppColor.white});
 

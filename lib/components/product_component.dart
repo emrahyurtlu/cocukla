@@ -1,5 +1,5 @@
 import 'package:cocukla/components/property_component.dart';
-import 'package:cocukla/models/product_model.dart';
+import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';

@@ -5,9 +5,7 @@ import 'package:cocukla/components/category_component.dart';
 import 'package:cocukla/components/product_component.dart';
 import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/models/comment_model.dart';
-import 'package:cocukla/models/photo_model.dart';
-import 'package:cocukla/models/product_model.dart';
-import 'package:cocukla/models/property_model.dart';
+import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/screens/home_explore.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
@@ -26,85 +24,86 @@ class _HomeState extends State<Home> {
   CurrentUserHelper _currentUserHelper;
   FirebaseUser user;
 
-  var model = ProductModel(
-      id: "1",
-      title: "Kaşıbeyaz Ataşehir",
-      city: "İstanbul",
-      district: "Ataşehir",
-      editor_id: "1",
-      isFav: true,
-      phone_number: "02122252244",
-      rating: 4,
-      email: "atasehir@kasiyeyaz.com",
-      fax: "02125554411",
-      text:
-          "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
-      address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
-      comments: [
-        CommentModel(
-            imageLink: "assets/images/avatar.png",
-            name: "Abdullah O.",
-            rating: 4,
-            text:
-                "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-            date: DateTime.now()),
-        CommentModel(
-            imageLink: "assets/images/avatar.png",
-            name: "Mehmet S.",
-            rating: 5,
-            text:
-                "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-            date: DateTime.now()),
-        CommentModel(
-            imageLink: "assets/images/avatar.png",
-            name: "Bayram T.",
-            rating: 3,
-            text:
-                "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-            date: DateTime.now()),
-        CommentModel(
-            imageLink: "assets/images/avatar.png",
-            name: "Emrah Y.",
-            rating: 5,
-            text:
-                "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-            date: DateTime.now()),
-      ],
-      photos: [
-        PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg"),
-        PhotoModel(imageLink: "assets/images/temp/gha_3325.jpg"),
-        PhotoModel(imageLink: "assets/images/temp/gha_3336.jpg"),
-        PhotoModel(imageLink: "assets/images/temp/gha_3499.jpg"),
-        PhotoModel(imageLink: "assets/images/temp/gha_3612.jpg"),
-      ],
-      properties: [
+  var model = PlaceModel(
+    id: "1",
+    name: "Kaşıbeyaz Ataşehir",
+    city: "İstanbul",
+    district: "Ataşehir",
+    owner: "1",
+    isFav: true,
+    phone: "02122252244",
+    rating: 4,
+    email: "atasehir@kasiyeyaz.com",
+    fax: "02125554411",
+    digest:
+        "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
+    address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
+    comments: [
+      CommentModel(
+          imageLink: "assets/images/avatar.png",
+          name: "Abdullah O.",
+          rating: 4,
+          text:
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+          date: DateTime.now()),
+      CommentModel(
+          imageLink: "assets/images/avatar.png",
+          name: "Mehmet S.",
+          rating: 5,
+          text:
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+          date: DateTime.now()),
+      CommentModel(
+          imageLink: "assets/images/avatar.png",
+          name: "Bayram T.",
+          rating: 3,
+          text:
+              "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+          date: DateTime.now()),
+      CommentModel(
+          imageLink: "assets/images/avatar.png",
+          name: "Emrah Y.",
+          rating: 5,
+          text:
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+          date: DateTime.now()),
+    ],
+    photos: [
+      "assets/images/temp/kasibeyaz_atasehir.jpg",
+      "assets/images/temp/gha_3325.jpg",
+      "assets/images/temp/gha_3336.jpg",
+      "assets/images/temp/gha_3499.jpg",
+      "assets/images/temp/gha_3612.jpg",
+    ],
+    /*properties: [
         PropertyModel(
-            icon_name: "access_time",
+            iconName: "access_time",
             text: "10:00-00:00 arası hizmet vermektedir",
             color: AppColor.green),
         PropertyModel(
-            icon_name: "location_on", text: "5.6km", color: AppColor.dark_gray),
+            iconName: "location_on", text: "5.6km", color: AppColor.dark_gray),
         PropertyModel(
-            icon_name: "restaurant_menu",
+            iconName: "restaurant_menu",
             text: "Çocuk menüsü",
             color: AppColor.dark_gray),
         PropertyModel(
-            icon_name: "child_friendly",
+            iconName: "child_friendly",
             text: "Bebek bakım odası",
             color: AppColor.dark_gray),
         PropertyModel(
-            icon_name: "child_care",
+            iconName: "child_care",
             text: "Oyun odası",
             color: AppColor.dark_gray),
         PropertyModel(
-            icon_name: "calendar_today",
+            iconName: "calendar_today",
             text: "Randevu ile gidilir",
             color: AppColor.dark_gray),
         PropertyModel(
-            icon_name: "cake",
+            iconName: "cake",
             text: "Organizasyon yapılır",
             color: AppColor.dark_gray),
-      ]);
+      ]*/
+  );
 
   static List<PropertyComponent> attributes = [
     PropertyComponent(
@@ -479,12 +478,7 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  void initState() {
-    _currentUserHelper = CurrentUserHelper();
-    _currentUserHelper.getCurrentUser().then((FirebaseUser result) {
-      user = result;
-    });
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -504,15 +498,15 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountName: Text(
-                  AppData.user["name"],
+                  AppData.user.displayName != null ? user.displayName : "Kullanıcı",
                   style: TextStyle(color: AppColor.white),
                 ),
-                accountEmail: Text(AppData.user["email"],
+                accountEmail: Text(AppData.user.email,
                     style: TextStyle(color: AppColor.white)),
-                currentAccountPicture:
-                CircleAvatar(
-                  child: ClipOval(child: CachedNetworkImage(
-                    imageUrl: AppData.user["avatar"],
+                currentAccountPicture: CircleAvatar(
+                  child: ClipOval(
+                      child: CachedNetworkImage(
+                    imageUrl: AppData.user.photoUrl != null ? AppData.user.photoUrl:"assets/images/user.png",
                     width: 86,
                     height: 86,
                     placeholder: (context, url) => CircularProgressIndicator(),
@@ -520,7 +514,6 @@ class _HomeState extends State<Home> {
                   )),
                   radius: 50,
                   backgroundColor: AppColor.light_gray,
-
                 ),
                 decoration: BoxDecoration(color: AppColor.pink),
               ),
@@ -544,9 +537,11 @@ class _HomeState extends State<Home> {
                 leading: Icon(Icons.exit_to_app),
                 title: Text("Çıkış"),
                 onTap: () {
-                  logoutLog(AppData.user["email"]);
-                  AppData.user = null;
-                  Navigator.of(context).pushNamed("/sign-in");
+                  logoutLog(AppData.user.email);
+                  FirebaseAuth.instance.signOut().then((_) {
+                    AppData.user = null;
+                    Navigator.of(context).pushNamed("/sign-in");
+                  });
                 },
               ),
             ],

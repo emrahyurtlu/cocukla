@@ -6,21 +6,21 @@ import 'package:cocukla/components/dropdown_component.dart';
 import 'package:cocukla/components/header_component.dart';
 import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/components/text_input_component.dart';
+import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/ui/font_family.dart';
 import 'package:cocukla/utilities/address_statics.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/city_info.dart';
-import 'package:cocukla/utilities/device_location.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PlaceForm extends StatefulWidget {
-  Map<String, dynamic> data;
+  PlaceModel data;
 
   PlaceForm([this.data]);
 
@@ -37,17 +37,15 @@ class _PlaceFormState extends State<PlaceForm> {
   static TextEditingController _faxController = TextEditingController();
   static TextEditingController _addressController = TextEditingController();
   static TextEditingController _emailController = TextEditingController();
-  static TextEditingController _coordinateController = TextEditingController();
+  static TextEditingController _coordinateController =
+      TextEditingController(text: AppData.coordinate);
   static String _categorySelected;
   static String _citySelected = "";
   static String _districtSelected = "";
-  static Position _location;
-  static List<Placemark> _list;
-  final _owner = AppData.user["email"];
-  static int _rating = 0;
+  static double _rating;
   final comments = [];
-  static String insert_date;
-  static String update_date;
+  static DateTime _insertDate;
+  static DateTime _updateDate;
   static List<String> _cities;
   static List<String> _districts;
   static List<Asset> _assets;
@@ -69,57 +67,34 @@ class _PlaceFormState extends State<PlaceForm> {
 
   @override
   void initState() {
-    insert_date = widget.data["insert_date"] ?? DateTime.now().toString();
-    update_date = DateTime.now().toString();
-    _nameController.text = widget.data["name"];
-    _digestController.text = widget.data["digest"];
-    _phoneController.text = widget.data["phone"];
-    _faxController.text = widget.data["fax"];
-    _addressController.text = widget.data["address"];
-    _emailController.text = widget.data["email"];
-    _coordinateController.text = widget.data["coordinate"];
-    _categorySelected = widget.data["category"] ?? "";
-    _citySelected = widget.data["city"] ?? "";
-    _districtSelected = widget.data["district"] ?? "";
-    _rating = widget.data["rating"] ?? 0;
-    _isApproved = widget.data["isApproved"] ?? false;
-    getLocation().then((pos) {
-      _location = pos;
-      if (_coordinateController.text == null)
-        _coordinateController.text = pos.latitude.toString() + "," + pos.longitude.toString();
-    });
+    _insertDate = widget.data.insertDate ?? DateTime.now();
+    _updateDate = DateTime.now();
+    _nameController.text = widget.data.name;
+    _digestController.text = widget.data.digest;
+    _phoneController.text = widget.data.phone;
+    _faxController.text = widget.data.fax;
+    _emailController.text = widget.data.email;
+    _addressController.text = widget.data.address;
+    _coordinateController.text = widget.data.location ?? AppData.coordinate;
+    _categorySelected = widget.data.category ?? "";
+    _citySelected = widget.data.city ?? "";
+    _districtSelected = widget.data.district ?? "";
+    _rating = widget.data.rating;
+    _citySelected = AppData.placemarks[0].administrativeArea;
+    _districtSelected = AppData.placemarks[0].subAdministrativeArea;
+    _cities = AddressStatics.getCities();
+    _assets = List<Asset>();
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    setDistricts(cityName: _citySelected);
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //Get Position
-    /*getLocation().then((pos) {
-      _location = pos;
-      if (_coordinateController.text == null)
-        setState(() {
-          _coordinateController.text = pos.latitude.toString() + "," + pos.longitude.toString();
-        });
-    });*/
-
-    //Get City list
-    setState(() {
-      _cities = AddressStatics.getCities();
-    });
-
-    //Get active city and district
-    getAddrInfo().then((List<Placemark> info) {
-      setState(() {
-        _citySelected = info[0].administrativeArea;
-        _districtSelected = info[0].subAdministrativeArea;
-      });
-    });
-
-    //Get district
-    setState(() {
-      _districts = getDistrictList(_citySelected ?? "Ankara");
-    });
-
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -170,6 +145,7 @@ class _PlaceFormState extends State<PlaceForm> {
                           });
                         },
                       ),
+                      //Select Photos
                       ButtonComponent(
                         text: "Fotoğraf seçiniz",
                         onPressed: () async {
@@ -182,21 +158,22 @@ class _PlaceFormState extends State<PlaceForm> {
                           print("Files are selected!");
                         },
                       ),
-
                       Text(_imageSelectedInfo),
+
                       HeaderComponent(
                         "Adres Bilgiler",
                       ),
                       TextInputComponent(
                         _coordinateController,
-                        labelText: "Koordinat",
+                        labelText: "Koordinat(Enlem,Boylam)",
+                        inputType: TextInputType.text,
                       ),
                       //City
                       DropdownComponent(
                         selected: _citySelected,
                         options: _cities,
                         hintText: "İl seçiniz",
-                        onChanged: (String selected) {
+                        onChanged: (selected) {
                           setState(() {
                             _citySelected = selected;
                             _districts = getDistrictList(selected);
@@ -399,17 +376,100 @@ class _PlaceFormState extends State<PlaceForm> {
                       ButtonComponent(
                         text: "Kaydet",
                         onPressed: () {
-                          print(_nameController.text.trim());
-                          print(_digestController.text.trim());
-                          print(_citySelected.trim());
-                          print(_districtSelected.trim());
-                          print(_phoneController.text.trim());
-                          print(_faxController.text.trim());
-                          print(_addressController.text.trim());
-                          print(_categorySelected);
-                          print(_citySelected);
-                          print(_districtSelected);
-                          print("İşlem Tamamlandı!");
+                          List<String> images = [];
+                          List<List<String>> properties = List<List<String>>();
+                          widget.data.name = _nameController.text.trim();
+                          widget.data.digest = _digestController.text.trim();
+                          widget.data.category = _categorySelected.trim();
+                          widget.data.location =
+                              _coordinateController.text.trim();
+                          widget.data.city = _citySelected.trim();
+                          widget.data.district = _districtSelected.trim();
+                          widget.data.phone = _phoneController.text.trim();
+                          widget.data.fax = _faxController.text.trim();
+                          widget.data.email = _emailController.text.trim();
+                          widget.data.owner = AppData.user.email;
+                          widget.data.rating = _rating;
+                          widget.data.insertDate = _insertDate;
+                          widget.data.updateDate = _updateDate;
+
+                          if (_assets != null && _assets.length > 0) {
+                            for (var asset in _assets) {
+                              uploadSelectedAsset(asset, "places")
+                                  .then((url) => images.add(url));
+                            }
+
+                            widget.data.photos = images;
+                          }
+
+                          if (_cocukMenusu)
+                            properties.add(["Çocuk menüsü", "restaurant_menu"]);
+
+                          if (_oyunAlani)
+                            properties.add(["Çocuk oyun alanı", "category"]);
+
+                          if (_oyunAblasi)
+                            properties
+                                .add(["Çocuk oyun ablası", "remove_red_eye"]);
+
+                          if (_atolye)
+                            properties.add(["Çocuk atölyesi", "color_lens"]);
+
+                          if (_tuvalet)
+                            properties.add(["Çocuk tuvaleti", "wc"]);
+
+                          if (_masaSandalye)
+                            properties.add(
+                                ["Çocuk masa ve sandalyesi", "event_seat"]);
+
+                          if (_bebekBakimOdasi)
+                            properties.add(["Bebek bakım odası", "child_care"]);
+
+                          if (_organizasyon)
+                            properties.add(["Özel gün organizasyonu", "cake"]);
+
+                          if (_organizasyon)
+                            properties
+                                .add(["Randevu ile gidilir", "calendar_today"]);
+
+                          if (_alkol)
+                            properties.add(["Alkol tüketilir", "local_bar"]);
+
+                          if (_yemekliToplanti)
+                            properties.add(
+                                ["Yemekli toplantı organizasyonu", "work"]);
+
+                          widget.data.properties = properties;
+
+                          //Validation
+                          if (widget.data.name != null &&
+                              widget.data.digest != null &&
+                              widget.data.category != null &&
+                              widget.data.photos != null &&
+                              widget.data.photos.length > 0 &&
+                              widget.data.properties != null &&
+                              widget.data.properties.length > 0 &&
+                              widget.data.phone != null &&
+                              widget.data.email != null &&
+                              widget.data.city != null &&
+                              widget.data.district != null &&
+                              widget.data.location != null) {
+                            print("Veritabanına eklendi");
+                          } else {
+                            Alert(
+                                    context: context,
+                                    title: "HATA",
+                                    desc:
+                                        "Ad, özet, telefon, eposta, lokasyon alanı zorunludur. En az bir tane fotoğraf seçilmelidir. En az bir özellik işaretlenmelidir ",
+                                    type: AlertType.error,
+                            buttons: <DialogButton>[
+                              DialogButton(
+                                child: Text("Tamam"),
+                                onPressed: () => Navigator.pop(context),
+                              )
+                            ])
+                                .show();
+                          }
                         },
                       ),
                     ],
@@ -422,4 +482,19 @@ class _PlaceFormState extends State<PlaceForm> {
       ),
     );
   }
+
+  void setDistricts({String cityName = "Ankara"}) {
+    var result = getDistrictList(_citySelected ?? "Ankara");
+    setState(() {
+      _districts = result;
+    });
+  }
+
+/*  _onBasicAlertPressed(context) {
+    Alert(
+        context: context,
+        title: "RFLUTTER ALERT",
+        desc: "Flutter is more awesome with RFlutter Alert.")
+        .show();
+  }*/
 }

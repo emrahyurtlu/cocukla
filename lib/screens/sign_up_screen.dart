@@ -1,12 +1,12 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' as prefix0;
-import 'package:cocukla/datalayer/collections.dart';
+import 'package:cocukla/components/button_component.dart';
+import 'package:cocukla/components/text_input_component.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/ui/font_family.dart';
+import 'package:cocukla/utilities/app_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -41,7 +41,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         title: Text("Üye Olun",
             style: TextStyle(
-                color: AppColor.text_color, fontFamily: FontFamily.MontserratRegular)),
+                color: AppColor.text_color,
+                fontFamily: FontFamily.MontserratRegular)),
         backgroundColor: AppColor.white,
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColor.text_color),
@@ -65,181 +66,66 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Column(
                   children: <Widget>[
                     //Name Surname
-                    SizedBox(
-                      width: 300,
-                      height: 60,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: AppColor.light_gray,
-                              ),
-                              child: TextFormField(
-                                controller: _nameController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  labelStyle:
-                                      TextStyle(color: AppColor.text_color),
-                                  labelText: 'Ad Soyad',
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.only(
-                                      left: 25, top: 5, bottom: 5, right: 5),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    TextInputComponent(
+                      _nameController,
+                      labelText: "Ad Soyad",
                     ),
 
                     //Email
-                    SizedBox(
-                      width: 300,
-                      height: 60,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: AppColor.light_gray,
-                              ),
-                              child: TextFormField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
-                                  labelStyle:
-                                      TextStyle(color: AppColor.text_color),
-                                  hintText: 'you@example.com',
-                                  labelText: 'Eposta',
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.only(
-                                      left: 25, top: 5, bottom: 5, right: 5),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    TextInputComponent(
+                      _emailController,
+                      labelText: "Eposta",
+                      hintText: "you@example.com",
+                      inputType: TextInputType.emailAddress,
                     ),
 
                     //Password
-                    SizedBox(
-                      width: 300,
-                      height: 60,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: AppColor.light_gray,
-                              ),
-                              child: TextFormField(
-                                controller: _passwordController,
-                                obscureText: true,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  labelStyle:
-                                      TextStyle(color: AppColor.text_color),
-                                  hintText: '***',
-                                  labelText: 'Şifre',
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.only(
-                                      left: 25, top: 5, bottom: 5, right: 5),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    TextInputComponent(
+                      _passwordController,
+                      labelText: "Şifre",
+                      hintText: "***",
+                      inputType: TextInputType.text,
+                      obscureText: true,
                     ),
 
                     //Submit btn
-                    SizedBox(
-                      width: 300,
-                      height: 60,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            width: 300,
-                            height: 50,
-                            child: FlatButton(
-                              color: AppColor.pink,
-                              textColor: AppColor.white,
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(50.0)),
-                              child: Text(
-                                "Üye Ol",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: "Montserrat", fontSize: 14),
-                              ),
-                              onPressed: () {
-                                var name = _nameController.text;
-                                var email = _emailController.text;
-                                var password = _passwordController.text;
-                                Map<String, dynamic> data;
+                    ButtonComponent(
+                      text: "Üye Ol",
+                      onPressed: () {
+                        var name = _nameController.text.trim();
+                        var email = _emailController.text.trim();
+                        var password = _passwordController.text.trim();
+                        if (name.isNotEmpty &&
+                            email.isNotEmpty &&
+                            (password.isNotEmpty && password.length > 5)) {
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: email, password: password)
+                              .then((FirebaseUser user) {
+                            UserUpdateInfo updateInfo;
+                            updateInfo.displayName = name;
 
-                                if (name.isNotEmpty &&
-                                    email.isNotEmpty &&
-                                    password.isNotEmpty) {
-                                  data = {
-                                    "name": name,
-                                    "email": email,
-                                    "password": password,
-                                    "role": 0,
-                                    "isActive": true
-                                  };
+                            AppData.user = user;
 
-                                  //Check is Unique
-                                  Firestore.instance.collection(Collection.Users).where("email", isEqualTo: email).snapshots().first.then((result){
-                                    if(result.documents.length == 0){
-                                      //Email is unique
-                                      Firestore.instance
-                                          .collection(Collection.Users)
-                                          .add(data)
-                                          .then((ref) {
-                                        _scaffoldKey.currentState
-                                            .showSnackBar(SnackBar(
-                                          content:
-                                          Text("Üyelik işleminiz tamamlandı!"),
-                                        ));
-                                      }).catchError((e) {
-                                        _scaffoldKey.currentState
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                              "Üyelik esnasında bir hata oluştu!"),
-                                        ));
-                                      });
-                                    }else{
-                                      //Email is used!
-                                      _scaffoldKey.currentState
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            "Girilen eposta kullanımda, lütfen başka bir eposta giriniz!"),
-                                      ));
-                                    }
-                                  });
-
-
-                                } else {
-                                  _scaffoldKey.currentState
-                                      .showSnackBar(SnackBar(
-                                    content: Text("Alanlar boş olamaz!"),
-                                  ));
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                            user.updateProfile(updateInfo).then((val) {
+                              Navigator.pushNamed(context, "/home");
+                            }).catchError(
+                                (e) => print("USER DATA UPDATE ERROR: " + e));
+                          }).catchError((e) {
+                            if (e is PlatformException) {
+                              if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                    content:
+                                        Text("Girilen eposta kullanımdadır.")));
+                              }
+                            }
+                          });
+                        } else {
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  "Alanlar boş olamaz. Şifre en az 6 karakterden oluşmalıdır.")));
+                        }
+                      },
                     ),
                   ],
                 )),

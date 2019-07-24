@@ -1,5 +1,6 @@
 import 'package:cocukla/components/product_component.dart';
 import 'package:cocukla/components/property_component.dart';
+import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/screens/place_form.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
@@ -166,6 +167,7 @@ class _PlacesState extends State<Places> {
           onPressed: () {
             var map = Map<String, dynamic>();
             map = {
+              "id":"",
               "name": "Hosta Piknik",
               "digest": "özet alanı",
               "insert_date": "",
@@ -177,12 +179,12 @@ class _PlacesState extends State<Places> {
               "category": "Mekanlar",
               "city": "Ankara",
               "district": "Çankaya",
-              "isApproved": false,
               "coordinate": ""
             };
+            PlaceModel model = PlaceModel.fromJson(map);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PlaceForm(map)),
+              MaterialPageRoute(builder: (context) => PlaceForm(model)),
             );
           },
         ),

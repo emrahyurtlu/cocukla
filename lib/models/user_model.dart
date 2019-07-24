@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class UserModel {
   String uid;
   String name;
   String email;
   String password;
+  String avatar;
   bool isActive;
   int role;
 
@@ -14,8 +17,9 @@ class UserModel {
       this.isActive,
       this.role});
 
-  @override
-  String toString() {
-    return 'UserModel{uid: $uid, name: $name, email: $email, password: $password, isActive: $isActive, role: $role}';
-  }
+  UserModel.fromFirebaseUser(FirebaseUser user)
+      : uid = user.uid,
+        name = user.displayName,
+        email = user.email,
+        avatar = user.photoUrl;
 }

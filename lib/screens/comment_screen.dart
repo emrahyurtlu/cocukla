@@ -1,11 +1,11 @@
-import 'package:cocukla/models/product_model.dart';
+import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class CommentScreen extends StatefulWidget {
-  final ProductModel model;
+  final PlaceModel model;
 
   const CommentScreen({Key key, @required this.model}) : super(key: key);
   @override

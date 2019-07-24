@@ -14,21 +14,21 @@ import 'package:splashscreen/splashscreen.dart';
 
 import 'models/comment_model.dart';
 import 'models/photo_model.dart';
-import 'models/product_model.dart';
+import 'models/place_model.dart';
 import 'models/property_model.dart';
 
-var model = ProductModel(
+var model = PlaceModel(
     id: "1",
-    title: "Kaşıbeyaz Ataşehir",
+    name: "Kaşıbeyaz Ataşehir",
     city: "İstanbul",
     district: "Ataşehir",
-    editor_id: "1",
+    owner: "1",
     isFav: true,
-    phone_number: "02122252244",
+    phone: "02122252244",
     rating: 4,
     email: "atasehir@kasiyeyaz.com",
     fax: "02125554411",
-    text:
+    digest:
         "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
     address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
     comments: [
@@ -62,40 +62,40 @@ var model = ProductModel(
           date: DateTime.now()),
     ],
     photos: [
-      PhotoModel(imageLink: "assets/images/temp/kasibeyaz_atasehir.jpg"),
-      PhotoModel(imageLink: "assets/images/temp/gha_3325.jpg"),
-      PhotoModel(imageLink: "assets/images/temp/gha_3336.jpg"),
-      PhotoModel(imageLink: "assets/images/temp/gha_3499.jpg"),
-      PhotoModel(imageLink: "assets/images/temp/gha_3612.jpg"),
+      "assets/images/temp/kasibeyaz_atasehir.jpg",
+      "assets/images/temp/gha_3325.jpg",
+      "assets/images/temp/gha_3336.jpg",
+      "assets/images/temp/gha_3499.jpg",
+      "assets/images/temp/gha_3612.jpg",
     ],
-    properties: [
+    /*properties: [
       PropertyModel(
-          icon_name: "access_time",
+          iconName: "access_time",
           text: "10:00-00:00 arası hizmet vermektedir",
           color: AppColor.green),
       PropertyModel(
-          icon_name: "location_on", text: "5.6km", color: AppColor.dark_gray),
+          iconName: "location_on", text: "5.6km", color: AppColor.dark_gray),
       PropertyModel(
-          icon_name: "restaurant_menu",
+          iconName: "restaurant_menu",
           text: "Çocuk menüsü",
           color: AppColor.dark_gray),
       PropertyModel(
-          icon_name: "child_friendly",
+          iconName: "child_friendly",
           text: "Bebek bakım odası",
           color: AppColor.dark_gray),
       PropertyModel(
-          icon_name: "child_care",
+          iconName: "child_care",
           text: "Oyun odası",
           color: AppColor.dark_gray),
       PropertyModel(
-          icon_name: "calendar_today",
+          iconName: "calendar_today",
           text: "Randevu ile gidilir",
           color: AppColor.dark_gray),
       PropertyModel(
-          icon_name: "cake",
+          iconName: "cake",
           text: "Organizasyon yapılır",
           color: AppColor.dark_gray),
-    ]);
+    ]*/);
 
 void main() {
   SystemChrome.setPreferredOrientations(
