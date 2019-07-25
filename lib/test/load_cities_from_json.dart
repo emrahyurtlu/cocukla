@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/ui/files.dart';
 import 'package:cocukla/utilities/load_file.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ class _LoadCityTestState extends State<LoadCityTest> {
                   setState(() {
                     cities = temp;
                   });
-                  for(var item in cities){
+                  for (var item in cities) {
                     //Firestore.instance.collection("cities").add(item);
                     //print("EKLENEN ==> " +item["city_name"]);
                   }

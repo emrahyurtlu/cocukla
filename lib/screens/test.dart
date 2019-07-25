@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:math';
 
 import 'package:cocukla/datalayer/data_layer.dart';
 import 'package:cocukla/models/user_model.dart';
@@ -70,7 +69,7 @@ class _ComponentTestState extends State<ComponentTest> {
                 print("City name: " + cityName);
 
                 var districtName = await getDistrictName();
-                print("District name: " +districtName);
+                print("District name: " + districtName);
               },
             ),
           )

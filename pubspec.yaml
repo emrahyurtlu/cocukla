@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore:
   firebase_auth:
   firebase_storage:
-  google_sign_in:
+  google_sign_in: ^4.0.4
   flutter_facebook_login:
   http:
   image_picker:
@@ -40,6 +40,7 @@ dependencies:
   multi_image_picker:
   cached_network_image: ^1.1.0
   rflutter_alert: ^1.0.3
+  url_launcher:
 
 
 dev_dependencies:

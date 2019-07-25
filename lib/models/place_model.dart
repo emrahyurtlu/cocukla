@@ -1,14 +1,11 @@
-import 'package:cocukla/models/comment_model.dart';
-import 'package:cocukla/models/property_model.dart';
-
 class PlaceModel {
-  String id;
+  String documentID;
   String name;
   String digest;
-  double rating;
-  List<List<String>> properties;
-  List<CommentModel> comments;
-  List<String> photos;
+  int rating;
+  List<Map<String, dynamic>> properties;
+  List<Map<String, dynamic>> comments;
+  List<String> images;
   bool isFav;
   bool isApproved;
   bool isActive;
@@ -25,13 +22,13 @@ class PlaceModel {
   DateTime updateDate;
 
   PlaceModel(
-      {this.id,
+      {this.documentID,
       this.name,
       this.digest,
       this.rating = 0,
       this.properties,
       this.comments,
-      this.photos,
+      this.images,
       this.isFav = false,
       this.isApproved = false,
       this.isActive = false,
@@ -48,13 +45,13 @@ class PlaceModel {
       this.updateDate});
 
   PlaceModel.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
+      : documentID = json["documentID"],
         name = json["name"],
         digest = json["digest"],
         rating = json["rating"],
         properties = json["properties"],
         comments = json["properties"],
-        photos = json["photos"],
+        images = json["photos"],
         isFav = json["isFav"],
         isApproved = json["isApproved"],
         isActive = json["isActive"],
@@ -71,12 +68,12 @@ class PlaceModel {
         updateDate = json["updateDate"];
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        'documentID': documentID,
         'name': name,
         'digest': digest,
         'properties': properties,
         'comments': comments,
-        'photos': photos,
+        'photos': images,
         'isFav': isFav,
         'isApproved': isApproved,
         'isActive': isActive,
@@ -91,4 +88,9 @@ class PlaceModel {
         'insertDate': insertDate,
         'updateDate': updateDate,
       };
+
+  @override
+  String toString() {
+    return 'PlaceModel{documentID: $documentID, name: $name, digest: $digest, rating: $rating, properties: $properties, comments: $comments, photos: $images, isFav: $isFav, isApproved: $isApproved, isActive: $isActive, owner: $owner, category: $category, phone: $phone, email: $email, fax: $fax, address: $address, city: $city, district: $district, location: $location, insertDate: $insertDate, updateDate: $updateDate}';
+  }
 }

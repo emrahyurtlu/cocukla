@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel {
-  String uid;
+  String documentID;
   String name;
   String email;
   String password;
-  String avatar;
+  String image;
   bool isActive;
   int role;
 
   UserModel(
-      {this.uid,
+      {this.documentID,
       this.name,
       this.email,
       this.password,
@@ -18,8 +18,23 @@ class UserModel {
       this.role});
 
   UserModel.fromFirebaseUser(FirebaseUser user)
-      : uid = user.uid,
+      : documentID = user.uid,
         name = user.displayName,
         email = user.email,
-        avatar = user.photoUrl;
+        image = user.photoUrl;
+
+  Map<String, dynamic> toJson() => {
+        "documentID": documentID,
+        "name": name,
+        "email": email,
+        "password": password,
+        "image": image,
+        "isActive": isActive,
+        "role": role,
+      };
+
+  @override
+  String toString() {
+    return 'UserModel{documentID: $documentID, name: $name, email: $email, password: $password, image: $image, isActive: $isActive, role: $role}';
+  }
 }

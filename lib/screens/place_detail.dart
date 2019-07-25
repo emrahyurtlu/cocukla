@@ -2,9 +2,7 @@ import 'package:cocukla/components/comment_component.dart';
 import 'package:cocukla/components/property_component.dart';
 import 'package:cocukla/components/smart_tab_component.dart';
 import 'package:cocukla/models/comment_model.dart';
-import 'package:cocukla/models/photo_model.dart';
 import 'package:cocukla/models/place_model.dart';
-import 'package:cocukla/models/property_model.dart';
 import 'package:cocukla/screens/comment_screen.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
@@ -12,10 +10,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ProductDetail extends StatefulWidget {
-  PlaceModel model = PlaceModel(
-      id: "1",
+class PlaceDetail extends StatefulWidget {
+  PlaceModel model;
+
+  PlaceDetail([this.model]);
+
+  @override
+  _PlaceDetailState createState() => _PlaceDetailState();
+}
+
+class _PlaceDetailState extends State<PlaceDetail>
+    with SingleTickerProviderStateMixin {
+  ScrollController _scrollController = ScrollController();
+  var model = PlaceModel(
+      documentID: "1",
       name: "Kaşıbeyaz Ataşehir",
       city: "İstanbul",
       district: "Ataşehir",
@@ -26,96 +36,95 @@ class ProductDetail extends StatefulWidget {
       email: "atasehir@kasiyeyaz.com",
       fax: "02125554411",
       digest:
-      "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
+          "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
       address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
       comments: [
-        CommentModel(
-            imageLink: "assets/images/avatar.png",
-            name: "Abdullah O.",
-            rating: 4,
-            text:
-            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-            date: DateTime.now()),
-        CommentModel(
-            imageLink: "assets/images/avatar.png",
-            name: "Mehmet S.",
-            rating: 5,
-            text:
-            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-            date: DateTime.now()),
-        CommentModel(
-            imageLink: "assets/images/avatar.png",
-            name: "Bayram T.",
-            rating: 3,
-            text:
-            "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-            date: DateTime.now()),
-        CommentModel(
-            imageLink: "assets/images/avatar.png",
-            name: "Emrah Y.",
-            rating: 5,
-            text:
-            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-            date: DateTime.now()),
+        {
+          "image": "assets/images/avatar.png",
+          "name": "Abdullah O.",
+          "rating": 4,
+          "content":
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+          "date": DateTime.now()
+        },
+        {
+          "image": "assets/images/avatar.png",
+          "name": "Mehmet S.",
+          "rating": 5,
+          "content":
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+          "date": DateTime.now()
+        },
+        {
+          "image": "assets/images/avatar.png",
+          "name": "Bayram T.",
+          "rating": 3,
+          "content":
+              "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+          "date": DateTime.now()
+        },
+        {
+          "image": "assets/images/avatar.png",
+          "name": "Emrah Y.",
+          "rating": 5,
+          "content":
+              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+          "date": DateTime.now()
+        },
       ],
-      photos: [
+      images: [
         "assets/images/temp/kasibeyaz_atasehir.jpg",
         "assets/images/temp/gha_3325.jpg",
         "assets/images/temp/gha_3336.jpg",
         "assets/images/temp/gha_3499.jpg",
         "assets/images/temp/gha_3612.jpg",
       ],
-      /*properties: [
-        PropertyModel(
-            iconName: "access_time",
-            text: "10:00-00:00 arası hizmet vermektedir",
-            color: AppColor.green),
-        PropertyModel(
-            iconName: "location_on",
-            text: "5.6km",
-            color: AppColor.dark_gray),
-        PropertyModel(
-            iconName: "restaurant_menu",
-            text: "Çocuk menüsü",
-            color: AppColor.dark_gray),
-        PropertyModel(
-            iconName: "child_friendly",
-            text: "Bebek bakım odası",
-            color: AppColor.dark_gray),
-        PropertyModel(
-            iconName: "child_care",
-            text: "Oyun odası",
-            color: AppColor.dark_gray),
-        PropertyModel(
-            iconName: "calendar_today",
-            text: "Randevu ile gidilir",
-            color: AppColor.dark_gray),
-        PropertyModel(
-            iconName: "cake",
-            text: "Organizasyon yapılır",
-            color: AppColor.dark_gray),
-      ]*/);
-
-  ProductDetail(this.model);
-
-  @override
-  _ProductDetailState createState() => _ProductDetailState();
-}
-
-class _ProductDetailState extends State<ProductDetail>
-    with SingleTickerProviderStateMixin {
-  TextEditingController _textEditingController;
-  ScrollController _scrollController = ScrollController();
+      properties: [
+        {
+          "iconName": "access_time",
+          "content": "10:00-00:00 arası hizmet vermektedir",
+          "color": AppColor.green
+        },
+        {
+          "iconName": "location_on",
+          "content": "5.6km",
+          "color": AppColor.dark_gray
+        },
+        {
+          "iconName": "restaurant_menu",
+          "content": "Çocuk menüsü",
+          "color": AppColor.dark_gray
+        },
+        {
+          "iconName": "child_friendly",
+          "content": "Bebek bakım odası",
+          "color": AppColor.dark_gray
+        },
+        {
+          "iconName": "child_care",
+          "content": "Oyun odası",
+          "color": AppColor.dark_gray
+        },
+        {
+          "iconName": "calendar_today",
+          "content": "Randevu ile gidilir",
+          "color": AppColor.dark_gray
+        },
+        {
+          "iconName": "cake",
+          "content": "Organizasyon yapılır",
+          "color": AppColor.dark_gray
+        },
+      ]);
 
   @override
   void initState() {
-    _textEditingController = TextEditingController();
+    print("PHOTO LENGTH ===> " + widget.model.toString());
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    _textEditingController.dispose();
   }
 
   @override
@@ -125,43 +134,38 @@ class _ProductDetailState extends State<ProductDetail>
         body: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[
+            //Place Photos
             SliverAppBar(
-              expandedHeight: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.35,
+              expandedHeight: MediaQuery.of(context).size.height * 0.35,
               flexibleSpace: Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.35,
+                height: MediaQuery.of(context).size.height * 0.35,
                 decoration: BoxDecoration(color: AppColor.light_gray),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Swiper(
                     itemBuilder: (BuildContext context, int index) {
                       return Image.asset(
-                        widget.model.photos[index],
+                        //widget.model.photos[index],
+                        model.images[index],
                         fit: BoxFit.fill,
                       );
                     },
-                    itemCount: widget.model.photos.length,
+//                    itemCount: widget.model.photos.length,
+                    itemCount: model.images.length,
                     pagination:
-                    SwiperPagination(builder: SwiperPagination.dots),
+                        SwiperPagination(builder: SwiperPagination.dots),
                   ),
                 ),
               ),
             ),
+            //Content Section
             SliverFillRemaining(
               child: Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.65,
+                height: MediaQuery.of(context).size.height * 0.65,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -172,7 +176,7 @@ class _ProductDetailState extends State<ProductDetail>
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           borderRadius:
-                          BorderRadius.all(Radius.elliptical(10, 10)),
+                              BorderRadius.all(Radius.elliptical(10, 10)),
                           border: Border.all(color: Colors.white),
                           color: AppColor.white),
                       child: Column(
@@ -188,7 +192,8 @@ class _ProductDetailState extends State<ProductDetail>
                                 child: Stack(
                                   children: <Widget>[
                                     Text(
-                                      widget.model.name,
+                                      //widget.model.name,
+                                      model.name,
                                       maxLines: 2,
                                       style: TextStyle(
                                           fontFamily: "MontserratRegular",
@@ -202,7 +207,7 @@ class _ProductDetailState extends State<ProductDetail>
                                       child: Container(
                                         color: Colors.white,
                                         child: IconButton(
-                                          icon: Icon(widget.model.isFav
+                                          icon: Icon(model.isFav
                                               ? Icons.favorite
                                               : Icons.favorite_border),
                                           iconSize: 24,
@@ -226,7 +231,7 @@ class _ProductDetailState extends State<ProductDetail>
                             children: <Widget>[
                               Container(
                                 child: FlutterRatingBarIndicator(
-                                  rating: widget.model.rating,
+                                  rating: model.rating.toDouble(),
                                   itemCount: 5,
                                   itemSize: 15,
                                   emptyColor: AppColor.dark_gray,
@@ -269,7 +274,7 @@ class _ProductDetailState extends State<ProductDetail>
                                               child: Column(
                                                 children: <Widget>[
                                                   Text(
-                                                    widget.model.digest,
+                                                    model.digest,
                                                     softWrap: true,
                                                   ),
                                                   Container(
@@ -277,11 +282,11 @@ class _ProductDetailState extends State<ProductDetail>
                                                         top: 20),
                                                     width: double.infinity,
                                                     child: PropertyComponent(
-                                                      icon_name: "phone",
+                                                      iconName: "phone",
                                                       content: "0850 441 2020",
                                                       padding: EdgeInsets.only(
                                                           left: 10),
-                                                      font_size: 18,
+                                                      fontSize: 18,
                                                     ),
                                                   ),
                                                   Container(
@@ -289,11 +294,11 @@ class _ProductDetailState extends State<ProductDetail>
                                                         top: 10),
                                                     width: double.infinity,
                                                     child: PropertyComponent(
-                                                      icon_name: "print",
+                                                      iconName: "print",
                                                       content: "0212 441 2040",
                                                       padding: EdgeInsets.only(
                                                           left: 10),
-                                                      font_size: 18,
+                                                      fontSize: 18,
                                                     ),
                                                   ),
                                                   Container(
@@ -301,12 +306,12 @@ class _ProductDetailState extends State<ProductDetail>
                                                         top: 10),
                                                     width: double.infinity,
                                                     child: PropertyComponent(
-                                                      icon_name: "location_on",
+                                                      iconName: "location_on",
                                                       content:
-                                                      "Barbaros Mah. Şebboy Sok. No:2 \nWatergarden İş Merkezi \nAtaşehir/İstanbul",
+                                                          "Barbaros Mah. Şebboy Sok. No:2 \nWatergarden İş Merkezi \nAtaşehir/İstanbul",
                                                       padding: EdgeInsets.only(
                                                           left: 10),
-                                                      font_size: 18,
+                                                      fontSize: 18,
                                                     ),
                                                   ),
                                                 ],
@@ -317,25 +322,26 @@ class _ProductDetailState extends State<ProductDetail>
                                             Page(
                                               child: ListView.builder(
                                                   shrinkWrap: true,
-                                                  itemCount: widget
-                                                      .model.properties.length,
+                                                  itemCount:
+                                                      model.properties.length,
                                                   itemBuilder:
                                                       (BuildContext context,
-                                                      int index) {
-                                                    var property = widget.model
-                                                        .properties[index];
+                                                          int index) {
+                                                    var property =
+                                                        model.properties[index];
                                                     return Container(
                                                       width: double.infinity,
                                                       margin: EdgeInsets.only(
                                                           top: 5, bottom: 5),
                                                       child: PropertyComponent(
-                                                          icon_name: property[1],
-                                                          content:
-                                                          property[0],
-                                                          font_size: 18,
+                                                          iconName: property[
+                                                              "iconName"],
+                                                          content: property[
+                                                              "content"],
+                                                          fontSize: 18,
                                                           padding:
-                                                          EdgeInsets.only(
-                                                              left: 5)),
+                                                              EdgeInsets.only(
+                                                                  left: 5)),
                                                     );
                                                   }),
                                             ),
@@ -344,11 +350,12 @@ class _ProductDetailState extends State<ProductDetail>
                                             Page(
                                               child: Column(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                                    MainAxisAlignment.start,
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.start,
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: <Widget>[
+                                                  //Comment It
                                                   SizedBox(
                                                     width: double.infinity,
                                                     height: 60,
@@ -356,39 +363,37 @@ class _ProductDetailState extends State<ProductDetail>
                                                       children: <Widget>[
                                                         Container(
                                                           width:
-                                                          double.infinity,
+                                                              double.infinity,
                                                           height: 50,
                                                           child: FlatButton(
                                                             color:
-                                                            AppColor.pink,
+                                                                AppColor.pink,
                                                             textColor:
-                                                            AppColor.white,
+                                                                AppColor.white,
                                                             onPressed: () {
                                                               Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
                                                                     builder:
-                                                                        (
-                                                                        context) =>
-                                                                        CommentScreen(
-                                                                          model: widget
-                                                                              .model,
-                                                                        )),
+                                                                        (context) =>
+                                                                            CommentScreen(
+                                                                              model: model,
+                                                                            )),
                                                               );
                                                             },
                                                             shape: new RoundedRectangleBorder(
                                                                 borderRadius:
-                                                                new BorderRadius
-                                                                    .circular(
-                                                                    50.0)),
+                                                                    new BorderRadius
+                                                                            .circular(
+                                                                        50.0)),
                                                             child: Text(
                                                               "Yorum yapın",
                                                               textAlign:
-                                                              TextAlign
-                                                                  .center,
+                                                                  TextAlign
+                                                                      .center,
                                                               style: TextStyle(
                                                                   fontFamily:
-                                                                  "Montserrat",
+                                                                      "Montserrat",
                                                                   fontSize: 14),
                                                             ),
                                                           ),
@@ -396,24 +401,23 @@ class _ProductDetailState extends State<ProductDetail>
                                                       ],
                                                     ),
                                                   ),
-                                                  Column(
+                                                  //List of comments
+                                                  Row(
                                                     children: <Widget>[
                                                       //Comments
                                                       ListView.builder(
-                                                        itemCount: widget.model
+                                                        itemCount: model
                                                             .comments.length,
-                                                        shrinkWrap: true,
+                                                        //shrinkWrap: true,
                                                         itemBuilder:
                                                             (BuildContext
-                                                        context,
-                                                            int index) {
-                                                          return Expanded(
-                                                            child: CommentComponent(
-                                                                model: widget
-                                                                    .model
-                                                                    .comments[
-                                                                index]),
-                                                          );
+                                                                    context,
+                                                                int index) {
+                                                          return CommentComponent(
+                                                              model: CommentModel
+                                                                  .fromJson(model
+                                                                          .comments[
+                                                                      index]));
                                                         },
                                                       ),
                                                     ],
@@ -441,16 +445,16 @@ class _ProductDetailState extends State<ProductDetail>
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.phone),
-          onPressed: () => print(widget.model.phone + " is calling..."),
+          onPressed: () => launch("tel:"+model.phone),
         ),
       ),
     );
   }
 
   void favOnPress() {
-    print("Fav id is " + widget.model.id.toString());
+    print("Fav id is " + model.documentID.toString());
     setState(() {
-      widget.model.isFav = !widget.model.isFav;
+      model.isFav = !model.isFav;
     });
   }
 }

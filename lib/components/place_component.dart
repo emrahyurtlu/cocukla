@@ -1,27 +1,33 @@
 import 'package:cocukla/components/property_component.dart';
-import 'package:cocukla/models/place_model.dart';
-import 'package:cocukla/screens/product_detail.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class Product extends StatefulWidget {
-  final int id;
+class PlaceComponent extends StatefulWidget {
+  final String id;
   final String title;
-  final String imageUrl;
+  final String image;
   final double rating;
-  final List<PropertyComponent> attributes;
+  final List<PropertyComponent> properties;
   bool isFav;
 
-  Product({Key key, this.id, this.title, this.imageUrl, this.rating, this.attributes, this.isFav}) : super(key: key);
+  PlaceComponent(
+      {Key key,
+      this.id,
+      this.title,
+      this.image,
+      this.rating,
+      this.properties,
+      this.isFav})
+      : super(key: key);
 
 
   @override
-  _ProductState createState() => _ProductState();
+  _PlaceComponentState createState() => _PlaceComponentState();
 }
 
-class _ProductState extends State<Product> {
+class _PlaceComponentState extends State<PlaceComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,7 +51,7 @@ class _ProductState extends State<Product> {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
-                      widget.imageUrl,
+                      widget.image,
                       width: 85,
                       height: 85,
                       fit: BoxFit.cover,
@@ -62,14 +68,15 @@ class _ProductState extends State<Product> {
               //Title Section
               Container(
                 width:
-                DimensionUtility(context, EdgeInsets.only(top: 5, left: 10))
-                    .setWidthRel(subtract: 100),
+                    DimensionUtility(context, EdgeInsets.only(top: 5, left: 10))
+                        .setWidthRel(subtract: 100),
                 height: 30,
                 padding: EdgeInsets.only(top: 5, left: 10),
                 child: Stack(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pushNamed("/product-detail"),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed("/product-detail"),
                       child: Text(
                         widget.title,
                         maxLines: 2,
@@ -85,8 +92,9 @@ class _ProductState extends State<Product> {
                       child: Container(
                         color: Colors.white,
                         child: IconButton(
-                          icon: Icon(
-                              widget.isFav ? Icons.favorite : Icons.favorite_border),
+                          icon: Icon(widget.isFav
+                              ? Icons.favorite
+                              : Icons.favorite_border),
                           iconSize: 24,
                           padding: EdgeInsets.all(0),
                           onPressed: favOnPress,
@@ -99,6 +107,7 @@ class _ProductState extends State<Product> {
                   ],
                 ),
               ),
+              //Rating
               Container(
                 padding: EdgeInsets.only(top: 0, left: 10),
                 child: Row(
@@ -114,17 +123,17 @@ class _ProductState extends State<Product> {
                   ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                width: 304,
-                child: GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed("/product-detail"),
+              GestureDetector(
+                onTap: () => Navigator.of(context).pushNamed("/product-detail"),
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  width: 304,
                   child: Wrap(
                     direction: Axis.horizontal,
                     alignment: WrapAlignment.start,
                     runSpacing: 0,
                     spacing: 3,
-                    children: widget.attributes,
+                    children: widget.properties,
                   ),
                 ),
               )
@@ -135,8 +144,8 @@ class _ProductState extends State<Product> {
     );
   }
 
-  void favOnPress(){
-    print("Fav id is "+widget.id.toString());
+  void favOnPress() {
+    print("Fav id is " + widget.id.toString());
     setState(() {
       widget.isFav = !widget.isFav;
     });

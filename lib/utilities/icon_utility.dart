@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-IconData getMaterialIconByName({String icon_name}){
-  return MaterialIcons[icon_name];
+IconData getMaterialIconByName({String iconName}){
+  return MaterialIcons[iconName];
 }
 
 const MaterialIcons = {

@@ -21,7 +21,4 @@ void processing(BuildContext context,
         );
       },
       barrierDismissible: dismiss);
-  hide(){
-    dismiss = true;
-  }
 }

@@ -1,19 +1,21 @@
-import 'package:cocukla/components/product_component.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/components/place_component.dart';
 import 'package:cocukla/components/property_component.dart';
+import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/screens/place_form.dart';
 import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/utilities/app_data.dart';
 import 'package:flutter/material.dart';
 
 class Places extends StatefulWidget {
   final List<PropertyComponent> attributes = [
     PropertyComponent(
-        icon_name: "access_time", content: "Açık", color: AppColor.green),
-    PropertyComponent(icon_name: "location_on", content: "5.6km"),
-    PropertyComponent(icon_name: "restaurant_menu", content: "Çocuk menüsü"),
-    PropertyComponent(
-        icon_name: "child_friendly", content: "Bebek bakım odası"),
-    PropertyComponent(icon_name: "child_care", content: "Oyun odası")
+        iconName: "access_time", content: "Açık", color: AppColor.green),
+    PropertyComponent(iconName: "location_on", content: "5.6km"),
+    PropertyComponent(iconName: "restaurant_menu", content: "Çocuk menüsü"),
+    PropertyComponent(iconName: "child_friendly", content: "Bebek bakım odası"),
+    PropertyComponent(iconName: "child_care", content: "Oyun odası")
   ];
 
   @override
@@ -108,7 +110,7 @@ class _PlacesState extends State<Places> {
                             shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(50.0)),
                             child: Icon(
-                              Icons.tune,
+                              Icons.search,
                               color: AppColor.white,
                             ),
                           ),
@@ -121,67 +123,56 @@ class _PlacesState extends State<Places> {
 
             //Product List
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(0),
-                children: <Widget>[
-                  Product(
-                    id: 1,
-                    title: "Fevzi Usta Köfte&Balık",
-                    imageUrl: "assets/images/temp/fevzi_usta.jpeg",
-                    rating: 5,
-                    attributes: widget.attributes,
-                    isFav: true,
-                  ),
-                  Product(
-                    id: 2,
-                    title: "Kaşıbeyaz Ataşehir",
-                    imageUrl: "assets/images/temp/kasibeyaz_atasehir.jpg",
-                    rating: 3,
-                    attributes: widget.attributes,
-                    isFav: true,
-                  ),
-                  Product(
-                    id: 3,
-                    title: "Trilye Restaurant",
-                    imageUrl: "assets/images/temp/fevzi_usta.jpeg",
-                    rating: 4.5,
-                    attributes: widget.attributes,
-                    isFav: true,
-                  ),
-                  Product(
-                    id: 4,
-                    title: "Mado Bahçelievler",
-                    imageUrl: "assets/images/temp/mado.jpg",
-                    rating: 3,
-                    attributes: widget.attributes,
-                    isFav: true,
-                  ),
-                ],
-              ),
+              child: getMyPlaces(),
             ),
-            //Product List
           ],
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            var map = Map<String, dynamic>();
-            map = {
-              "id":"",
-              "name": "Hosta Piknik",
-              "digest": "özet alanı",
-              "insert_date": "",
-              "update_date": "",
-              "phone": "0312 333 4455",
-              "fax": "0312 111 2233",
-              "email": "necatibey@hosta.com",
-              "address": "Necatibey Caddesi ...",
-              "category": "Mekanlar",
-              "city": "Ankara",
-              "district": "Çankaya",
-              "coordinate": ""
-            };
-            PlaceModel model = PlaceModel.fromJson(map);
+            PlaceModel model = PlaceModel(
+                isActive: true,
+                email: "necatibey@hosta.com",
+                name: "Hosta Piknik",
+                city: "Ankara",
+                district: "Çankaya",
+                address: "Necatibey Caddesi No:25 Sıhhıye, Çankaya/Ankara",
+                category: "Mekanlar",
+                digest: "Bu alana mekan hakkında özet bilgi gelecek",
+                fax: "0312 111 2233",
+                phone: "0312 333 4455",
+                isApproved: true,
+                location: "",
+                owner: AppData.user.email,
+                properties: [
+                  {
+                    "iconName": "restaurant_menu",
+                    "content": "Çocuk menüsü",
+                  },
+                  {
+                    "iconName": "child_friendly",
+                    "content": "Bebek bakım odası",
+                  },
+                  {
+                    "iconName": "child_care",
+                    "content": "Oyun odası",
+                  },
+                  {
+                    "iconName": "calendar_today",
+                    "content": "Randevu ile gidilir",
+                  },
+                  {
+                    "iconName": "cake",
+                    "content": "Özel gün organizasyonu",
+                  },
+                ],
+                images: [
+                  "assets/images/temp/kasibeyaz_atasehir.jpg",
+                  "assets/images/temp/gha_3325.jpg",
+                  "assets/images/temp/gha_3336.jpg",
+                  "assets/images/temp/gha_3499.jpg",
+                  "assets/images/temp/gha_3612.jpg",
+                ]);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => PlaceForm(model)),
@@ -189,6 +180,34 @@ class _PlacesState extends State<Places> {
           },
         ),
       ),
+    );
+  }
+}
+
+Widget getMyPlaces() {
+  List<DocumentSnapshot> documents;
+  var snapshot = Firestore.instance.document(Collection.Places).snapshots();
+  snapshot
+      .where((DocumentSnapshot ds) => ds.data["owner"] == AppData.user.email)
+      .listen((DocumentSnapshot ds) {
+    documents.add(ds);
+  });
+  if (documents != null) {
+    return ListView.builder(
+        itemCount: documents.length,
+        itemBuilder: (BuildContext context, int index) {
+          return PlaceComponent(
+            id: documents[index].documentID,
+            title: documents[index].data["title"],
+            rating: (documents[index].data["rating"] as num).toDouble(),
+            image: documents[index].data["images"][0],
+            properties: documents[index].data["properties"],
+            isFav: documents[index].data["isFav"],
+          );
+        });
+  } else {
+    return Center(
+      child: Text("Kayıt bulunamadı."),
     );
   }
 }

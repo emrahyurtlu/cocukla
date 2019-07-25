@@ -6,10 +6,10 @@ import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
 import 'package:cocukla/utilities/processing.dart';
+import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
@@ -26,16 +26,45 @@ class _ProfileState extends State<Profile> {
   final _passwordController = TextEditingController();
   static List<Asset> _assets;
   static Image _avatar;
+  static String _name;
+  static String _password;
+  static String _tempUrl;
+  FirebaseUser user;
 
   @override
   void initState() {
-    _nameController.text = AppData.user.displayName;
-    emailController.text = AppData.user.email;
+    FirebaseAuth.instance.currentUser().then((user) {
+      print("-----------------------------------------");
+      print("MY PROFILE");
+      print(user.toString());
+      print("-----------------------------------------");
+      if (user != null && user.email != null) {
+        user = user;
+        setState(() {
+          this.user = user;
+          AppData.user = user;
+        });
+        _nameController.text = _name = user.displayName;
+        emailController.text = user.email;
+
+        if (user.photoUrl != null) {
+          _avatar = Image.network(
+            user.photoUrl,
+            width: 86,
+          );
+        } else {
+          _avatar = Image.asset(
+            "assets/images/user.png",
+            width: 86,
+          );
+        }
+      } else {
+        Navigator.of(context).pushNamed(CustomRoute.signIn);
+      }
+    });
+
     _assets = null;
-    _avatar = Image.network(
-      AppData.user.photoUrl,
-      width: 86,
-    );
+
     super.initState();
   }
 
@@ -125,42 +154,32 @@ class _ProfileState extends State<Profile> {
                       ButtonComponent(
                         text: "Güncelle",
                         onPressed: () async {
+                          setState(() {
+                            _name = _nameController.text.trim();
+                            _password = _passwordController.text.trim();
+                          });
                           var dismiss = false;
                           processing(context, dismiss: dismiss);
 
-                          var password = _passwordController.text.trim();
-
-                          var tempUrl = "";
                           if (_assets != null && _assets.length != 0) {
-                            tempUrl = await uploadSelectedAsset(
+                            var res = await uploadSelectedAsset(
                                 _assets[0], "avatars");
                             _assets.clear();
+                            setState(() {
+                              _tempUrl = res;
+                            });
                           }
+                          var info = UserUpdateInfo();
+                          info.displayName = _name;
+                          info.photoUrl = _tempUrl;
 
-                          FirebaseAuth.instance
-                              .currentUser()
-                              .then((FirebaseUser user) {
-                            UserUpdateInfo info;
-                            info.displayName = _nameController.text.trim();
-                            info.photoUrl = tempUrl;
-                            user.updateProfile(info).catchError(
-                                (e) => print("USER INFO UPDATE ERROR: " + e));
-                            if(password != null){
-                              user.updatePassword(_passwordController.text.trim())
-                                  .catchError((e) {
-                                if (e is PlatformException) {
-                                  if (e.code.contains("WEAK")) {
-                                    _scaffoldKey.currentState
-                                        .showSnackBar(SnackBar(
-                                      content: Text(
-                                          "Şifreniz en az 6 karakterden oluşmalıdır."),
-                                    ));
-                                  }
-                                }
-                              });
-                            }
-
-                          });
+                          user.updateProfile(info).then((_) {
+                            dismiss = true;
+                            user.reload();
+                          }).catchError(
+                              (e) => print("PROFILE UPDATE ERROR: " + e));
+                          user.reload().then((_) => dismiss = true);
+                          dismiss = true;
                         },
                       ),
                       Padding(

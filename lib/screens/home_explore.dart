@@ -16,15 +16,15 @@ class _HomeExploreState extends State<HomeExplore> {
   void initState() {
     locateUser();
     allMarkers.add(Marker(
-      markerId: MarkerId("my_marker"),
+      markerId: MarkerId("Buradasınız"),
       draggable: false,
       onTap: () => print("Tapped to marker"),
-      position: LatLng(39.915047, 32.819284),
+      position: LatLng(AppData.position.latitude, AppData.position.longitude),
       visible: true,
     ));
   }
 
-  Future<Position> locateUser() async {
+  Future<void> locateUser() async {
     await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position value) => AppData.position = value);

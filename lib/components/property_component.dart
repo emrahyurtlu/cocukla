@@ -5,26 +5,26 @@ import 'package:flutter/material.dart';
 class PropertyComponent extends StatelessWidget {
   IconData _iconData;
   Icon _icon;
-  final String icon_name;
+  final String iconName;
   final String content;
-  final double font_size;
+  final double fontSize;
   final Color color;
   final EdgeInsets padding;
 
   PropertyComponent({
-    @required this.icon_name,
+    @required this.iconName,
     @required this.content,
     this.color = AppColor.dark_gray,
-    this.font_size = 14,
+    this.fontSize = 14,
     this.padding = const EdgeInsets.all(0),
   });
 
   @override
   Widget build(BuildContext context) {
-    this._iconData = getMaterialIconByName(icon_name: icon_name);
+    this._iconData = getMaterialIconByName(iconName: iconName);
     this._icon = Icon(
       _iconData,
-      size: this.font_size,
+      size: this.fontSize,
       color: this.color,
     );
     return Wrap(

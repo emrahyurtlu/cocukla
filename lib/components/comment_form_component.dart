@@ -13,14 +13,6 @@ class CommentFormComponent extends StatefulWidget {
 }
 
 class _CommentFormComponentState extends State<CommentFormComponent> {
-  TextEditingController _textEditingController;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    _textEditingController = TextEditingController();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(

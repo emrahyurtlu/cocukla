@@ -37,6 +37,5 @@ class DataLayer {
         .document(documentID)
         .get(source: Source.serverAndCache)
         .catchError((e) => print("DATABASE GET ERROR: " + e));
-    ;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/components/button_component.dart';
 import 'package:cocukla/components/card_component.dart';
 import 'package:cocukla/components/dropdown_component.dart';
@@ -13,6 +14,8 @@ import 'package:cocukla/utilities/address_statics.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/city_info.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
+import 'package:cocukla/utilities/route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -42,14 +45,11 @@ class _PlaceFormState extends State<PlaceForm> {
   static String _categorySelected;
   static String _citySelected = "";
   static String _districtSelected = "";
-  static double _rating;
-  final comments = [];
   static DateTime _insertDate;
   static DateTime _updateDate;
   static List<String> _cities;
   static List<String> _districts;
   static List<Asset> _assets;
-  static bool _isApproved;
   static String _imageSelectedInfo = "Herhangi bir resim seçilmedi";
 
   //Properties
@@ -64,10 +64,27 @@ class _PlaceFormState extends State<PlaceForm> {
   static bool _randevu = false;
   static bool _alkol = false;
   static bool _yemekliToplanti = false;
+  FirebaseUser user;
 
   @override
   void initState() {
-    _insertDate = widget.data.insertDate ?? DateTime.now();
+    FirebaseAuth.instance.currentUser().then((user) {
+      print("-----------------------------------------");
+      print("PLACE ADD/UPDATE FORM");
+      print(user.toString());
+      print("-----------------------------------------");
+      if (user != null && user.email != null) {
+        AppData.user = user;
+        setState(() {
+          this.user = user;
+        });
+      } else {
+        Navigator.of(context).pushNamed(CustomRoute.signIn);
+      }
+    });
+    _insertDate = widget.data.insertDate != null
+        ? widget.data.insertDate
+        : DateTime.now();
     _updateDate = DateTime.now();
     _nameController.text = widget.data.name;
     _digestController.text = widget.data.digest;
@@ -75,15 +92,43 @@ class _PlaceFormState extends State<PlaceForm> {
     _faxController.text = widget.data.fax;
     _emailController.text = widget.data.email;
     _addressController.text = widget.data.address;
-    _coordinateController.text = widget.data.location ?? AppData.coordinate;
+    _coordinateController.text = widget.data.location.isNotEmpty
+        ? widget.data.location
+        : AppData.coordinate;
     _categorySelected = widget.data.category ?? "";
     _citySelected = widget.data.city ?? "";
     _districtSelected = widget.data.district ?? "";
-    _rating = widget.data.rating;
     _citySelected = AppData.placemarks[0].administrativeArea;
     _districtSelected = AppData.placemarks[0].subAdministrativeArea;
     _cities = AddressStatics.getCities();
     _assets = List<Asset>();
+    /*****************************************************/
+    for (var element in widget.data.properties) {
+      if (element["content"] == "Çocuk menüsü") _cocukMenusu = true;
+
+      if (element["content"] == "Çocuk oyun alanı") _oyunAlani = true;
+
+      if (element["content"] == "Oyun ablası") _oyunAblasi = true;
+
+      if (element["content"] == "Çocuk atölyesi") _atolye = true;
+
+      if (element["content"] == "Çocuk tuvaleti") _tuvalet = true;
+
+      if (element["content"] == "Çocuk masa ve sandalyesi")
+        _masaSandalye = true;
+
+      if (element["content"] == "Bebek bakım odası") _bebekBakimOdasi = true;
+
+      if (element["content"] == "Özel gün organizasyonu") _organizasyon = true;
+
+      if (element["content"] == "Randevu ile gidilir") _randevu = true;
+
+      if (element["content"] == "Alkol tüketilir") _alkol = true;
+
+      if (element["content"] == "Toplantı organizasyonu")
+        _yemekliToplanti = true;
+    }
+    /*****************************************************/
     super.initState();
   }
 
@@ -216,7 +261,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Çocuk menüsü
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "restaurant_menu",
+                          iconName: "restaurant_menu",
                           content: "Çocuk menüsü",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -230,7 +275,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Çocuk oyun alanı
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "category",
+                          iconName: "category",
                           content: "Çocuk oyun alanı",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -244,7 +289,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Oyun ablası
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "remove_red_eye",
+                          iconName: "remove_red_eye",
                           content: "Oyun ablası",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -258,7 +303,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Çocuk atölyesi
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "color_lens",
+                          iconName: "color_lens",
                           content: "Çocuk atölyesi",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -272,7 +317,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Çocuk tuvaleti
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "wc",
+                          iconName: "wc",
                           content: "Çocuk tuvaleti",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -286,7 +331,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Çocuk masa ve sandalyesi
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "event_seat",
+                          iconName: "event_seat",
                           content: "Çocuk masa ve sandalyesi",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -300,7 +345,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Bebek bakım odası
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "child_care",
+                          iconName: "child_care",
                           content: "Bebek bakım odası",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -314,7 +359,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Özel gün organizasyonu
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "cake",
+                          iconName: "cake",
                           content: "Özel gün organizasyonu",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -328,7 +373,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Randevu ile gidilir
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "calendar_today",
+                          iconName: "calendar_today",
                           content: "Randevu ile gidilir",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -342,7 +387,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Alkol tüketilir
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "local_bar",
+                          iconName: "local_bar",
                           content: "Alkol tüketilir",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -356,7 +401,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Toplantı organizasyonu
                       SwitchListTile(
                         title: PropertyComponent(
-                          icon_name: "work",
+                          iconName: "work",
                           content: "Toplantı organizasyonu",
                           padding: EdgeInsets.only(left: 10),
                         ),
@@ -375,9 +420,9 @@ class _PlaceFormState extends State<PlaceForm> {
 
                       ButtonComponent(
                         text: "Kaydet",
-                        onPressed: () {
+                        onPressed: () async {
                           List<String> images = [];
-                          List<List<String>> properties = List<List<String>>();
+                          var properties = List<Map<String, dynamic>>();
                           widget.data.name = _nameController.text.trim();
                           widget.data.digest = _digestController.text.trim();
                           widget.data.category = _categorySelected.trim();
@@ -389,86 +434,146 @@ class _PlaceFormState extends State<PlaceForm> {
                           widget.data.fax = _faxController.text.trim();
                           widget.data.email = _emailController.text.trim();
                           widget.data.owner = AppData.user.email;
-                          widget.data.rating = _rating;
                           widget.data.insertDate = _insertDate;
                           widget.data.updateDate = _updateDate;
 
-                          if (_assets != null && _assets.length > 0) {
-                            for (var asset in _assets) {
-                              uploadSelectedAsset(asset, "places")
-                                  .then((url) => images.add(url));
+                          //Validation
+                          if (widget.data.name.isNotEmpty &&
+                              widget.data.category.isNotEmpty &&
+                              (widget.data.images.length > 0 ||
+                                  (_assets != null && _assets.length > 0)) &&
+                              (_cocukMenusu ||
+                                  _oyunAblasi ||
+                                  _oyunAlani ||
+                                  _tuvalet ||
+                                  _yemekliToplanti ||
+                                  _bebekBakimOdasi ||
+                                  _randevu ||
+                                  _organizasyon ||
+                                  _atolye ||
+                                  _masaSandalye) &&
+                              widget.data.phone.isNotEmpty &&
+                              widget.data.email.isNotEmpty &&
+                              widget.data.city.isNotEmpty &&
+                              widget.data.district.isNotEmpty &&
+                              widget.data.location.isNotEmpty) {
+                            if (_cocukMenusu)
+                              properties.add({
+                                "content": "Çocuk menüsü",
+                                "icon_name": "restaurant_menu"
+                              });
+
+                            if (_oyunAlani)
+                              properties.add({
+                                "content": "Çocuk oyun alanı",
+                                "icon_name": "category"
+                              });
+
+                            if (_oyunAblasi)
+                              properties.add({
+                                "content": "Çocuk oyun ablası",
+                                "icon_name": "remove_red_eye"
+                              });
+
+                            if (_atolye)
+                              properties.add({
+                                "content": "Çocuk atölyesi",
+                                "icon_name": "color_lens"
+                              });
+
+                            if (_tuvalet)
+                              properties.add({
+                                "content": "Çocuk tuvaleti",
+                                "icon_name": "wc"
+                              });
+
+                            if (_masaSandalye)
+                              properties.add({
+                                "content": "Çocuk masa ve sandalyesi",
+                                "icon_name": "event_seat"
+                              });
+
+                            if (_bebekBakimOdasi)
+                              properties.add({
+                                "content": "Bebek bakım odası",
+                                "icon_name": "child_care"
+                              });
+
+                            if (_organizasyon)
+                              properties.add({
+                                "content": "Özel gün organizasyonu",
+                                "icon_name": "cake"
+                              });
+
+                            if (_organizasyon)
+                              properties.add({
+                                "content": "Randevu ile gidilir",
+                                "icon_name": "calendar_today"
+                              });
+
+                            if (_alkol)
+                              properties.add({
+                                "content": "Alkol tüketilir",
+                                "icon_name": "local_bar"
+                              });
+
+                            if (_yemekliToplanti)
+                              properties.add({
+                                "content": "Toplantı organizasyonu",
+                                "icon_name": "work"
+                              });
+
+                            widget.data.properties = properties;
+
+                            widget.data.rating = 0;
+                            widget.data.isActive = false;
+                            widget.data.isApproved = false;
+                            widget.data.isFav = false;
+                            widget.data.comments =
+                                (widget.data.comments != null &&
+                                        widget.data.comments.length > 0)
+                                    ? widget.data.comments
+                                    : [];
+
+                            List<String> urlList;
+                            if (_assets.length > 0)
+                              urlList =
+                                  await uploadSelectedAssets(_assets, "places");
+                            if (urlList != null) {
+                              print("PHOTOS: " + urlList.toString());
+                              widget.data.images = urlList;
+
+                              /**********************************************/
+                              if (widget.data.documentID == null || widget.data.documentID.isEmpty) {
+                                //Insert Code
+                                _insert(context, widget.data.toJson());
+                              } else {
+                                //Update Code
+                                _update(context, widget.data.toJson());
+                              }
+
+                              /**********************************************/
+
+                            } else {
+                              Alert(
+                                  context: context,
+                                  title: "Hata",
+                                  desc:
+                                      "Ad, telefon, eposta, lokasyon alanı zorunludur. En az bir tane fotoğraf seçilmelidir. En az bir özellik işaretlenmelidir ",
+                                  type: AlertType.error,
+                                  buttons: <DialogButton>[
+                                    DialogButton(
+                                      child: Text(
+                                        "Tamam",
+                                        style: TextStyle(color: AppColor.white),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                    )
+                                  ]).show();
                             }
 
-                            widget.data.photos = images;
-                          }
-
-                          if (_cocukMenusu)
-                            properties.add(["Çocuk menüsü", "restaurant_menu"]);
-
-                          if (_oyunAlani)
-                            properties.add(["Çocuk oyun alanı", "category"]);
-
-                          if (_oyunAblasi)
-                            properties
-                                .add(["Çocuk oyun ablası", "remove_red_eye"]);
-
-                          if (_atolye)
-                            properties.add(["Çocuk atölyesi", "color_lens"]);
-
-                          if (_tuvalet)
-                            properties.add(["Çocuk tuvaleti", "wc"]);
-
-                          if (_masaSandalye)
-                            properties.add(
-                                ["Çocuk masa ve sandalyesi", "event_seat"]);
-
-                          if (_bebekBakimOdasi)
-                            properties.add(["Bebek bakım odası", "child_care"]);
-
-                          if (_organizasyon)
-                            properties.add(["Özel gün organizasyonu", "cake"]);
-
-                          if (_organizasyon)
-                            properties
-                                .add(["Randevu ile gidilir", "calendar_today"]);
-
-                          if (_alkol)
-                            properties.add(["Alkol tüketilir", "local_bar"]);
-
-                          if (_yemekliToplanti)
-                            properties.add(
-                                ["Yemekli toplantı organizasyonu", "work"]);
-
-                          widget.data.properties = properties;
-
-                          //Validation
-                          if (widget.data.name != null &&
-                              widget.data.digest != null &&
-                              widget.data.category != null &&
-                              widget.data.photos != null &&
-                              widget.data.photos.length > 0 &&
-                              widget.data.properties != null &&
-                              widget.data.properties.length > 0 &&
-                              widget.data.phone != null &&
-                              widget.data.email != null &&
-                              widget.data.city != null &&
-                              widget.data.district != null &&
-                              widget.data.location != null) {
-                            print("Veritabanına eklendi");
-                          } else {
-                            Alert(
-                                    context: context,
-                                    title: "HATA",
-                                    desc:
-                                        "Ad, özet, telefon, eposta, lokasyon alanı zorunludur. En az bir tane fotoğraf seçilmelidir. En az bir özellik işaretlenmelidir ",
-                                    type: AlertType.error,
-                            buttons: <DialogButton>[
-                              DialogButton(
-                                child: Text("Tamam"),
-                                onPressed: () => Navigator.pop(context),
-                              )
-                            ])
-                                .show();
+                            //Validation
+                            print(widget.data.toString());
                           }
                         },
                       ),
@@ -489,12 +594,80 @@ class _PlaceFormState extends State<PlaceForm> {
       _districts = result;
     });
   }
+}
 
-/*  _onBasicAlertPressed(context) {
+_update(BuildContext context, Map map) {
+  print("UPDATE SECTION: ");
+  print(map);
+
+  Firestore.instance.document(map["documentID"]).setData(map).then((result) {
     Alert(
         context: context,
-        title: "RFLUTTER ALERT",
-        desc: "Flutter is more awesome with RFlutter Alert.")
-        .show();
-  }*/
+        title: "Başarılı",
+        desc: "İşlem başarıyla tamamlandı.",
+        type: AlertType.success,
+        buttons: <DialogButton>[
+          DialogButton(
+            child: Text(
+              "Tamam",
+              style: TextStyle(color: AppColor.white),
+            ),
+            onPressed: () => Navigator.pop(context),
+          )
+        ]).show();
+  }).catchError((e) {
+    print(e);
+    Alert(
+        context: context,
+        title: "Hata",
+        desc: "Kayıt eklenemedi.",
+        type: AlertType.error,
+        buttons: <DialogButton>[
+          DialogButton(
+            child: Text(
+              "Tamam",
+              style: TextStyle(color: AppColor.white),
+            ),
+            onPressed: () => Navigator.pop(context),
+          )
+        ]).show();
+  });
+}
+
+_insert(BuildContext context, Map map) {
+  print("INSERT SECTION: ");
+  print(map);
+
+  Firestore.instance.collection("places").add(map).then((result) {
+    if (result != null)
+      Alert(
+          context: context,
+          title: "Başarılı",
+          desc: "İşlem başarıyla tamamlandı.",
+          type: AlertType.success,
+          buttons: <DialogButton>[
+            DialogButton(
+              child: Text(
+                "Tamam",
+                style: TextStyle(color: AppColor.white),
+              ),
+              onPressed: () => Navigator.pop(context),
+            )
+          ]).show();
+  }).catchError((e) {
+    Alert(
+        context: context,
+        title: "Hata",
+        desc: "Kayıt eklenemedi.",
+        type: AlertType.error,
+        buttons: <DialogButton>[
+          DialogButton(
+            child: Text(
+              "Tamam",
+              style: TextStyle(color: AppColor.white),
+            ),
+            onPressed: () => Navigator.pop(context),
+          )
+        ]).show();
+  });
 }

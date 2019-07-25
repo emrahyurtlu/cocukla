@@ -3,6 +3,7 @@ import 'package:cocukla/components/text_input_component.dart';
 import 'package:cocukla/ui/app_color.dart';
 import 'package:cocukla/ui/font_family.dart';
 import 'package:cocukla/utilities/app_data.dart';
+import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -102,15 +103,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               .createUserWithEmailAndPassword(
                                   email: email, password: password)
                               .then((FirebaseUser user) {
+                            print("-----------------------------------------");
+                            print(user.toString());
+                            print("-----------------------------------------");
                             UserUpdateInfo updateInfo;
-                            updateInfo.displayName = name;
+                            updateInfo.displayName = name ?? email;
 
                             AppData.user = user;
 
                             user.updateProfile(updateInfo).then((val) {
-                              Navigator.pushNamed(context, "/home");
+                              Navigator.pushNamed(context, CustomRoute.home);
+                              //user.reload();
                             }).catchError(
                                 (e) => print("USER DATA UPDATE ERROR: " + e));
+
+                            AppData.user = user;
+
                           }).catchError((e) {
                             if (e is PlatformException) {
                               if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {

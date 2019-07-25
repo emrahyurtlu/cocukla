@@ -5,13 +5,15 @@ import 'package:flutter/widgets.dart';
 class ButtonComponent extends StatefulWidget {
   double width, height;
   String text;
+  Widget icon;
   VoidCallback onPressed;
   Color color, textColor;
 
   ButtonComponent(
       {this.width = 300,
       this.height = 60,
-      this.text = "Button",
+      this.icon,
+      this.text,
       @required this.onPressed,
       this.color = AppColor.pink,
       this.textColor = AppColor.white});
@@ -37,11 +39,12 @@ class _ButtonComponentState extends State<ButtonComponent> {
               onPressed: widget.onPressed,
               shape: new RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0)),
-              child: Text(
-                widget.text,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: "Montserrat", fontSize: 14),
-              ),
+              child: widget.icon ??
+                  Text(
+                    widget.text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontFamily: "Montserrat", fontSize: 14),
+                  ),
             ),
           ),
         ],

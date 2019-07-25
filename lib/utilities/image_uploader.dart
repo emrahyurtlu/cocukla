@@ -38,6 +38,24 @@ Future<List<String>> uploadPickedImages() async {
 
   return links;
 }
+Future<List<String>> uploadSelectedAssets(List<Asset> assets, [String folderName = ""]) async {
+  print(" ------------------------------------------------------------ ");
+  print("Files are selected!");
+  print(assets.length);
+  print(" ------------------------------------------------------------ ");
+
+  links.clear();
+
+  for (var asset in assets) {
+    var result = await uploadSelectedAsset(asset, folderName);
+    if(result != null){
+      print("UPLOADED PHOTO LINK: " + result);
+      links.add(result);
+    }
+  }
+
+  return links;
+}
 
 Future<dynamic> uploadSelectedAsset(Asset asset,
     [String folderName = ""]) async {

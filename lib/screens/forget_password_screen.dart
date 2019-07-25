@@ -1,4 +1,8 @@
+import 'package:cocukla/components/button_component.dart';
+import 'package:cocukla/components/text_input_component.dart';
 import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -7,21 +11,21 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey();
-    final myController = TextEditingController();
-
-    @override
-    void dispose() {
-      // Clean up the controller when the Widget is disposed
-      myController.dispose();
-      //super.dispose();
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("Şifremi Unuttum", style: TextStyle(color: AppColor.text_color,fontFamily: "MontserratRegular")),
+        title: Text("Şifremi Unuttum", style: AppStyle.AppBarTextStyle),
         backgroundColor: AppColor.white,
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColor.text_color),
@@ -44,64 +48,17 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 child: Center(
                     child: Column(
                   children: <Widget>[
-                    SizedBox(
-                      width: 300,
-                      height: 60,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: AppColor.light_gray,
-                              ),
-                              child: TextFormField(
-                                controller: null,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: new InputDecoration(
-                                  labelStyle:
-                                      TextStyle(color: AppColor.text_color),
-                                  hintText: 'you@example.com',
-                                  labelText: 'Eposta',
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.only(
-                                      left: 25, top: 5, bottom: 5, right: 5),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 300,
-                      height: 60,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            width: 300,
-                            height: 50,
-                            child: FlatButton(
-                              color: AppColor.pink,
-                              textColor: AppColor.white,
-                              onPressed: () => {
-                                    Navigator.pop(context)
-                                  },
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(50.0)),
-                              child: Text(
-                                "Şifremi Hatırlat",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: "Montserrat", fontSize: 14),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    TextInputComponent(_emailController,labelText: "Eposta", hintText: "you@example.com", inputType: TextInputType.emailAddress,),
+                    ButtonComponent(text: "Şifremi Hatırlat", onPressed: () {
+                      var email = _emailController.text.trim();
+                      if(email != null){
+                        FirebaseAuth.instance.sendPasswordResetEmail(email: email).then((result){
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Eposta adresinize şifre hatırlatma postası gönderildi."),));
+                        }).catchError((e) {
+                          print(e);
+                        });
+                      }
+                    },),
                   ],
                 )),
               )

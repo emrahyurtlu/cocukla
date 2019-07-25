@@ -25,7 +25,7 @@ class _CommentComponentState extends State<CommentComponent> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Image.asset(
-                widget.model.imageLink,
+                widget.model.image,
                 width: 40,
                 height: 40,
                 fit: BoxFit.cover,
@@ -61,7 +61,7 @@ class _CommentComponentState extends State<CommentComponent> {
               //Comment Text
               Container(
                   margin: EdgeInsets.only(left: 50),
-                  child: Text(widget.model.text,
+                  child: Text(widget.model.content,
                       softWrap: true,
                       textAlign: TextAlign.left,
                       style: TextStyle(
