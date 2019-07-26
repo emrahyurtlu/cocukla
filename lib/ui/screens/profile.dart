@@ -1,7 +1,7 @@
-import 'package:cocukla/components/button_component.dart';
-import 'package:cocukla/components/card_component.dart';
-import 'package:cocukla/components/text_input_component.dart';
-import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/components/button_component.dart';
+import 'package:cocukla/ui/components/card_component.dart';
+import 'package:cocukla/ui/components/text_input_component.dart';
+import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/image_uploader.dart';

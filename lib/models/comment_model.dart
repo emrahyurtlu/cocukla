@@ -18,7 +18,7 @@ class CommentModel {
       : image = json["image"],
         name = json["name"],
         content = json["content"],
-        rating = (json["rating"] as num).toDouble(),
+        rating = double.parse(json["rating"]),
         date = json["date"],
         documentID = json["documentID"];
 

@@ -1,7 +1,7 @@
-import 'package:cocukla/components/button_component.dart';
-import 'package:cocukla/components/text_input_component.dart';
-import 'package:cocukla/ui/app_color.dart';
-import 'package:cocukla/ui/font_family.dart';
+import 'package:cocukla/ui/components/button_component.dart';
+import 'package:cocukla/ui/components/text_input_component.dart';
+import 'package:cocukla/ui/config/app_color.dart';
+import 'package:cocukla/ui/config/font_family.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -118,7 +118,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 (e) => print("USER DATA UPDATE ERROR: " + e));
 
                             AppData.user = user;
-
                           }).catchError((e) {
                             if (e is PlatformException) {
                               if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {

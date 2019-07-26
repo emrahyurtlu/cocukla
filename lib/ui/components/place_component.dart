@@ -1,27 +1,32 @@
-import 'package:cocukla/components/property_component.dart';
-import 'package:cocukla/ui/app_color.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/ui/components/property_component.dart';
+import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class PlaceComponent extends StatefulWidget {
-  final String id;
+  final DocumentSnapshot document;
+  final String documentID;
   final String title;
   final String image;
   final double rating;
   final List<PropertyComponent> properties;
+  final GestureTapCallback onTap;
   bool isFav;
 
   PlaceComponent(
       {Key key,
-      this.id,
-      this.title,
-      this.image,
-      this.rating,
+      this.documentID,
+      @required this.onTap,
+      @required this.title,
+      @required this.image,
+      this.rating = 0,
       this.properties,
-      this.isFav})
+      this.isFav,
+      this.document})
       : super(key: key);
-
 
   @override
   _PlaceComponentState createState() => _PlaceComponentState();
@@ -47,14 +52,17 @@ class _PlaceComponentState extends State<PlaceComponent> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               GestureDetector(
-                onTap: () => Navigator.of(context).pushNamed("/product-detail"),
+                onTap: widget.onTap,
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      widget.image,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.image,
                       width: 85,
                       height: 85,
                       fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     )),
               )
             ],
@@ -75,8 +83,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 child: Stack(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () =>
-                          Navigator.of(context).pushNamed("/product-detail"),
+                      onTap: widget.onTap,
                       child: Text(
                         widget.title,
                         maxLines: 2,
@@ -108,23 +115,27 @@ class _PlaceComponentState extends State<PlaceComponent> {
                 ),
               ),
               //Rating
-              Container(
-                padding: EdgeInsets.only(top: 0, left: 10),
-                child: Row(
-                  children: <Widget>[
-                    FlutterRatingBarIndicator(
-                      rating: widget.rating,
-                      itemCount: 5,
-                      itemSize: 15,
-                      emptyColor: AppColor.dark_gray,
-                      fillColor: AppColor.yellow,
-                      itemPadding: EdgeInsets.only(right: 2),
-                    ),
-                  ],
-                ),
-              ),
               GestureDetector(
-                onTap: () => Navigator.of(context).pushNamed("/product-detail"),
+                child: Container(
+                  padding: EdgeInsets.only(top: 0, left: 10),
+                  child: Row(
+                    children: <Widget>[
+                      FlutterRatingBarIndicator(
+                        rating: widget.rating,
+                        itemCount: 5,
+                        itemSize: 15,
+                        emptyColor: AppColor.dark_gray,
+                        fillColor: AppColor.yellow,
+                        itemPadding: EdgeInsets.only(right: 2),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: widget.onTap,
+              ),
+
+              GestureDetector(
+                onTap: widget.onTap,
                 child: Container(
                   padding: EdgeInsets.only(left: 10),
                   width: 304,
@@ -145,7 +156,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   }
 
   void favOnPress() {
-    print("Fav id is " + widget.id.toString());
+    print("Fav documentID is " + widget.documentID.toString());
     setState(() {
       widget.isFav = !widget.isFav;
     });

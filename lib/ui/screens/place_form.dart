@@ -1,17 +1,18 @@
 import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocukla/components/button_component.dart';
-import 'package:cocukla/components/card_component.dart';
-import 'package:cocukla/components/dropdown_component.dart';
-import 'package:cocukla/components/header_component.dart';
-import 'package:cocukla/components/property_component.dart';
-import 'package:cocukla/components/text_input_component.dart';
+import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/models/place_model.dart';
-import 'package:cocukla/ui/app_color.dart';
-import 'package:cocukla/ui/font_family.dart';
+import 'package:cocukla/ui/components/button_component.dart';
+import 'package:cocukla/ui/components/card_component.dart';
+import 'package:cocukla/ui/components/dropdown_component.dart';
+import 'package:cocukla/ui/components/header_component.dart';
+import 'package:cocukla/ui/components/property_component.dart';
+import 'package:cocukla/ui/components/text_input_component.dart';
+import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/address_statics.dart';
 import 'package:cocukla/utilities/app_data.dart';
+import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/city_info.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
 import 'package:cocukla/utilities/route.dart';
@@ -22,16 +23,22 @@ import 'package:flutter/widgets.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class PlaceForm extends StatefulWidget {
-  PlaceModel data;
+import 'my_places.dart';
 
-  PlaceForm([this.data]);
+class PlaceForm extends StatefulWidget {
+  Map<String, dynamic> data;
+  final String documentID;
+
+  PlaceForm({this.data, this.documentID = "INITIAL DOCUMENT"});
 
   @override
   _PlaceFormState createState() => _PlaceFormState();
 }
 
 class _PlaceFormState extends State<PlaceForm> {
+  String appBarTitle = "Yeni Ekle";
+  PlaceModel model;
+  DocumentSnapshot document;
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   static TextEditingController _nameController = TextEditingController();
@@ -45,10 +52,14 @@ class _PlaceFormState extends State<PlaceForm> {
   static String _categorySelected;
   static String _citySelected = "";
   static String _districtSelected = "";
-  static DateTime _insertDate;
-  static DateTime _updateDate;
   static List<String> _cities;
   static List<String> _districts;
+  static List<String> _categories = [
+    "Mekanlar",
+    "Aktiviteler",
+    "Sağlık",
+    "Alışveriş"
+  ];
   static List<Asset> _assets;
   static String _imageSelectedInfo = "Herhangi bir resim seçilmedi";
 
@@ -72,6 +83,7 @@ class _PlaceFormState extends State<PlaceForm> {
       print("-----------------------------------------");
       print("PLACE ADD/UPDATE FORM");
       print(user.toString());
+      print("DOCUMENT: ${widget.documentID}");
       print("-----------------------------------------");
       if (user != null && user.email != null) {
         AppData.user = user;
@@ -82,51 +94,53 @@ class _PlaceFormState extends State<PlaceForm> {
         Navigator.of(context).pushNamed(CustomRoute.signIn);
       }
     });
-    _insertDate = widget.data.insertDate != null
-        ? widget.data.insertDate
-        : DateTime.now();
-    _updateDate = DateTime.now();
-    _nameController.text = widget.data.name;
-    _digestController.text = widget.data.digest;
-    _phoneController.text = widget.data.phone;
-    _faxController.text = widget.data.fax;
-    _emailController.text = widget.data.email;
-    _addressController.text = widget.data.address;
-    _coordinateController.text = widget.data.location.isNotEmpty
-        ? widget.data.location
-        : AppData.coordinate;
-    _categorySelected = widget.data.category ?? "";
-    _citySelected = widget.data.city ?? "";
-    _districtSelected = widget.data.district ?? "";
-    _citySelected = AppData.placemarks[0].administrativeArea;
-    _districtSelected = AppData.placemarks[0].subAdministrativeArea;
+    if (widget.data != null) appBarTitle = "Güncelle";
+    model =
+        widget.data != null ? PlaceModel.fromJson(widget.data) : PlaceModel();
+
+    model.owner = model.owner ??= AppData.user.email;
+    model.rating = model.rating ??= "0";
+    _nameController.text = model.name ??= "";
+    _digestController.text = model.digest ??= "";
+    _phoneController.text = model.phone ??= "";
+    _faxController.text = model.fax ??= "";
+    _emailController.text = model.email ??= "";
+    _addressController.text = model.address ??= "";
+    _coordinateController.text = model.location ??= AppData.coordinate;
+    _categorySelected = model.category ?? _categories[0];
+    _citySelected = model.city ??= AppData.placemarks[0].administrativeArea;
+    _districtSelected =
+        model.district ??= AppData.placemarks[0].subAdministrativeArea;
     _cities = AddressStatics.getCities();
     _assets = List<Asset>();
     /*****************************************************/
-    for (var element in widget.data.properties) {
-      if (element["content"] == "Çocuk menüsü") _cocukMenusu = true;
+    if (model.properties != null) {
+      for (var element in model.properties) {
+        if (element["content"] == "Çocuk menüsü") _cocukMenusu = true;
 
-      if (element["content"] == "Çocuk oyun alanı") _oyunAlani = true;
+        if (element["content"] == "Çocuk oyun alanı") _oyunAlani = true;
 
-      if (element["content"] == "Oyun ablası") _oyunAblasi = true;
+        if (element["content"] == "Oyun ablası") _oyunAblasi = true;
 
-      if (element["content"] == "Çocuk atölyesi") _atolye = true;
+        if (element["content"] == "Çocuk atölyesi") _atolye = true;
 
-      if (element["content"] == "Çocuk tuvaleti") _tuvalet = true;
+        if (element["content"] == "Çocuk tuvaleti") _tuvalet = true;
 
-      if (element["content"] == "Çocuk masa ve sandalyesi")
-        _masaSandalye = true;
+        if (element["content"] == "Çocuk masa ve sandalyesi")
+          _masaSandalye = true;
 
-      if (element["content"] == "Bebek bakım odası") _bebekBakimOdasi = true;
+        if (element["content"] == "Bebek bakım odası") _bebekBakimOdasi = true;
 
-      if (element["content"] == "Özel gün organizasyonu") _organizasyon = true;
+        if (element["content"] == "Özel gün organizasyonu")
+          _organizasyon = true;
 
-      if (element["content"] == "Randevu ile gidilir") _randevu = true;
+        if (element["content"] == "Randevu ile gidilir") _randevu = true;
 
-      if (element["content"] == "Alkol tüketilir") _alkol = true;
+        if (element["content"] == "Alkol tüketilir") _alkol = true;
 
-      if (element["content"] == "Toplantı organizasyonu")
-        _yemekliToplanti = true;
+        if (element["content"] == "Toplantı organizasyonu")
+          _yemekliToplanti = true;
+      }
     }
     /*****************************************************/
     super.initState();
@@ -144,10 +158,7 @@ class _PlaceFormState extends State<PlaceForm> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text("Yeni Ekle",
-              style: TextStyle(
-                  color: AppColor.text_color,
-                  fontFamily: FontFamily.MontserratRegular)),
+          title: Text(appBarTitle, style: AppStyle.AppBarTextStyle),
           backgroundColor: AppColor.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: AppColor.text_color),
@@ -177,12 +188,7 @@ class _PlaceFormState extends State<PlaceForm> {
                       //Category
                       DropdownComponent(
                         selected: _categorySelected,
-                        options: [
-                          "Mekanlar",
-                          "Aktiviteler",
-                          "Sağlık",
-                          "Alışveriş"
-                        ],
+                        options: _categories,
                         hintText: "Kategori seçiniz",
                         onChanged: (String selected) {
                           setState(() {
@@ -421,26 +427,26 @@ class _PlaceFormState extends State<PlaceForm> {
                       ButtonComponent(
                         text: "Kaydet",
                         onPressed: () async {
-                          List<String> images = [];
                           var properties = List<Map<String, dynamic>>();
-                          widget.data.name = _nameController.text.trim();
-                          widget.data.digest = _digestController.text.trim();
-                          widget.data.category = _categorySelected.trim();
-                          widget.data.location =
-                              _coordinateController.text.trim();
-                          widget.data.city = _citySelected.trim();
-                          widget.data.district = _districtSelected.trim();
-                          widget.data.phone = _phoneController.text.trim();
-                          widget.data.fax = _faxController.text.trim();
-                          widget.data.email = _emailController.text.trim();
-                          widget.data.owner = AppData.user.email;
-                          widget.data.insertDate = _insertDate;
-                          widget.data.updateDate = _updateDate;
+                          model.name = _nameController.text.trim();
+                          model.digest = _digestController.text.trim();
+                          model.category = _categorySelected.trim();
+                          model.location = _coordinateController.text.trim();
+                          model.city = _citySelected.trim();
+                          model.district = _districtSelected.trim();
+                          model.phone = _phoneController.text.trim();
+                          model.fax = _faxController.text.trim();
+                          model.email = _emailController.text.trim();
+                          model.address = _addressController.text.trim();
+                          model.insertDate = model.insertDate ??=
+                              Timestamp.fromDate(DateTime.now());
+                          model.updateDate = Timestamp.fromDate(DateTime.now());
 
                           //Validation
-                          if (widget.data.name.isNotEmpty &&
-                              widget.data.category.isNotEmpty &&
-                              (widget.data.images.length > 0 ||
+                          if (model.name.isNotEmpty &&
+                              model.category.isNotEmpty &&
+                              ((model.images != null &&
+                                      model.images.length > 0) ||
                                   (_assets != null && _assets.length > 0)) &&
                               (_cocukMenusu ||
                                   _oyunAblasi ||
@@ -452,88 +458,90 @@ class _PlaceFormState extends State<PlaceForm> {
                                   _organizasyon ||
                                   _atolye ||
                                   _masaSandalye) &&
-                              widget.data.phone.isNotEmpty &&
-                              widget.data.email.isNotEmpty &&
-                              widget.data.city.isNotEmpty &&
-                              widget.data.district.isNotEmpty &&
-                              widget.data.location.isNotEmpty) {
+                              model.phone.isNotEmpty &&
+                              model.email.isNotEmpty &&
+                              model.city.isNotEmpty &&
+                              model.district.isNotEmpty &&
+                              model.location.isNotEmpty) {
                             if (_cocukMenusu)
                               properties.add({
                                 "content": "Çocuk menüsü",
-                                "icon_name": "restaurant_menu"
+                                "iconName": "restaurant_menu"
                               });
 
                             if (_oyunAlani)
                               properties.add({
                                 "content": "Çocuk oyun alanı",
-                                "icon_name": "category"
+                                "iconName": "category"
                               });
 
                             if (_oyunAblasi)
                               properties.add({
                                 "content": "Çocuk oyun ablası",
-                                "icon_name": "remove_red_eye"
+                                "iconName": "remove_red_eye"
                               });
 
                             if (_atolye)
                               properties.add({
                                 "content": "Çocuk atölyesi",
-                                "icon_name": "color_lens"
+                                "iconName": "color_lens"
                               });
 
                             if (_tuvalet)
                               properties.add({
                                 "content": "Çocuk tuvaleti",
-                                "icon_name": "wc"
+                                "iconName": "wc"
                               });
 
                             if (_masaSandalye)
                               properties.add({
                                 "content": "Çocuk masa ve sandalyesi",
-                                "icon_name": "event_seat"
+                                "iconName": "event_seat"
                               });
 
                             if (_bebekBakimOdasi)
                               properties.add({
                                 "content": "Bebek bakım odası",
-                                "icon_name": "child_care"
+                                "iconName": "child_care"
                               });
 
                             if (_organizasyon)
                               properties.add({
                                 "content": "Özel gün organizasyonu",
-                                "icon_name": "cake"
+                                "iconName": "cake"
                               });
 
                             if (_organizasyon)
                               properties.add({
                                 "content": "Randevu ile gidilir",
-                                "icon_name": "calendar_today"
+                                "iconName": "calendar_today"
                               });
 
                             if (_alkol)
                               properties.add({
                                 "content": "Alkol tüketilir",
-                                "icon_name": "local_bar"
+                                "iconName": "local_bar"
                               });
 
                             if (_yemekliToplanti)
                               properties.add({
                                 "content": "Toplantı organizasyonu",
-                                "icon_name": "work"
+                                "iconName": "work"
                               });
 
-                            widget.data.properties = properties;
+                            if (_randevu)
+                              properties.add({
+                                "content": "Randevu ile gidilir",
+                                "iconName": "calendar_today"
+                              });
 
-                            widget.data.rating = 0;
-                            widget.data.isActive = false;
-                            widget.data.isApproved = false;
-                            widget.data.isFav = false;
-                            widget.data.comments =
-                                (widget.data.comments != null &&
-                                        widget.data.comments.length > 0)
-                                    ? widget.data.comments
-                                    : [];
+                            model.properties = properties;
+
+                            //model.rating = 0.0;
+                            model.isActive = false;
+                            model.isApproved = false;
+                            model.isFav = false;
+                            model.comments = model.comments ??= [];
 
                             List<String> urlList;
                             if (_assets.length > 0)
@@ -541,42 +549,86 @@ class _PlaceFormState extends State<PlaceForm> {
                                   await uploadSelectedAssets(_assets, "places");
                             if (urlList != null) {
                               print("PHOTOS: " + urlList.toString());
-                              widget.data.images = urlList;
-
-                              /**********************************************/
-                              if (widget.data.documentID == null || widget.data.documentID.isEmpty) {
-                                //Insert Code
-                                _insert(context, widget.data.toJson());
-                              } else {
-                                //Update Code
-                                _update(context, widget.data.toJson());
-                              }
-
-                              /**********************************************/
-
-                            } else {
-                              Alert(
-                                  context: context,
-                                  title: "Hata",
-                                  desc:
-                                      "Ad, telefon, eposta, lokasyon alanı zorunludur. En az bir tane fotoğraf seçilmelidir. En az bir özellik işaretlenmelidir ",
-                                  type: AlertType.error,
-                                  buttons: <DialogButton>[
-                                    DialogButton(
-                                      child: Text(
-                                        "Tamam",
-                                        style: TextStyle(color: AppColor.white),
-                                      ),
-                                      onPressed: () => Navigator.pop(context),
-                                    )
-                                  ]).show();
+                              model.images = urlList;
                             }
 
+                            /**********************************************/
+                            var json = model.toJson();
+
+                            if (widget.data == null) {
+                              //Insert Code
+                              _insert(context, json);
+                            } else {
+                              //Update Code
+                              _update(context, json, widget.documentID);
+                            }
+
+                            /**********************************************/
+
                             //Validation
-                            print(widget.data.toString());
+                            print(model.toString());
+                          } else {
+                            Alert(
+                                context: context,
+                                title: "Hata",
+                                desc:
+                                    "Ad, telefon, eposta, lokasyon alanı zorunludur. En az bir tane fotoğraf seçilmelidir. En az bir özellik işaretlenmelidir ",
+                                type: AlertType.error,
+                                buttons: <DialogButton>[
+                                  DialogButton(
+                                    child: Text(
+                                      "Evet",
+                                      style: TextStyle(color: AppColor.white),
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ]).show();
                           }
                         },
                       ),
+                      Divider(
+                        indent: 20,
+                        endIndent: 20,
+                      ),
+                      //Delete Record
+                      ButtonComponent(
+                        onPressed: () {
+                          Alert(
+                              context: context,
+                              title: "Dikkat",
+                              desc:
+                                  "Bu kaydı silmek istediğinize emin misiniz?",
+                              type: AlertType.warning,
+                              buttons: <DialogButton>[
+                                DialogButton(
+                                  child: Text(
+                                    "Hayır",
+                                    style: TextStyle(color: AppColor.white),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  color: AppColor.dark_gray,
+                                ),
+                                DialogButton(
+                                  child: Text(
+                                    "Evet",
+                                    style: TextStyle(color: AppColor.white),
+                                  ),
+                                  onPressed: () {
+                                    print(
+                                        "DELETED DOCUMENT: ${widget.documentID}");
+                                    Firestore.instance
+                                        .collection(Collection.Places)
+                                        .document(widget.documentID)
+                                        .updateData({"isDeleted": true});
+                                    Navigator.pop(context);
+                                    redirecTo(context, Places());
+                                  },
+                                ),
+                              ]).show();
+                        },
+                        text: "Kaydı sil",
+                        color: Colors.black,
+                      )
                     ],
                   )),
                 )
@@ -596,11 +648,14 @@ class _PlaceFormState extends State<PlaceForm> {
   }
 }
 
-_update(BuildContext context, Map map) {
-  print("UPDATE SECTION: ");
-  print(map);
+_update(BuildContext context, Map map, String documentID) {
+  print("UPDATE SECTION: $map");
 
-  Firestore.instance.document(map["documentID"]).setData(map).then((result) {
+  Firestore.instance
+      .collection("places")
+      .document(documentID)
+      .setData(map)
+      .then((result) {
     Alert(
         context: context,
         title: "Başarılı",
@@ -635,8 +690,7 @@ _update(BuildContext context, Map map) {
 }
 
 _insert(BuildContext context, Map map) {
-  print("INSERT SECTION: ");
-  print(map);
+  print("INSERT SECTION: $map");
 
   Firestore.instance.collection("places").add(map).then((result) {
     if (result != null)

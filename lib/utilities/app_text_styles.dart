@@ -1,5 +1,5 @@
-import 'package:cocukla/ui/app_color.dart';
-import 'package:cocukla/ui/font_family.dart';
+import 'package:cocukla/ui/config/app_color.dart';
+import 'package:cocukla/ui/config/font_family.dart';
 import 'package:flutter/material.dart';
 
 class AppStyle {

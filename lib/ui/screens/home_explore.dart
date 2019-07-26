@@ -14,7 +14,6 @@ class _HomeExploreState extends State<HomeExplore> {
 
   @override
   void initState() {
-    locateUser();
     allMarkers.add(Marker(
       markerId: MarkerId("Buradasınız"),
       draggable: false,
@@ -24,19 +23,14 @@ class _HomeExploreState extends State<HomeExplore> {
     ));
   }
 
-  Future<void> locateUser() async {
-    await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position value) => AppData.position = value);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
         child: GoogleMap(
-          initialCameraPosition:
-              CameraPosition(target: LatLng(39.915047, 32.819284), zoom: 14.0),
+          initialCameraPosition: CameraPosition(
+              target: LatLng(
+                  AppData.position.latitude, AppData.position.longitude)),
           markers: Set.from(allMarkers),
           onMapCreated: null,
         ),

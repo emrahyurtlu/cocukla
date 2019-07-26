@@ -1,4 +1,4 @@
-import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/icon_utility.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +11,21 @@ class PropertyComponent extends StatelessWidget {
   final Color color;
   final EdgeInsets padding;
 
+  PropertyComponent.fromJson(Map<String, dynamic> json)
+      : iconName = json["iconName"],
+        content = json["content"],
+        fontSize = 14,
+        color = AppColor.dark_gray,
+        padding = const EdgeInsets.all(0);
+
   PropertyComponent({
     @required this.iconName,
     @required this.content,
     this.color = AppColor.dark_gray,
     this.fontSize = 14,
     this.padding = const EdgeInsets.all(0),
-  });
+  })  : assert(iconName != null, "IconName cannot be null"),
+        assert(content != null, "Content cannot be null");
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +42,7 @@ class PropertyComponent extends StatelessWidget {
         Padding(
           padding: padding,
           child: Text(
-            content,
+            content ?? "",
             softWrap: true,
             style: TextStyle(color: color),
           ),

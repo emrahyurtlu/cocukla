@@ -1,21 +1,23 @@
-import 'package:cocukla/components/comment_component.dart';
-import 'package:cocukla/components/property_component.dart';
-import 'package:cocukla/components/smart_tab_component.dart';
 import 'package:cocukla/models/comment_model.dart';
-import 'package:cocukla/models/place_model.dart';
-import 'package:cocukla/screens/comment_screen.dart';
-import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/components/comment_component.dart';
+import 'package:cocukla/ui/components/property_component.dart';
+import 'package:cocukla/ui/components/smart_tab_component.dart';
+import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class PlaceDetail extends StatefulWidget {
-  PlaceModel model;
+import 'comment_screen.dart';
 
-  PlaceDetail([this.model]);
+class PlaceDetail extends StatefulWidget {
+  Map<String, dynamic> data;
+  final String documentID;
+
+  PlaceDetail({Key key, this.documentID, this.data}) : super(key: key);
 
   @override
   _PlaceDetailState createState() => _PlaceDetailState();
@@ -24,102 +26,12 @@ class PlaceDetail extends StatefulWidget {
 class _PlaceDetailState extends State<PlaceDetail>
     with SingleTickerProviderStateMixin {
   ScrollController _scrollController = ScrollController();
-  var model = PlaceModel(
-      documentID: "1",
-      name: "Kaşıbeyaz Ataşehir",
-      city: "İstanbul",
-      district: "Ataşehir",
-      owner: "1",
-      isFav: true,
-      phone: "02122252244",
-      rating: 4,
-      email: "atasehir@kasiyeyaz.com",
-      fax: "02125554411",
-      digest:
-          "Kaşıbeyaz restaurant 1980 yılında Gaziantep'te kurulmuştur. Kurulduğu günden beri kaliteden ödün vermeden hizmet sektöründe iş yaşamına devam etmiştir.",
-      address: "Yeşiltepe Mah. Konyalı Sok. No:24 Ataşehir/İstanbul",
-      comments: [
-        {
-          "image": "assets/images/avatar.png",
-          "name": "Abdullah O.",
-          "rating": 4,
-          "content":
-              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-          "date": DateTime.now()
-        },
-        {
-          "image": "assets/images/avatar.png",
-          "name": "Mehmet S.",
-          "rating": 5,
-          "content":
-              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-          "date": DateTime.now()
-        },
-        {
-          "image": "assets/images/avatar.png",
-          "name": "Bayram T.",
-          "rating": 3,
-          "content":
-              "The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-          "date": DateTime.now()
-        },
-        {
-          "image": "assets/images/avatar.png",
-          "name": "Emrah Y.",
-          "rating": 5,
-          "content":
-              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-          "date": DateTime.now()
-        },
-      ],
-      images: [
-        "assets/images/temp/kasibeyaz_atasehir.jpg",
-        "assets/images/temp/gha_3325.jpg",
-        "assets/images/temp/gha_3336.jpg",
-        "assets/images/temp/gha_3499.jpg",
-        "assets/images/temp/gha_3612.jpg",
-      ],
-      properties: [
-        {
-          "iconName": "access_time",
-          "content": "10:00-00:00 arası hizmet vermektedir",
-          "color": AppColor.green
-        },
-        {
-          "iconName": "location_on",
-          "content": "5.6km",
-          "color": AppColor.dark_gray
-        },
-        {
-          "iconName": "restaurant_menu",
-          "content": "Çocuk menüsü",
-          "color": AppColor.dark_gray
-        },
-        {
-          "iconName": "child_friendly",
-          "content": "Bebek bakım odası",
-          "color": AppColor.dark_gray
-        },
-        {
-          "iconName": "child_care",
-          "content": "Oyun odası",
-          "color": AppColor.dark_gray
-        },
-        {
-          "iconName": "calendar_today",
-          "content": "Randevu ile gidilir",
-          "color": AppColor.dark_gray
-        },
-        {
-          "iconName": "cake",
-          "content": "Organizasyon yapılır",
-          "color": AppColor.dark_gray
-        },
-      ]);
+  FirebaseUser user;
+  bool isFav = false;
 
   @override
   void initState() {
-    print("PHOTO LENGTH ===> " + widget.model.toString());
+    isFav = widget.data["isFav"];
   }
 
   @override
@@ -146,14 +58,13 @@ class _PlaceDetailState extends State<PlaceDetail>
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Swiper(
                     itemBuilder: (BuildContext context, int index) {
-                      return Image.asset(
-                        //widget.model.photos[index],
-                        model.images[index],
+                      return Image.network(
+                        widget.data["images"][index],
                         fit: BoxFit.fill,
                       );
                     },
 //                    itemCount: widget.model.photos.length,
-                    itemCount: model.images.length,
+                    itemCount: widget.data["images"].length,
                     pagination:
                         SwiperPagination(builder: SwiperPagination.dots),
                   ),
@@ -192,8 +103,7 @@ class _PlaceDetailState extends State<PlaceDetail>
                                 child: Stack(
                                   children: <Widget>[
                                     Text(
-                                      //widget.model.name,
-                                      model.name,
+                                      widget.data["name"],
                                       maxLines: 2,
                                       style: TextStyle(
                                           fontFamily: "MontserratRegular",
@@ -207,7 +117,7 @@ class _PlaceDetailState extends State<PlaceDetail>
                                       child: Container(
                                         color: Colors.white,
                                         child: IconButton(
-                                          icon: Icon(model.isFav
+                                          icon: Icon(isFav
                                               ? Icons.favorite
                                               : Icons.favorite_border),
                                           iconSize: 24,
@@ -231,7 +141,7 @@ class _PlaceDetailState extends State<PlaceDetail>
                             children: <Widget>[
                               Container(
                                 child: FlutterRatingBarIndicator(
-                                  rating: model.rating.toDouble(),
+                                  rating: double.parse(widget.data["rating"]),
                                   itemCount: 5,
                                   itemSize: 15,
                                   emptyColor: AppColor.dark_gray,
@@ -274,7 +184,7 @@ class _PlaceDetailState extends State<PlaceDetail>
                                               child: Column(
                                                 children: <Widget>[
                                                   Text(
-                                                    model.digest,
+                                                    widget.data["digest"],
                                                     softWrap: true,
                                                   ),
                                                   Container(
@@ -322,13 +232,15 @@ class _PlaceDetailState extends State<PlaceDetail>
                                             Page(
                                               child: ListView.builder(
                                                   shrinkWrap: true,
-                                                  itemCount:
-                                                      model.properties.length,
+                                                  itemCount: Map.from(widget
+                                                          .data["properties"])
+                                                      .length,
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    var property =
-                                                        model.properties[index];
+                                                    var property = widget
+                                                            .data["properties"]
+                                                        [index];
                                                     return Container(
                                                       width: double.infinity,
                                                       margin: EdgeInsets.only(
@@ -377,7 +289,7 @@ class _PlaceDetailState extends State<PlaceDetail>
                                                                     builder:
                                                                         (context) =>
                                                                             CommentScreen(
-                                                                              model: model,
+                                                                              documentID: widget.documentID,
                                                                             )),
                                                               );
                                                             },
@@ -406,18 +318,20 @@ class _PlaceDetailState extends State<PlaceDetail>
                                                     children: <Widget>[
                                                       //Comments
                                                       ListView.builder(
-                                                        itemCount: model
-                                                            .comments.length,
-                                                        //shrinkWrap: true,
+                                                        itemCount: Map.from(
+                                                                widget.data[
+                                                                    "comments"])
+                                                            .length,
                                                         itemBuilder:
                                                             (BuildContext
                                                                     context,
                                                                 int index) {
                                                           return CommentComponent(
                                                               model: CommentModel
-                                                                  .fromJson(model
-                                                                          .comments[
-                                                                      index]));
+                                                                  .fromJson(widget
+                                                                              .data[
+                                                                          "comments"]
+                                                                      [index]));
                                                         },
                                                       ),
                                                     ],
@@ -445,16 +359,19 @@ class _PlaceDetailState extends State<PlaceDetail>
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.phone),
-          onPressed: () => launch("tel:"+model.phone),
+          onPressed: () {
+            if (widget.data["phone"].isNotEmpty)
+              launch("tel:" + widget.data["phone"]);
+          },
         ),
       ),
     );
   }
 
   void favOnPress() {
-    print("Fav id is " + model.documentID.toString());
+    print("Fav id is:" + widget.documentID);
     setState(() {
-      model.isFav = !model.isFav;
+      widget.data["isFav"] = !widget.data["isFav"].isFav;
     });
   }
 }

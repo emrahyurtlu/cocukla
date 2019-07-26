@@ -1,4 +1,4 @@
-import 'package:cocukla/ui/files.dart';
+import 'package:cocukla/ui/config/files.dart';
 import 'package:cocukla/utilities/load_file.dart';
 import 'package:flutter/material.dart';
 

@@ -1,9 +1,9 @@
 import 'package:cocukla/business/login_service.dart';
-import 'package:cocukla/components/button_component.dart';
-import 'package:cocukla/components/text_input_component.dart';
-import 'package:cocukla/screens/forget_password_screen.dart';
-import 'package:cocukla/screens/sign_up_screen.dart';
-import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/components/button_component.dart';
+import 'package:cocukla/ui/components/text_input_component.dart';
+import 'package:cocukla/ui/screens/forget_password_screen.dart';
+import 'package:cocukla/ui/screens/sign_up_screen.dart';
+import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/device_location.dart';
 import 'package:cocukla/utilities/route.dart';

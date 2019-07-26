@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/config/app_color.dart';
 
 class Category extends StatelessWidget {
   final String imageUrl;

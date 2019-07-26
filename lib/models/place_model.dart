@@ -1,14 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PlaceModel {
-  String documentID;
   String name;
   String digest;
-  int rating;
-  List<Map<String, dynamic>> properties;
-  List<Map<String, dynamic>> comments;
-  List<String> images;
+  String rating;
+  List<dynamic> properties;
+  List<dynamic> comments;
+  List<dynamic> images;
   bool isFav;
   bool isApproved;
   bool isActive;
+  bool isDeleted;
   String owner;
   String category;
   String phone;
@@ -18,20 +20,20 @@ class PlaceModel {
   String city;
   String district;
   String location;
-  DateTime insertDate;
-  DateTime updateDate;
+  Timestamp insertDate;
+  Timestamp updateDate;
 
   PlaceModel(
-      {this.documentID,
-      this.name,
+      {this.name,
       this.digest,
-      this.rating = 0,
+      this.rating = "0",
       this.properties,
       this.comments,
       this.images,
       this.isFav = false,
       this.isApproved = false,
       this.isActive = false,
+      this.isDeleted = false,
       this.owner,
       this.category,
       this.phone,
@@ -45,13 +47,12 @@ class PlaceModel {
       this.updateDate});
 
   PlaceModel.fromJson(Map<String, dynamic> json)
-      : documentID = json["documentID"],
-        name = json["name"],
+      : name = json["name"],
         digest = json["digest"],
         rating = json["rating"],
         properties = json["properties"],
-        comments = json["properties"],
-        images = json["photos"],
+        comments = json["comments"],
+        images = json["images"],
         isFav = json["isFav"],
         isApproved = json["isApproved"],
         isActive = json["isActive"],
@@ -64,19 +65,20 @@ class PlaceModel {
         city = json["city"],
         district = json["district"],
         location = json["position"],
+        isDeleted = json["isDeleted"],
         insertDate = json["insertDate"],
         updateDate = json["updateDate"];
 
   Map<String, dynamic> toJson() => {
-        'documentID': documentID,
         'name': name,
         'digest': digest,
         'properties': properties,
         'comments': comments,
-        'photos': images,
+        'images': images,
         'isFav': isFav,
         'isApproved': isApproved,
         'isActive': isActive,
+        'isDeleted': isDeleted,
         'owner': owner,
         'category': category,
         'phone': phone,
@@ -87,10 +89,12 @@ class PlaceModel {
         'position': location,
         'insertDate': insertDate,
         'updateDate': updateDate,
+        'email': email,
+        'rating': rating
       };
 
   @override
   String toString() {
-    return 'PlaceModel{documentID: $documentID, name: $name, digest: $digest, rating: $rating, properties: $properties, comments: $comments, photos: $images, isFav: $isFav, isApproved: $isApproved, isActive: $isActive, owner: $owner, category: $category, phone: $phone, email: $email, fax: $fax, address: $address, city: $city, district: $district, location: $location, insertDate: $insertDate, updateDate: $updateDate}';
+    return 'PlaceModel{name: $name, digest: $digest, rating: $rating, properties: $properties, comments: $comments, images: $images, isFav: $isFav, isApproved: $isApproved, isActive: $isActive, isDeleted: $isDeleted, owner: $owner, category: $category, phone: $phone, email: $email, fax: $fax, address: $address, city: $city, district: $district, location: $location, insertDate: $insertDate, updateDate: $updateDate}';
   }
 }

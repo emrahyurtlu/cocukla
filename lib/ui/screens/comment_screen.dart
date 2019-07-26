@@ -1,13 +1,15 @@
-import 'package:cocukla/models/place_model.dart';
-import 'package:cocukla/ui/app_color.dart';
+import 'package:cocukla/ui/components/card_component.dart';
+import 'package:cocukla/ui/config/app_color.dart';
+import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class CommentScreen extends StatefulWidget {
-  final PlaceModel model;
+  final String documentID;
 
-  const CommentScreen({Key key, @required this.model}) : super(key: key);
+  CommentScreen({Key key, this.documentID}) : super(key: key);
+
   @override
   _CommentScreenState createState() => _CommentScreenState();
 }
@@ -26,23 +28,13 @@ class _CommentScreenState extends State<CommentScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Yorum Yapın",
-              style: TextStyle(
-                  color: AppColor.text_color, fontFamily: "MontserratRegular")),
+          title: Text("Yorum Yapın", style: AppStyle.AppBarTextStyle),
           backgroundColor: AppColor.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: AppColor.text_color),
         ),
         body: SafeArea(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.elliptical(10, 10)),
-                border: Border.all(color: Colors.white),
-                color: AppColor.white),
+          child: CardComponent(
             child: ListView(
               children: <Widget>[
                 Form(
@@ -63,33 +55,32 @@ class _CommentScreenState extends State<CommentScreen> {
                           Container(
                             margin: EdgeInsets.only(bottom: 10, top: 10),
                             child: FlutterRatingBar(
-                              initialRating: _rating,
-                              itemCount: 5,
-                              itemPadding: EdgeInsets.only(left: 3, right: 3),
-                              itemSize: 25,
-                              //borderColor: AppColor.text_color,
-                              fullRatingWidget: Icon(
-                                Icons.star,
-                                size: 25,
-                                color: AppColor.yellow,
-                              ),
-                              noRatingWidget: Icon(
-                                Icons.star_border,
-                                size: 25,
-                                color: AppColor.text_color,
-                              ),
-                              halfRatingWidget: Icon(
-                                Icons.star,
-                                size: 25,
-                                color: AppColor.yellow,
-                              ),
-                              fillColor: AppColor.yellow,
-                              onRatingUpdate: (double rating) {
-                                setState(() {
-                                  _rating = rating;
-                                });
-                              }
-                            ),
+                                initialRating: _rating,
+                                itemCount: 5,
+                                itemPadding: EdgeInsets.only(left: 3, right: 3),
+                                itemSize: 25,
+                                //borderColor: AppColor.text_color,
+                                fullRatingWidget: Icon(
+                                  Icons.star,
+                                  size: 25,
+                                  color: AppColor.yellow,
+                                ),
+                                noRatingWidget: Icon(
+                                  Icons.star_border,
+                                  size: 25,
+                                  color: AppColor.text_color,
+                                ),
+                                halfRatingWidget: Icon(
+                                  Icons.star,
+                                  size: 25,
+                                  color: AppColor.yellow,
+                                ),
+                                fillColor: AppColor.yellow,
+                                onRatingUpdate: (double rating) {
+                                  setState(() {
+                                    _rating = rating;
+                                  });
+                                }),
                           )
                         ],
                       ),
@@ -144,7 +135,10 @@ class _CommentScreenState extends State<CommentScreen> {
                                 color: AppColor.pink,
                                 textColor: AppColor.white,
                                 onPressed: () {
-                                  print("Güncellendi!" + commentController.text + " rating is " +_rating.ceil().toString());
+                                  print("Güncellendi!" +
+                                      commentController.text +
+                                      " rating is " +
+                                      _rating.ceil().toString());
                                   Navigator.pop(context);
                                 },
                                 shape: new RoundedRectangleBorder(
