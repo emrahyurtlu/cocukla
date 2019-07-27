@@ -131,13 +131,4 @@ class _PlacesState extends State<Places> {
     }
     return result;
   }
-
-/* void test(DocumentSnapshot document) {
-    print("------------------------------------------");
-    print(document.documentID);
-    print(document["name"]);
-    print(document["properties"]);
-    print(document["images"]);
-    print("------------------------------------------");
-  }*/
 }

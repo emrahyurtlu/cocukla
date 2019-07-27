@@ -11,4 +11,5 @@ class AppData {
   //static UserModel user;
   static FirebaseUser user;
   static String documentID;
+  static String homeSelectedCategory = "Mekanlar";
 }

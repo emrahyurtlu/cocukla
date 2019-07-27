@@ -47,109 +47,112 @@ class _PlaceComponentState extends State<PlaceComponent> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          //Image Section
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              GestureDetector(
-                onTap: widget.onTap,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.image,
-                      width: 85,
-                      height: 85,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    )),
-              )
-            ],
-          ),
+          Wrap(children: <Widget>[
+            //Image Section
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: widget.onTap,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.image,
+                        width: 85,
+                        height: 85,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      )),
+                )
+              ],
+            ),
 
-          //Info Section
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              //Title Section
-              Container(
-                width:
-                    DimensionUtility(context, EdgeInsets.only(top: 5, left: 10))
-                        .setWidthRel(subtract: 100),
-                height: 30,
-                padding: EdgeInsets.only(top: 5, left: 10),
-                child: Stack(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text(
-                        widget.title,
-                        maxLines: 2,
-                        style: TextStyle(
-                            fontFamily: "MontserratLight",
-                            fontSize: 18,
-                            color: AppColor.text_color),
-                      ),
-                    ),
-                    Positioned(
-                      width: 30,
-                      height: 30,
-                      child: Container(
-                        color: Colors.white,
-                        child: IconButton(
-                          icon: Icon(widget.isFav
-                              ? Icons.favorite
-                              : Icons.favorite_border),
-                          iconSize: 24,
-                          padding: EdgeInsets.all(0),
-                          onPressed: favOnPress,
-                          color: AppColor.pink,
+            //Info Section
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                //Title Section
+                Container(
+                  width:
+                  DimensionUtility(context, EdgeInsets.only(top: 5, left: 10))
+                      .setWidthRel(subtract: 100),
+                  height: 30,
+                  padding: EdgeInsets.only(top: 5, left: 10),
+                  child: Stack(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text(
+                          widget.title,
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontFamily: "MontserratLight",
+                              fontSize: 18,
+                              color: AppColor.text_color),
                         ),
                       ),
-                      top: 0,
-                      right: 0,
-                    ),
-                  ],
-                ),
-              ),
-              //Rating
-              GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.only(top: 0, left: 10),
-                  child: Row(
-                    children: <Widget>[
-                      FlutterRatingBarIndicator(
-                        rating: widget.rating,
-                        itemCount: 5,
-                        itemSize: 15,
-                        emptyColor: AppColor.dark_gray,
-                        fillColor: AppColor.yellow,
-                        itemPadding: EdgeInsets.only(right: 2),
+                      Positioned(
+                        width: 30,
+                        height: 30,
+                        child: Container(
+                          color: Colors.white,
+                          child: IconButton(
+                            icon: Icon(widget.isFav
+                                ? Icons.favorite
+                                : Icons.favorite_border),
+                            iconSize: 24,
+                            padding: EdgeInsets.all(0),
+                            onPressed: favOnPress,
+                            color: AppColor.pink,
+                          ),
+                        ),
+                        top: 0,
+                        right: 0,
                       ),
                     ],
                   ),
                 ),
-                onTap: widget.onTap,
-              ),
-
-              GestureDetector(
-                onTap: widget.onTap,
-                child: Container(
-                  padding: EdgeInsets.only(left: 10),
-                  width: 304,
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    alignment: WrapAlignment.start,
-                    runSpacing: 0,
-                    spacing: 3,
-                    children: widget.properties,
+                //Rating
+                GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 0, left: 10),
+                    child: Row(
+                      children: <Widget>[
+                        FlutterRatingBarIndicator(
+                          rating: widget.rating,
+                          itemCount: 5,
+                          itemSize: 15,
+                          emptyColor: AppColor.dark_gray,
+                          fillColor: AppColor.yellow,
+                          itemPadding: EdgeInsets.only(right: 2),
+                        ),
+                      ],
+                    ),
                   ),
+                  onTap: widget.onTap,
                 ),
-              )
-            ],
-          )
+
+                GestureDetector(
+                  onTap: widget.onTap,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10),
+                    width: 304,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      alignment: WrapAlignment.start,
+                      runSpacing: 0,
+                      spacing: 3,
+                      children: widget.properties,
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],),
+
         ],
       ),
     );
