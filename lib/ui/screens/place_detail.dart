@@ -5,6 +5,7 @@ import 'package:cocukla/ui/components/comment_component.dart';
 import 'package:cocukla/ui/components/header_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
+import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,14 +54,17 @@ class _PlaceDetailState extends State<PlaceDetail>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            //Place Photos
-            SliverAppBar(
-              iconTheme: IconThemeData(color: AppColor.pink),
-              expandedHeight: MediaQuery.of(context).size.height * 0.35,
-              flexibleSpace: Container(
+        appBar: AppBar(
+          title: Text(
+            widget.data["name"],
+            style: AppStyle.AppBarTextStyle,
+          ),
+        ),
+        body: Container(
+          child: ListView(
+            children: <Widget>[
+              //Place Photos
+              Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.35,
@@ -81,175 +85,181 @@ class _PlaceDetailState extends State<PlaceDetail>
                   ),
                 ),
               ),
-            ),
-            //Content Section
-            SliverFillRemaining(
-              child: Container(
+              //Content Section
+              Container(
                 padding: EdgeInsets.all(10),
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.65,
+                //height: MediaQuery.of(context).size.height*2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
+                  //mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     //Content Section
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.all(Radius.elliptical(10, 10)),
-                          border: Border.all(color: Colors.white),
-                          color: AppColor.white),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        key: GlobalKey(),
-                        children: <Widget>[
-                          //Title and favorite button
-                          Row(
+                    Card(
+                      elevation: 0,
+                      color: AppColor.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      margin: EdgeInsets.all(0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 10,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Container(
-                                width: DimensionUtility(context)
-                                    .setWidthRel(subtract: 42),
-                                child: Stack(
-                                  children: <Widget>[
-                                    Text(
-                                      widget.data["name"],
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                          fontFamily: "MontserratRegular",
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColor.text_color),
-                                    ),
-                                    Positioned(
-                                      width: 30,
-                                      height: 30,
-                                      child: Container(
-                                        color: Colors.white,
-                                        child: IconButton(
-                                          icon: Icon(isFav
-                                              ? Icons.favorite
-                                              : Icons.favorite_border),
-                                          iconSize: 24,
-                                          padding: EdgeInsets.all(0),
-                                          onPressed: favOnPress,
-                                          color: AppColor.pink,
+                              //Title and favorite button
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: DimensionUtility(context)
+                                        .setWidthRel(subtract: 42),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Text(
+                                          widget.data["name"],
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontFamily: "MontserratRegular",
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColor.text_color),
                                         ),
-                                      ),
-                                      top: 0,
-                                      right: 0,
+                                        Positioned(
+                                          width: 30,
+                                          height: 30,
+                                          child: Container(
+                                            color: Colors.white,
+                                            child: IconButton(
+                                              icon: Icon(isFav
+                                                  ? Icons.favorite
+                                                  : Icons.favorite_border),
+                                              iconSize: 24,
+                                              padding: EdgeInsets.all(0),
+                                              onPressed: favOnPress,
+                                              color: AppColor.pink,
+                                            ),
+                                          ),
+                                          top: 0,
+                                          right: 0,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          //End Title and favorite button
-                          //Rating
-                          Row(
-                            children: <Widget>[
+                              //End Title and favorite button
+                              //Rating
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    child: FlutterRatingBarIndicator(
+                                      rating:
+                                          double.parse(widget.data["rating"]),
+                                      itemCount: 5,
+                                      itemSize: 15,
+                                      emptyColor: AppColor.dark_gray,
+                                      fillColor: AppColor.yellow,
+                                      itemPadding: EdgeInsets.only(right: 2),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              //End Rating
+
+                              HeaderComponent(
+                                "Hakkımızda",
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                padding: EdgeInsets.only(top: 20),
+                              ),
+                              Text(
+                                widget.data["digest"],
+                                softWrap: true,
+                                textAlign: TextAlign.left,
+                              ),
+                              HeaderComponent(
+                                "İletişim",
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                padding: EdgeInsets.only(top: 20),
+                              ),
                               Container(
-                                child: FlutterRatingBarIndicator(
-                                  rating: double.parse(widget.data["rating"]),
-                                  itemCount: 5,
-                                  itemSize: 15,
-                                  emptyColor: AppColor.dark_gray,
-                                  fillColor: AppColor.yellow,
-                                  itemPadding: EdgeInsets.only(right: 2),
+                                margin: EdgeInsets.only(top: 20),
+                                width: double.infinity,
+                                child: PropertyComponent(
+                                  iconName: "phone",
+                                  content: widget.data["phone"],
+                                  padding: EdgeInsets.only(left: 10),
+                                  fontSize: 18,
                                 ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 10),
+                                width: double.infinity,
+                                child: PropertyComponent(
+                                  iconName: "location_on",
+                                  content: widget.data["address"],
+                                  padding: EdgeInsets.only(left: 10),
+                                  fontSize: 18,
+                                ),
+                              ),
+                              HeaderComponent(
+                                "Özellikler",
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                padding: EdgeInsets.only(top: 20),
+                              ),
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: properties.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    var propertyComponent = properties[index];
+                                    propertyComponent.fontSize = 18;
+                                    propertyComponent.padding =
+                                        EdgeInsets.only(left: 5);
+                                    return Container(
+                                        width: double.infinity,
+                                        margin:
+                                            EdgeInsets.only(top: 5, bottom: 5),
+                                        child: propertyComponent);
+                                  }),
+                              HeaderComponent(
+                                "Yorumlar",
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                padding: EdgeInsets.only(top: 20),
+                              ),
+                              //Comment It
+                              ButtonComponent(
+                                text: "Yorum yapın",
+                                onPressed: () {
+                                  redirecTo(
+                                      context,
+                                      CommentScreen(
+                                        documentID: widget.documentID,
+                                      ));
+                                },
+                              ),
+                              //List of comments
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: comments.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return comments[index];
+                                },
                               ),
                             ],
                           ),
-                          //End Rating
-
-                          //Main Content
-                          HeaderComponent(
-                            "Hakkımızda",
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            padding: EdgeInsets.only(top: 20),
-                          ),
-                          Text(
-                            widget.data["digest"],
-                            softWrap: true,
-                            textAlign: TextAlign.left,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 20),
-                            width: double.infinity,
-                            child: PropertyComponent(
-                              iconName: "phone",
-                              content: widget.data["phone"],
-                              padding: EdgeInsets.only(left: 10),
-                              fontSize: 18,
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            width: double.infinity,
-                            child: PropertyComponent(
-                              iconName: "location_on",
-                              content: widget.data["address"],
-                              padding: EdgeInsets.only(left: 10),
-                              fontSize: 18,
-                            ),
-                          ),
-                          HeaderComponent(
-                            "Özellikler",
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            padding: EdgeInsets.only(top: 20),
-                          ),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: properties.length,
-                              itemBuilder:
-                                  (BuildContext context, int index) {
-                                var propertyComponent = properties[index];
-                                propertyComponent.fontSize = 18;
-                                propertyComponent.padding =
-                                    EdgeInsets.only(left: 5);
-                                return Container(
-                                    width: double.infinity,
-                                    margin:
-                                    EdgeInsets.only(top: 5, bottom: 5),
-                                    child: propertyComponent);
-                              }),
-                          HeaderComponent(
-                            "Yorumlar",
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            padding: EdgeInsets.only(top: 20),
-                          ),
-                          //Comment It
-                          ButtonComponent(
-                            text: "Yorum yapın",
-                            onPressed: () {
-                              redirecTo(
-                                  context,
-                                  CommentScreen(
-                                    documentID: widget.documentID,
-                                  ));
-                            },
-                          ),
-                          //List of comments
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount:comments.length,
-                            itemBuilder:
-                                (BuildContext context, int index) {
-                              //return Text("Yorum");
-                              return comments[index];
-                            },
-                          ),
-
-                          //End Tabs
-                        ],
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.phone),
