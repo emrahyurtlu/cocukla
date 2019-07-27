@@ -114,7 +114,7 @@ class _PlacesState extends State<Places> {
           documents = result.documents;
         });
         print("DOCUMENTS LENGTH: " + documents.length.toString());
-        print("DOCUMENT ID: " + documents[0].documentID);
+        print("DOCUMENT SAMPLE: " + documents[0].data.toString());
       }
     });
   }

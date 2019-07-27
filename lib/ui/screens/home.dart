@@ -21,6 +21,8 @@ class _HomeState extends State<Home> {
   int _currentTab = 0;
   FirebaseUser user;
 
+  //static List<DocumentSnapshot> documents;
+
   List<String> _titles = ["Çocukla", "Favorilerim", "Keşfet"];
 
   @override
@@ -38,11 +40,12 @@ class _HomeState extends State<Home> {
       } else {
         Navigator.of(context).pushNamed(CustomRoute.signIn);
       }
-      //getData();
     });
+
+    //getData();
   }
 
-  static List<Widget> _tabContents = [
+  List<Widget> _tabContents = [
     //HomeScreen
     HomePlaces(),
 
@@ -62,14 +65,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    var title =
+        _currentTab == 0 ? AppData.homeSelectedCategory : _titles[_currentTab];
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-              _currentTab == 0
-                  ? AppData.homeSelectedCategory
-                  : _titles[_currentTab],
-              style: AppStyle.AppBarTextStyle),
+          title: Text(title, style: AppStyle.AppBarTextStyle),
           backgroundColor: AppColor.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: AppColor.text_color),
@@ -85,4 +86,17 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+/*getData() {
+    Firestore.instance
+        .collection(Collection.Places)
+        .where("isActive", isEqualTo: true)
+        .where("isApproved", isEqualTo: true)
+        .getDocuments()
+        .then((list) {
+      documents = list.documents;
+    }).catchError((e) {
+      print("Error: $e");
+    });
+  }*/
 }

@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocukla/models/comment_model.dart';
+import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/comment_component.dart';
+import 'package:cocukla/ui/components/header_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
-import 'package:cocukla/ui/components/smart_tab_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
+import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +31,17 @@ class _PlaceDetailState extends State<PlaceDetail>
   ScrollController _scrollController = ScrollController();
   FirebaseUser user;
   bool isFav = false;
+  List<String> images;
+  List<PropertyComponent> properties;
+  List<CommentComponent> comments;
 
   @override
   void initState() {
     isFav = widget.data["isFav"];
+    print("Here is place detail screen!");
+    images = List.castFrom(widget.data["images"]);
+    properties = convertProperties(widget.data["properties"]);
+    comments = convertComments(widget.data["comments"]);
   }
 
   @override
@@ -48,6 +58,7 @@ class _PlaceDetailState extends State<PlaceDetail>
           slivers: <Widget>[
             //Place Photos
             SliverAppBar(
+              iconTheme: IconThemeData(color: AppColor.pink),
               expandedHeight: MediaQuery.of(context).size.height * 0.35,
               flexibleSpace: Container(
                 padding: EdgeInsets.all(10),
@@ -58,13 +69,13 @@ class _PlaceDetailState extends State<PlaceDetail>
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Swiper(
                     itemBuilder: (BuildContext context, int index) {
-                      return Image.network(
-                        widget.data["images"][index],
+                      return CachedNetworkImage(
+                        imageUrl: images[index],
                         fit: BoxFit.fill,
                       );
                     },
 //                    itemCount: widget.model.photos.length,
-                    itemCount: widget.data["images"].length,
+                    itemCount: images.length,
                     pagination:
                         SwiperPagination(builder: SwiperPagination.dots),
                   ),
@@ -135,7 +146,6 @@ class _PlaceDetailState extends State<PlaceDetail>
                             ],
                           ),
                           //End Title and favorite button
-
                           //Rating
                           Row(
                             children: <Widget>[
@@ -153,198 +163,82 @@ class _PlaceDetailState extends State<PlaceDetail>
                           ),
                           //End Rating
 
-                          //Tabs
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                  constraints: BoxConstraints(
-                                      maxHeight: double.infinity,
-                                      maxWidth: double.infinity,
-                                      minWidth: double.infinity,
-                                      minHeight: 200.0),
-                                  height: 400,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: SmartTab(
-                                          tabs: <Tab>[
-                                            Tab(
-                                              text: "Hakkımızda",
-                                            ),
-                                            Tab(
-                                              text: "Özellikler",
-                                            ),
-                                            Tab(
-                                              text: "Yorumlar",
-                                            ),
-                                          ],
-                                          pages: <Page>[
-                                            //Hakkımızda
-                                            Page(
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Text(
-                                                    widget.data["digest"],
-                                                    softWrap: true,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 20),
-                                                    width: double.infinity,
-                                                    child: PropertyComponent(
-                                                      iconName: "phone",
-                                                      content: "0850 441 2020",
-                                                      padding: EdgeInsets.only(
-                                                          left: 10),
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 10),
-                                                    width: double.infinity,
-                                                    child: PropertyComponent(
-                                                      iconName: "print",
-                                                      content: "0212 441 2040",
-                                                      padding: EdgeInsets.only(
-                                                          left: 10),
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 10),
-                                                    width: double.infinity,
-                                                    child: PropertyComponent(
-                                                      iconName: "location_on",
-                                                      content:
-                                                          "Barbaros Mah. Şebboy Sok. No:2 \nWatergarden İş Merkezi \nAtaşehir/İstanbul",
-                                                      padding: EdgeInsets.only(
-                                                          left: 10),
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-
-                                            //Özellikler
-                                            Page(
-                                              child: ListView.builder(
-                                                  shrinkWrap: true,
-                                                  itemCount: Map.from(widget
-                                                          .data["properties"])
-                                                      .length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    var property = widget
-                                                            .data["properties"]
-                                                        [index];
-                                                    return Container(
-                                                      width: double.infinity,
-                                                      margin: EdgeInsets.only(
-                                                          top: 5, bottom: 5),
-                                                      child: PropertyComponent(
-                                                          iconName: property[
-                                                              "iconName"],
-                                                          content: property[
-                                                              "content"],
-                                                          fontSize: 18,
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 5)),
-                                                    );
-                                                  }),
-                                            ),
-
-                                            //Yorumlar
-                                            Page(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: <Widget>[
-                                                  //Comment It
-                                                  SizedBox(
-                                                    width: double.infinity,
-                                                    height: 60,
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        Container(
-                                                          width:
-                                                              double.infinity,
-                                                          height: 50,
-                                                          child: FlatButton(
-                                                            color:
-                                                                AppColor.pink,
-                                                            textColor:
-                                                                AppColor.white,
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            CommentScreen(
-                                                                              documentID: widget.documentID,
-                                                                            )),
-                                                              );
-                                                            },
-                                                            shape: new RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    new BorderRadius
-                                                                            .circular(
-                                                                        50.0)),
-                                                            child: Text(
-                                                              "Yorum yapın",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      "Montserrat",
-                                                                  fontSize: 14),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  //List of comments
-                                                  Row(
-                                                    children: <Widget>[
-                                                      //Comments
-                                                      ListView.builder(
-                                                        itemCount: Map.from(
-                                                                widget.data[
-                                                                    "comments"])
-                                                            .length,
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index) {
-                                                          return CommentComponent(
-                                                              model: CommentModel
-                                                                  .fromJson(widget
-                                                                              .data[
-                                                                          "comments"]
-                                                                      [index]));
-                                                        },
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ))
-                            ],
+                          //Main Content
+                          HeaderComponent(
+                            "Hakkımızda",
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            padding: EdgeInsets.only(top: 20),
+                          ),
+                          Text(
+                            widget.data["digest"],
+                            softWrap: true,
+                            textAlign: TextAlign.left,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 20),
+                            width: double.infinity,
+                            child: PropertyComponent(
+                              iconName: "phone",
+                              content: widget.data["phone"],
+                              padding: EdgeInsets.only(left: 10),
+                              fontSize: 18,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10),
+                            width: double.infinity,
+                            child: PropertyComponent(
+                              iconName: "location_on",
+                              content: widget.data["address"],
+                              padding: EdgeInsets.only(left: 10),
+                              fontSize: 18,
+                            ),
+                          ),
+                          HeaderComponent(
+                            "Özellikler",
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            padding: EdgeInsets.only(top: 20),
+                          ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: properties.length,
+                              itemBuilder:
+                                  (BuildContext context, int index) {
+                                var propertyComponent = properties[index];
+                                propertyComponent.fontSize = 18;
+                                propertyComponent.padding =
+                                    EdgeInsets.only(left: 5);
+                                return Container(
+                                    width: double.infinity,
+                                    margin:
+                                    EdgeInsets.only(top: 5, bottom: 5),
+                                    child: propertyComponent);
+                              }),
+                          HeaderComponent(
+                            "Yorumlar",
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            padding: EdgeInsets.only(top: 20),
+                          ),
+                          //Comment It
+                          ButtonComponent(
+                            text: "Yorum yapın",
+                            onPressed: () {
+                              redirecTo(
+                                  context,
+                                  CommentScreen(
+                                    documentID: widget.documentID,
+                                  ));
+                            },
+                          ),
+                          //List of comments
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount:comments.length,
+                            itemBuilder:
+                                (BuildContext context, int index) {
+                              //return Text("Yorum");
+                              return comments[index];
+                            },
                           ),
 
                           //End Tabs
@@ -373,5 +267,39 @@ class _PlaceDetailState extends State<PlaceDetail>
     setState(() {
       widget.data["isFav"] = !widget.data["isFav"].isFav;
     });
+  }
+
+  List<PropertyComponent> convertProperties(List properties) {
+    var result = List<PropertyComponent>();
+
+    if (properties.length > 0) {
+      properties.forEach((item) {
+        var temp = PropertyComponent(
+            iconName: item["iconName"], content: item["content"]);
+        result.add(temp);
+      });
+    }
+    return result;
+  }
+
+  List<CommentComponent> convertComments(List properties) {
+    var result = List<CommentComponent>();
+
+    if (properties.length > 0) {
+      properties.forEach((item) {
+        var model = CommentModel(
+            rating: double.parse(item["rating"].toString()),
+            name: item["name"],
+            content: item["content"],
+            date: item["date"],
+            image: item["image"]);
+        var temp = CommentComponent(
+          model: model,
+        );
+
+        result.add(temp);
+      });
+    }
+    return result;
   }
 }

@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 
 class HeaderComponent extends StatefulWidget {
-  final String text;
+  String text;
+  MainAxisAlignment mainAxisAlignment;
+  CrossAxisAlignment crossAxisAlignment;
+  TextStyle style;
+  EdgeInsetsGeometry padding;
 
-  HeaderComponent(this.text);
+  double indent, endIndent;
+
+  HeaderComponent(this.text,
+      {this.crossAxisAlignment = CrossAxisAlignment.center,
+      this.mainAxisAlignment = MainAxisAlignment.start,
+      this.style = const TextStyle(fontWeight: FontWeight.bold),
+      this.padding = const EdgeInsets.all(8.0), this.indent = 0, this.endIndent = 0});
+
   @override
   _HeaderComponentState createState() => _HeaderComponentState();
 }
@@ -12,19 +23,19 @@ class _HeaderComponentState extends State<HeaderComponent> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: widget.mainAxisAlignment,
+      crossAxisAlignment: widget.crossAxisAlignment,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: widget.padding,
           child: Text(
             widget.text,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: widget.style,
           ),
         ),
         Divider(
-          indent: 20,
-          endIndent: 20,
+          indent: widget.indent,
+          endIndent: widget.endIndent,
         ),
       ],
     );

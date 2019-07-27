@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 class PropertyComponent extends StatelessWidget {
   IconData _iconData;
   Icon _icon;
-  final String iconName;
-  final String content;
-  final double fontSize;
-  final Color color;
-  final EdgeInsets padding;
+  String iconName;
+  String content;
+  double fontSize;
+  Color color;
+  EdgeInsets padding;
 
   PropertyComponent.fromJson(Map<String, dynamic> json)
       : iconName = json["iconName"],
@@ -50,4 +50,8 @@ class PropertyComponent extends StatelessWidget {
       ],
     );
   }
+
+
+
+
 }

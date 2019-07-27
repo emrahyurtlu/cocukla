@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class CommentModel {
   String documentID;
   String image;
   String name;
   String content;
   double rating;
-  DateTime date;
+  Timestamp date;
 
   CommentModel(
       {this.image,
