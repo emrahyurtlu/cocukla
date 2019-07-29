@@ -11,6 +11,6 @@ class AppStyle {
       fontSize: 14,
       fontFamily: FontFamily.MontserratRegular);
 
-  static TextStyle CommentContentTextStyle = TextStyle(
-      fontSize: 14, fontFamily: FontFamily.MontserratLight);
+  static TextStyle CommentContentTextStyle =
+      TextStyle(fontSize: 14, fontFamily: FontFamily.MontserratLight);
 }

@@ -65,8 +65,7 @@ class _CommentFormComponentState extends State<CommentFormComponent> {
                     controller: null,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelStyle:
-                      TextStyle(color: AppColor.text_color),
+                      labelStyle: TextStyle(color: AppColor.text_color),
                       labelText: 'Eposta',
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.only(
@@ -78,7 +77,7 @@ class _CommentFormComponentState extends State<CommentFormComponent> {
             ],
           ),
         ),
-       /* Column(
+        /* Column(
           children: <Widget>[
             Container(
               //padding: EdgeInsets.all(5),

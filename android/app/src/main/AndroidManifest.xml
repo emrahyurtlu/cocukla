@@ -8,7 +8,6 @@
          FlutterApplication and put your custom class here. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.LOCATION_HARDWARE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -16,7 +15,7 @@
             android:name="io.flutter.app.FlutterApplication"
             android:label="Çocukla"
             android:icon="@mipmap/ic_launcher">
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCXc7Nq-xA7cRDl3UeMiyrgDC6_epLRjPU"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBQzta21qh_74XJ8z_T8dqgLaCi1R3mM5Y"/>
         <activity
                 android:name=".MainActivity"
                 android:launchMode="singleTop"

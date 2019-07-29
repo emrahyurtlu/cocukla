@@ -50,8 +50,4 @@ class PropertyComponent extends StatelessWidget {
       ],
     );
   }
-
-
-
-
 }

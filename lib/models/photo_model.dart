@@ -20,6 +20,4 @@ class PhotoModel {
   String toString() {
     return 'PhotoModel{documentID: $documentID, turn: $turn, image: $image}';
   }
-
-
 }

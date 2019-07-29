@@ -102,22 +102,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
                                   email: email, password: password)
-                              .then((FirebaseUser user) {
+                              .then((result) {
                             print("-----------------------------------------");
-                            print(user.toString());
+                            print(result.user.toString());
                             print("-----------------------------------------");
                             UserUpdateInfo updateInfo;
                             updateInfo.displayName = name ?? email;
 
-                            AppData.user = user;
+                            AppData.user = result.user;
 
-                            user.updateProfile(updateInfo).then((val) {
+                            result.user.updateProfile(updateInfo).then((val) {
                               Navigator.pushNamed(context, CustomRoute.home);
                               //user.reload();
                             }).catchError(
                                 (e) => print("USER DATA UPDATE ERROR: " + e));
 
-                            AppData.user = user;
+                            AppData.user = result.user;
                           }).catchError((e) {
                             if (e is PlatformException) {
                               if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {

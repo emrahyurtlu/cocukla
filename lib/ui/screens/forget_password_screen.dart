@@ -48,17 +48,30 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 child: Center(
                     child: Column(
                   children: <Widget>[
-                    TextInputComponent(_emailController,labelText: "Eposta", hintText: "you@example.com", inputType: TextInputType.emailAddress,),
-                    ButtonComponent(text: "Şifremi Hatırlat", onPressed: () {
-                      var email = _emailController.text.trim();
-                      if(email != null){
-                        FirebaseAuth.instance.sendPasswordResetEmail(email: email).then((result){
-                          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Eposta adresinize şifre hatırlatma postası gönderildi."),));
-                        }).catchError((e) {
-                          print(e);
-                        });
-                      }
-                    },),
+                    TextInputComponent(
+                      _emailController,
+                      labelText: "Eposta",
+                      hintText: "you@example.com",
+                      inputType: TextInputType.emailAddress,
+                    ),
+                    ButtonComponent(
+                      text: "Şifremi Hatırlat",
+                      onPressed: () {
+                        var email = _emailController.text.trim();
+                        if (email != null) {
+                          FirebaseAuth.instance
+                              .sendPasswordResetEmail(email: email)
+                              .then((result) {
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  "Eposta adresinize şifre hatırlatma postası gönderildi."),
+                            ));
+                          }).catchError((e) {
+                            print(e);
+                          });
+                        }
+                      },
+                    ),
                   ],
                 )),
               )

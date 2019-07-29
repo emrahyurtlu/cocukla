@@ -22,7 +22,8 @@ class Category extends StatelessWidget {
               style: TextStyle(
                   fontFamily: "MontserratLight",
                   fontSize: 13,
-                  color: AppColor.text_color, fontWeight: FontWeight.bold))
+                  color: AppColor.text_color,
+                  fontWeight: FontWeight.bold))
         ],
       ),
     );

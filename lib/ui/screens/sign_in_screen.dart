@@ -1,9 +1,9 @@
 import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/text_input_component.dart';
+import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/ui/screens/forget_password_screen.dart';
 import 'package:cocukla/ui/screens/sign_up_screen.dart';
-import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/device_location.dart';
 import 'package:cocukla/utilities/route.dart';
@@ -28,6 +28,7 @@ class _SignInScreenState extends State<SignInScreen> {
       if (user != null && user.email != null) {
         getLocation().then((position) => AppData.position = position);
         getAddrInfo().then((result) => AppData.placemarks = result);
+
         Navigator.of(context).pushNamed(CustomRoute.home);
       }
     });
@@ -37,8 +38,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
     emailController = TextEditingController();
     passwordController = TextEditingController();
-
-
 
     super.initState();
   }
@@ -94,8 +93,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: _email, password: _password)
-                              .then((user) {
-                            AppData.user = user;
+                              .then((result) {
+                            AppData.user = result.user;
                             loginLog(_email);
                             Navigator.pushNamed(context, CustomRoute.home);
                           }).catchError((e) {
@@ -159,12 +158,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColor.facebook,
                       textColor: AppColor.white,
                       onPressed: () {
-                        signInWithFacebook().then((user){
-                          if(user != null){
+                        signInWithFacebook().then((user) {
+                          if (user != null) {
                             Navigator.pushNamed(context, CustomRoute.home);
                           }
-                        }).catchError((e){
-                          _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Facebook ile giriş yapamadınız"),));
+                        }).catchError((e) {
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text("Facebook ile giriş yapamadınız"),
+                          ));
                         });
                       },
                     ),

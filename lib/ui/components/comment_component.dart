@@ -27,7 +27,7 @@ class _CommentComponentState extends State<CommentComponent> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: widget.model.image,
+                imageUrl: "", //widget.model.image,
                 width: 40,
                 height: 40,
                 fit: BoxFit.cover,

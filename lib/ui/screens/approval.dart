@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/ui/components/place_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
@@ -11,19 +10,18 @@ import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:flutter/material.dart';
 
-class Places extends StatefulWidget {
+class Approval extends StatefulWidget {
   @override
-  _PlacesState createState() => _PlacesState();
+  _ApprovalState createState() => _ApprovalState();
 }
 
-class _PlacesState extends State<Places> {
+class _ApprovalState extends State<Approval> {
   TextEditingController _controller;
   List<DocumentSnapshot> documents;
 
   @override
   void initState() {
     getData();
-    userCanApprove(AppData.user.email);
     super.initState();
   }
 
@@ -33,7 +31,7 @@ class _PlacesState extends State<Places> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text("Mekanlarım", style: AppStyle.AppBarTextStyle),
+          title: Text("Onay Bekleyenler", style: AppStyle.AppBarTextStyle),
           backgroundColor: AppColor.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: AppColor.text_color),
@@ -55,7 +53,7 @@ class _PlacesState extends State<Places> {
             ],
           ),
           onRefresh: () async {
-            print("MY PLACES PAGE IS REFRESHING.");
+            print("PENDING APPROVAL PAGE IS REFRESHING.");
             getData();
           },
         ),
@@ -107,8 +105,7 @@ class _PlacesState extends State<Places> {
     print("DATA IS GETTING...");
     Firestore.instance
         .collection(Collections.Places)
-        .where("owner", isEqualTo: AppData.user.email)
-        .where("isDeleted", isEqualTo: false)
+        .where("isApproved", isEqualTo: false)
         .getDocuments()
         .then((result) {
       if (result.documents.length > 0) {

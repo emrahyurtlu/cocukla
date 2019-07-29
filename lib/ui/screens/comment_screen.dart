@@ -1,22 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/datalayer/collections.dart';
+import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
+import 'package:cocukla/ui/components/header_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
+import 'package:cocukla/ui/screens/place_detail.dart';
+import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:cocukla/utilities/route.dart';
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class CommentScreen extends StatefulWidget {
   final String documentID;
+  final Map<String, dynamic> data;
 
-  CommentScreen({Key key, this.documentID}) : super(key: key);
+  CommentScreen({Key key, this.documentID, this.data}) : super(key: key);
 
   @override
   _CommentScreenState createState() => _CommentScreenState();
 }
 
 class _CommentScreenState extends State<CommentScreen> {
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController commentController;
-  double _rating = 0;
+  double _rating = 1;
 
   @override
   void initState() {
@@ -27,6 +38,7 @@ class _CommentScreenState extends State<CommentScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Yorum Yapın", style: AppStyle.AppBarTextStyle),
           backgroundColor: AppColor.white,
@@ -42,12 +54,10 @@ class _CommentScreenState extends State<CommentScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Text(
-                          "Oylayın",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                      HeaderComponent(
+                        "Oylayın",
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        padding: EdgeInsets.only(top: 20),
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,12 +94,10 @@ class _CommentScreenState extends State<CommentScreen> {
                           )
                         ],
                       ),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10, top: 20),
-                        child: Text(
-                          "Yorum yapın",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                      HeaderComponent(
+                        "Yorum yapın",
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        padding: EdgeInsets.only(top: 20),
                       ),
                       SizedBox(
                         width: double.infinity,
@@ -123,37 +131,61 @@ class _CommentScreenState extends State<CommentScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 60,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: double.infinity,
-                              height: 50,
-                              child: FlatButton(
-                                color: AppColor.pink,
-                                textColor: AppColor.white,
-                                onPressed: () {
-                                  print("Güncellendi!" +
-                                      commentController.text +
-                                      " rating is " +
-                                      _rating.ceil().toString());
-                                  Navigator.pop(context);
-                                },
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(50.0)),
-                                child: Text(
-                                  "Tamam",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "Montserrat", fontSize: 14),
+                      ButtonComponent(
+                        text: "Tamam",
+                        onPressed: () {
+                          var comment = commentController.text.trim();
+                          if (comment.isNotEmpty) {
+                            Map<String, dynamic> temp = {
+                              "content": comment,
+                              "rating": _rating,
+                              "name": AppData.user.displayName,
+                              "owner": AppData.user.email,
+                              "isApproved": false,
+                              "timestamp": Timestamp.now()
+                            };
+                            /*var comments = List.of(widget.data["comments"]);
+                            comments.add(temp);*/
+
+                            Firestore.instance
+                                .collection(Collections.Places)
+                                .document(widget.documentID)
+                                .setData({"comments": temp}, merge: true).then(
+                                    (_) {
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                content: Text(
+                                    "Yorumunuz eklendi. Onay işleminden sonra yayınlanacaktır."),
+                                action: SnackBarAction(
+                                  label: "Geri dön",
+                                  onPressed: () {
+                                    redirecTo(
+                                        context,
+                                        PlaceDetail(
+                                          documentID: widget.documentID,
+                                          data: widget.data,
+                                        ));
+                                  },
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
+                              ));
+                            });
+                            //.updateData({"comments": comments});
+                          } else {
+                            Alert(
+                                context: context,
+                                type: AlertType.warning,
+                                title: "Dikkat",
+                                desc: "Yorum metni boş olamaz",
+                                buttons: <DialogButton>[
+                                  DialogButton(
+                                    child: Text(
+                                      "Tamam",
+                                      style: TextStyle(color: AppColor.white),
+                                    ),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ]);
+                          }
+                        },
                       ),
                     ],
                   ),

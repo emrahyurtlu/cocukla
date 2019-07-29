@@ -18,7 +18,10 @@ Future<FirebaseUser> signInWithGoogle() async {
     idToken: googleSignInAuthentication.idToken,
   );
 
-  final FirebaseUser user = await _auth.signInWithCredential(credential);
+  final FirebaseUser user =
+      await _auth.signInWithCredential(credential).then((AuthResult result) {
+    return result.user;
+  });
 
   assert(!user.isAnonymous);
   assert(await user.getIdToken() != null);
@@ -32,8 +35,7 @@ Future<FirebaseUser> signInWithGoogle() async {
 FacebookLogin fbLogin = FacebookLogin();
 
 Future<FirebaseUser> signInWithFacebook() async {
-  fbLogin.loginWithPublishPermissions([]).then(
-      (FacebookLoginResult result) {
+  fbLogin.loginWithPublishPermissions([]).then((FacebookLoginResult result) {
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         AuthCredential credential = FacebookAuthProvider.getCredential(
@@ -46,7 +48,7 @@ Future<FirebaseUser> signInWithFacebook() async {
             print("-----------------------------------------");
           }
         }).catchError((e) {
-          if(e is PlatformException){
+          if (e is PlatformException) {
             print(e.code);
           }
         });
@@ -63,12 +65,12 @@ Future<FirebaseUser> signInWithFacebook() async {
 
 Future<void> loginLog(String email) async {
   Firestore.instance
-      .collection(Collection.UserLogins)
+      .collection(Collections.UserLogins)
       .add({"email": email, "action_date": DateTime.now(), "type": "login"});
 }
 
 Future<void> logoutLog(String email) async {
   Firestore.instance
-      .collection(Collection.UserLogins)
+      .collection(Collections.UserLogins)
       .add({"email": email, "action_date": DateTime.now(), "type": "logout"});
 }

@@ -6,7 +6,7 @@ List<String> cities = List<String>();
 
 Future<List<String>> getCityList() async {
   Firestore.instance
-      .collection(Collection.Cities)
+      .collection(Collections.Cities)
       .getDocuments()
       .then((result) {
     result.documents.forEach((document) {

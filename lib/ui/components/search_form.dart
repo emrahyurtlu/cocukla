@@ -5,7 +5,8 @@ class SearchFormComponent extends StatefulWidget {
   final TextEditingController controller;
   final VoidCallback onPressed;
 
-  const SearchFormComponent({Key key, @required this.controller, @required this.onPressed})
+  const SearchFormComponent(
+      {Key key, @required this.controller, @required this.onPressed})
       : super(key: key);
 
   @override

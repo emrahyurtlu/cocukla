@@ -48,7 +48,10 @@ class _DropdownComponentState extends State<DropdownComponent> {
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: widget.selected,
-                      hint: Text(widget.hintText, style: TextStyle(color: AppColor.text_color),),
+                      hint: Text(
+                        widget.hintText,
+                        style: TextStyle(color: AppColor.text_color),
+                      ),
                       onChanged: widget.onChanged,
                       isExpanded: true,
                       items: widget.options

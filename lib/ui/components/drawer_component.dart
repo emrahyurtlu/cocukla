@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocukla/business/login_service.dart';
+import 'package:cocukla/business/user_service.dart';
+import 'package:cocukla/ui/components/conditional_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/route.dart';
@@ -17,6 +19,12 @@ class DrawerComponent extends StatefulWidget {
 }
 
 class _DrawerComponentState extends State<DrawerComponent> {
+  @override
+  void initState() {
+    userCanApprove(AppData.user.email);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -62,8 +70,21 @@ class _DrawerComponentState extends State<DrawerComponent> {
             leading: Icon(Icons.place),
             title: Text("Mekanlarım"),
             onTap: () {
-              Navigator.of(context).pushNamed("/my-places");
+              Navigator.of(context).pushNamed(CustomRoute.myPlaces);
             },
+          ),
+          ConditionalComponent(
+            condition: AppData.canApprove,
+            children: <Widget>[
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.gavel),
+                title: Text("Onay Bekleyenler"),
+                onTap: () {
+                  Navigator.of(context).pushNamed(CustomRoute.approval);
+                },
+              ),
+            ],
           ),
           Divider(),
           ListTile(

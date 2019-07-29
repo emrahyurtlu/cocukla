@@ -13,7 +13,8 @@ var links = List<String>();
 
 Future<List<Asset>> pickImages({int maxImages = 5}) async {
   assets = await MultiImagePicker.pickImages(
-      maxImages: maxImages, enableCamera: true);
+    maxImages: maxImages,
+  );
   print(" ------------------------------------------------------------ ");
   print("Files are selected!");
   print(assets.length);
@@ -38,7 +39,9 @@ Future<List<String>> uploadPickedImages() async {
 
   return links;
 }
-Future<List<String>> uploadSelectedAssets(List<Asset> assets, [String folderName = ""]) async {
+
+Future<List<String>> uploadSelectedAssets(List<Asset> assets,
+    [String folderName = ""]) async {
   print(" ------------------------------------------------------------ ");
   print("Files are selected!");
   print(assets.length);
@@ -48,7 +51,7 @@ Future<List<String>> uploadSelectedAssets(List<Asset> assets, [String folderName
 
   for (var asset in assets) {
     var result = await uploadSelectedAsset(asset, folderName);
-    if(result != null){
+    if (result != null) {
       print("UPLOADED PHOTO LINK: " + result);
       links.add(result);
     }

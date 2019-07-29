@@ -41,8 +41,6 @@ class _HomeState extends State<Home> {
         Navigator.of(context).pushNamed(CustomRoute.signIn);
       }
     });
-
-    //getData();
   }
 
   List<Widget> _tabContents = [
@@ -86,17 +84,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-/*getData() {
-    Firestore.instance
-        .collection(Collection.Places)
-        .where("isActive", isEqualTo: true)
-        .where("isApproved", isEqualTo: true)
-        .getDocuments()
-        .then((list) {
-      documents = list.documents;
-    }).catchError((e) {
-      print("Error: $e");
-    });
-  }*/
 }

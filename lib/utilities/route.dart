@@ -10,6 +10,7 @@ class CustomRoute {
   static String profilePage = "/my-profile";
   static String myPlaces = "/my-places";
   static String addPlace = "/add-place";
+  static String approval = "/approval";
 }
 
 redirecTo(BuildContext context, Widget screen) {

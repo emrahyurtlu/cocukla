@@ -13,7 +13,9 @@ class HeaderComponent extends StatefulWidget {
       {this.crossAxisAlignment = CrossAxisAlignment.center,
       this.mainAxisAlignment = MainAxisAlignment.start,
       this.style = const TextStyle(fontWeight: FontWeight.bold),
-      this.padding = const EdgeInsets.all(8.0), this.indent = 0, this.endIndent = 0});
+      this.padding = const EdgeInsets.all(8.0),
+      this.indent = 0,
+      this.endIndent = 0});
 
   @override
   _HeaderComponentState createState() => _HeaderComponentState();

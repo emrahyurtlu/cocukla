@@ -12,4 +12,5 @@ class AppData {
   static FirebaseUser user;
   static String documentID;
   static String homeSelectedCategory = "Mekanlar";
+  static bool canApprove = false;
 }

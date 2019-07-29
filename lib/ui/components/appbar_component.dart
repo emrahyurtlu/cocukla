@@ -9,7 +9,10 @@ class MyAppBar extends AppBar implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(myTitle, style: TextStyle(color: AppColor.green,)),
+      title: Text(myTitle,
+          style: TextStyle(
+            color: AppColor.green,
+          )),
       backgroundColor: AppColor.white,
       centerTitle: true,
     );

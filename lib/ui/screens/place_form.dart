@@ -5,6 +5,7 @@ import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
+import 'package:cocukla/ui/components/conditional_component.dart';
 import 'package:cocukla/ui/components/dropdown_component.dart';
 import 'package:cocukla/ui/components/header_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
@@ -36,7 +37,9 @@ class PlaceForm extends StatefulWidget {
 }
 
 class _PlaceFormState extends State<PlaceForm> {
+  String approveBtnText = "Onayla";
   String appBarTitle = "Yeni Ekle";
+  bool insertScreen = true;
   PlaceModel model;
   DocumentSnapshot document;
   final _formKey = GlobalKey<FormState>();
@@ -95,6 +98,7 @@ class _PlaceFormState extends State<PlaceForm> {
       }
     });
     if (widget.data != null) appBarTitle = "Güncelle";
+    if (widget.data != null) insertScreen = false;
     model =
         widget.data != null ? PlaceModel.fromJson(widget.data) : PlaceModel();
 
@@ -143,6 +147,9 @@ class _PlaceFormState extends State<PlaceForm> {
       }
     }
     /*****************************************************/
+    if (widget.data != null)
+      approveBtnText =
+          widget.data["isApproved"] == true ? "Onayı iptal et" : "Onayla";
     super.initState();
   }
 
@@ -174,6 +181,8 @@ class _PlaceFormState extends State<PlaceForm> {
                     children: <Widget>[
                       HeaderComponent(
                         "Genel Bilgiler",
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                       ),
                       //Mekan adı giriniz
                       TextInputComponent(
@@ -210,9 +219,10 @@ class _PlaceFormState extends State<PlaceForm> {
                         },
                       ),
                       Text(_imageSelectedInfo),
-
                       HeaderComponent(
                         "Adres Bilgiler",
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                       ),
                       TextInputComponent(
                         _coordinateController,
@@ -247,11 +257,11 @@ class _PlaceFormState extends State<PlaceForm> {
                         labelText: "Telefon",
                         inputType: TextInputType.phone,
                       ),
-                      TextInputComponent(
+                      /*TextInputComponent(
                         _faxController,
                         labelText: "Fax",
                         inputType: TextInputType.phone,
-                      ),
+                      ),*/
                       TextInputComponent(
                         _emailController,
                         labelText: "Eposta",
@@ -263,6 +273,8 @@ class _PlaceFormState extends State<PlaceForm> {
                       ),
                       HeaderComponent(
                         "Özellikler",
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                       ),
                       //Çocuk menüsü
                       SwitchListTile(
@@ -418,12 +430,10 @@ class _PlaceFormState extends State<PlaceForm> {
                           });
                         },
                       ),
-
                       Divider(
                         indent: 20,
                         endIndent: 20,
                       ),
-
                       ButtonComponent(
                         text: "Kaydet",
                         onPressed: () async {
@@ -586,6 +596,38 @@ class _PlaceFormState extends State<PlaceForm> {
                           }
                         },
                       ),
+
+                      ConditionalComponent(
+                        condition: AppData.canApprove && insertScreen,
+                        children: <Widget>[
+                          Divider(
+                            indent: 20,
+                            endIndent: 20,
+                          ),
+                          ButtonComponent(
+                            text: approveBtnText,
+                            onPressed: () {
+                              Firestore.instance
+                                  .collection(Collections.Places)
+                                  .document(widget.documentID)
+                                  .updateData({
+                                "isApproved": widget.data["isApproved"] == true
+                                    ? false
+                                    : true
+                              }).then((_) {
+                                print("${widget.documentID} is approved!");
+                                setState(() {
+                                  approveBtnText =
+                                      widget.data["isApproved"] == true
+                                          ? "Onayı iptal et"
+                                          : "Onayla";
+                                });
+                              });
+                            },
+                          )
+                        ],
+                      ),
+
                       Divider(
                         indent: 20,
                         endIndent: 20,
@@ -617,7 +659,7 @@ class _PlaceFormState extends State<PlaceForm> {
                                     print(
                                         "DELETED DOCUMENT: ${widget.documentID}");
                                     Firestore.instance
-                                        .collection(Collection.Places)
+                                        .collection(Collections.Places)
                                         .document(widget.documentID)
                                         .updateData({"isDeleted": true});
                                     Navigator.pop(context);
@@ -628,7 +670,8 @@ class _PlaceFormState extends State<PlaceForm> {
                         },
                         text: "Kaydı sil",
                         color: Colors.black,
-                      )
+                      ),
+                      //Approve Button
                     ],
                   )),
                 )

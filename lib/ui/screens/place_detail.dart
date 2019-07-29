@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/models/comment_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/comment_component.dart';
 import 'package:cocukla/ui/components/header_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
+import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:cocukla/utilities/route.dart';
@@ -39,7 +41,7 @@ class _PlaceDetailState extends State<PlaceDetail>
   @override
   void initState() {
     isFav = widget.data["isFav"];
-    print("Here is place detail screen!");
+    print("Here is place detail screen with data: ${widget.data}");
     images = List.castFrom(widget.data["images"]);
     properties = convertProperties(widget.data["properties"]);
     comments = convertComments(widget.data["comments"]);
@@ -238,6 +240,7 @@ class _PlaceDetailState extends State<PlaceDetail>
                                       context,
                                       CommentScreen(
                                         documentID: widget.documentID,
+                                        data: widget.data,
                                       ));
                                 },
                               ),
@@ -273,9 +276,10 @@ class _PlaceDetailState extends State<PlaceDetail>
   }
 
   void favOnPress() {
-    print("Fav id is:" + widget.documentID);
+    print("Place is setting as fav.");
     setState(() {
-      widget.data["isFav"] = !widget.data["isFav"].isFav;
+      widget.data["isFav"] = favorite(AppData.user.email, widget.documentID);
+      ;
     });
   }
 
@@ -301,8 +305,7 @@ class _PlaceDetailState extends State<PlaceDetail>
             rating: double.parse(item["rating"].toString()),
             name: item["name"],
             content: item["content"],
-            date: item["date"],
-            image: item["image"]);
+            date: item["date"]);
         var temp = CommentComponent(
           model: model,
         );

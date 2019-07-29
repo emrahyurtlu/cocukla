@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-IconData getMaterialIconByName({String iconName}){
+IconData getMaterialIconByName({String iconName}) {
   return MaterialIcons[iconName];
 }
 
@@ -804,7 +804,7 @@ const MaterialIcons = {
   'shutter_speed': Icons.shutter_speed,
   'signal_cellular_4_bar': Icons.signal_cellular_4_bar,
   'signal_cellular_connected_no_internet_4_bar':
-  Icons.signal_cellular_connected_no_internet_4_bar,
+      Icons.signal_cellular_connected_no_internet_4_bar,
   'signal_cellular_no_sim': Icons.signal_cellular_no_sim,
   'signal_cellular_null': Icons.signal_cellular_null,
   'signal_cellular_off': Icons.signal_cellular_off,

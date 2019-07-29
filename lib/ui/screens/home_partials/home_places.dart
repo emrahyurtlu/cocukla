@@ -4,6 +4,7 @@ import 'package:cocukla/ui/components/place_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
 import 'package:cocukla/ui/components/search_form.dart';
 import 'package:cocukla/ui/screens/home_partials/home_categories.dart';
+import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:flutter/material.dart';
 
@@ -21,18 +22,18 @@ class HomePlaces extends StatefulWidget {
 class _HomePlacesState extends State<HomePlaces> {
   TextEditingController controller;
   List<DocumentSnapshot> documents;
-  List<QuerySnapshot> querySnapshot;
+  Future<QuerySnapshot> data;
 
   @override
   void initState() {
-    getData();
+    data = getData();
     print("Here is home_places.dart");
   }
 
-  getData() {
+  Future<QuerySnapshot> getData() {
     print("DATA IS GETTING: home_places.dart");
     return Firestore.instance
-        .collection(Collection.Places)
+        .collection(Collections.Places)
         .where("isActive", isEqualTo: true)
         .where("isApproved", isEqualTo: true)
         .where("isDeleted", isEqualTo: false)
@@ -41,36 +42,36 @@ class _HomePlacesState extends State<HomePlaces> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            //Search
-            SearchFormComponent(
-              controller: controller,
-              onPressed: () {},
-            ),
-            //End Search
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          //Search
+          SearchFormComponent(
+            controller: controller,
+            onPressed: () {},
+          ),
+          //End Search
 
-            //Categories
-            HomeCategories(),
-            //End Categories
+          //Categories
+          HomeCategories(),
+          //End Categories
 
-            //Product List
-            /*Expanded(
-              child: getPlaces(),
-            ),*/
-            Expanded(
-              child: FutureBuilder<QuerySnapshot>(
-                future: getData(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+          //Product List
+          Expanded(
+            child: FutureBuilder<QuerySnapshot>(
+              future: data,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     var documents = snapshot.data.documents;
+                    bool fav = false;
                     return ListView.builder(
                         itemCount: documents.length,
                         itemBuilder: (BuildContext context, int index) {
-                          //test(documents[index]);
+                          fav = List<String>.from(
+                                  documents[index].data["favorites"])
+                              .contains(AppData.user.email);
                           return PlaceComponent(
                             documentID: documents[index].documentID,
                             title: documents[index]["name"],
@@ -78,7 +79,7 @@ class _HomePlacesState extends State<HomePlaces> {
                             image: documents[index]["images"][0],
                             properties: convertProperties(
                                 documents[index]["properties"]),
-                            isFav: documents[index].data["isFav"],
+                            isFav: fav,
                             onTap: () {
                               redirecTo(
                                   context,
@@ -94,49 +95,25 @@ class _HomePlacesState extends State<HomePlaces> {
                       child: Text("İçerik bulunamadı."),
                     );
                   }
-                },
-              ),
+                } else if (snapshot.connectionState ==
+                        ConnectionState.waiting ||
+                    snapshot.connectionState == ConnectionState.active) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return Center(
+                    child: Text("İçerik bulunamadı."),
+                  );
+                }
+              },
             ),
-            //Product List
-          ],
-        ),
+          ),
+          //Product List
+        ],
       ),
-      onRefresh: () {
-        getData();
-      },
     );
   }
-
-  /*Widget getPlaces() {
-    print("GETTIN LIST OF WIDGETS: home_places.dart");
-    if (documents != null) {
-      return ListView.builder(
-          itemCount: documents.length,
-          itemBuilder: (BuildContext context, int index) {
-            //test(documents[index]);
-            return PlaceComponent(
-              documentID: documents[index].documentID,
-              title: documents[index]["name"],
-              rating: double.parse(documents[index]["rating"]),
-              image: documents[index]["images"][0],
-              properties: convertProperties(documents[index]["properties"]),
-              isFav: documents[index].data["isFav"],
-              onTap: () {
-                redirecTo(
-                    context,
-                    PlaceDetail(
-                      documentID: documents[index].documentID,
-                      data: documents[index].data,
-                    ));
-              },
-            );
-          });
-    } else {
-      return Center(
-        child: Text("İçerik bulunamadı."),
-      );
-    }
-  }*/
 
   List<PropertyComponent> convertProperties(List properties) {
     var result = List<PropertyComponent>();

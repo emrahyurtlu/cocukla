@@ -1,5 +1,6 @@
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/ui/config/font_family.dart';
+import 'package:cocukla/ui/screens/approval.dart';
 import 'package:cocukla/ui/screens/forget_password_screen.dart';
 import 'package:cocukla/ui/screens/home.dart';
 import 'package:cocukla/ui/screens/my_places.dart';
@@ -33,6 +34,7 @@ void main() {
       "/my-profile": (context) => Profile(),
       "/my-places": (context) => Places(),
       "/add-place": (context) => PlaceForm(),
+      "/approval": (context) => Approval(),
     },
     debugShowCheckedModeBanner: false,
   ));

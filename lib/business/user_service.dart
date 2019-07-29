@@ -1,67 +1,45 @@
-/*
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocukla/business/base_service.dart';
 import 'package:cocukla/datalayer/collections.dart';
-import 'package:cocukla/datalayer/data_layer.dart';
-import 'package:cocukla/models/user_model.dart';
+import 'package:cocukla/utilities/app_data.dart';
 
-import 'helpers/login_helper.dart';
-*/
+bool favorite(String email, String documentID) {
+  bool fav = false;
+  DocumentSnapshot entity;
+  var emails = [];
+  var ref =
+      Firestore.instance.collection(Collections.Places).document(documentID);
 
-/*
-class UserService extends LoginHelper implements BaseService<UserModel> {
-  @override
-  String collection = Collection.Users;
+  ref.get().then((DocumentSnapshot document) {
+    entity = document;
 
-  @override
-  DataLayer dataLayer = DataLayer();
-
-  @override
-  void delete(String documentPath) {
-    dataLayer.delete(collection, documentPath);
-  }
-
-  @override
-  Future<DocumentSnapshot> get(String documentID) {
-    UserModel model;
-    dataLayer.get(collection, documentID).then((document) {
-      model = UserModel(
-          uid: document.documentID,
-          name: document["name"],
-          email: document["email"],
-          password: document["password"],
-          role: document["role"]);
-      print("USER SERVICE => " + model.toString());
-    });
-    return model;
-  }
-
-  @override
-  List<UserModel> getList() {
-    List<UserModel> users;
-    dataLayer.getList(collection).then((QuerySnapshot result) {
-      for (int i = 0; i < result.documents.length; i++) {
-        var document = result.documents[i];
-        var model = UserModel(
-            uid: document.documentID,
-            name: document["name"],
-            email: document["email"],
-            password: document["password"],
-            role: document["role"]);
-        users.add(model);
-      }
-    });
-    return users;
-  }
-
-  @override
-  void insert(Map data) {
-    dataLayer.insert(collection, data);
-  }
-
-  @override
-  void update(Map data, String documentPath) {
-    dataLayer.update(collection, data, documentPath);
-  }
+    emails = List<String>.from(document.data["favorites"]);
+    if (emails.contains(email)) {
+      //UnFav
+      emails.remove(email);
+      entity.data["favorites"] = emails;
+      ref.updateData(entity.data);
+    } else {
+      //Fav
+      emails.add(email);
+      entity.data["favorites"] = emails;
+      ref.updateData(entity.data);
+      fav = true;
+    }
+  });
+  return fav;
 }
-*/
+
+bool userCanApprove(String email) {
+  Firestore.instance
+      .collection(Collections.UserGranted)
+      .where("email", isEqualTo: email)
+      .getDocuments()
+      .then((QuerySnapshot snapshot) {
+    if (snapshot.documents.length > 0) {
+      AppData.canApprove = true;
+    }
+  });
+  return AppData.canApprove;
+}
