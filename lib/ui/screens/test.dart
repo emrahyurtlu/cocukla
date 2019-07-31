@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:cocukla/datalayer/data_layer.dart';
 import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/utilities/device_location.dart';
 import 'package:flutter/material.dart';
@@ -45,14 +44,14 @@ class _ComponentTestState extends State<ComponentTest> {
       ),
     );
   }*/
-  DataLayer _service = DataLayer();
+  //DataLayer _service = DataLayer();
   Map<String, dynamic> insert = {"name": "Ali"};
   Map<String, dynamic> update = {"name": "Veli"};
   UserModel model;
 
   @override
   Widget build(BuildContext context) {
-    String label = "Get Device Location";
+    //String label = "Get Device Location";
     return SafeArea(
       child: Scaffold(
           body: ListView(

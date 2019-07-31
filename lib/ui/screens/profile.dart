@@ -1,3 +1,4 @@
+import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
 import 'package:cocukla/ui/components/text_input_component.dart';
@@ -42,7 +43,8 @@ class _ProfileState extends State<Profile> {
         user = user;
         setState(() {
           this.user = user;
-          AppData.user = user;
+          AppData.user = UserModel(
+              name: user.displayName, email: user.email, image: user.photoUrl);
         });
         _nameController.text = _name = user.displayName;
         emailController.text = user.email;

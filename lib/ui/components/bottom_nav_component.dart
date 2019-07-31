@@ -2,7 +2,7 @@ import 'package:cocukla/ui/config/app_color.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationComponent extends StatefulWidget {
-  int currentIndex;
+  final int currentIndex;
   final ValueChanged<int> onTap;
 
   BottomNavigationComponent(

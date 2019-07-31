@@ -279,7 +279,6 @@ class _PlaceDetailState extends State<PlaceDetail>
     print("Place is setting as fav.");
     setState(() {
       widget.data["isFav"] = favorite(AppData.user.email, widget.documentID);
-      ;
     });
   }
 

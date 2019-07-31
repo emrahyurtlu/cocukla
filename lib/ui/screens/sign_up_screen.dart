@@ -1,3 +1,4 @@
+import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/text_input_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
@@ -26,6 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    super.initState();
   }
 
   @override
@@ -109,7 +111,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             UserUpdateInfo updateInfo;
                             updateInfo.displayName = name ?? email;
 
-                            AppData.user = result.user;
+                            AppData.user = UserModel(
+                                name: result.user.displayName, email: result.user.email, image: result.user.photoUrl);
 
                             result.user.updateProfile(updateInfo).then((val) {
                               Navigator.pushNamed(context, CustomRoute.home);
@@ -117,7 +120,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             }).catchError(
                                 (e) => print("USER DATA UPDATE ERROR: " + e));
 
-                            AppData.user = result.user;
+                            AppData.user = UserModel(
+                                name: result.user.displayName, email: result.user.email, image: result.user.photoUrl);
                           }).catchError((e) {
                             if (e is PlatformException) {
                               if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {

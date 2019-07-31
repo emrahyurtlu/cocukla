@@ -3,8 +3,8 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 
 class SmartTab extends StatefulWidget {
-  List<Tab> tabs;
-  List<Page> pages;
+  final List<Tab> tabs;
+  final List<Page> pages;
 
   SmartTab({@required this.tabs, @required this.pages})
       : assert(tabs.isNotEmpty, "Tab length is equal to 0"),

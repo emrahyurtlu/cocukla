@@ -1,10 +1,13 @@
 import 'package:cocukla/business/login_service.dart';
+import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/text_input_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/ui/screens/forget_password_screen.dart';
+import 'package:cocukla/ui/screens/home.dart';
 import 'package:cocukla/ui/screens/sign_up_screen.dart';
 import 'package:cocukla/utilities/app_data.dart';
+import 'package:cocukla/utilities/console_message.dart';
 import 'package:cocukla/utilities/device_location.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,14 +27,15 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-    FirebaseAuth.instance.currentUser().then((user) {
+    /*FirebaseAuth.instance.currentUser().then((user) {
       if (user != null && user.email != null) {
         getLocation().then((position) => AppData.position = position);
         getAddrInfo().then((result) => AppData.placemarks = result);
 
         Navigator.of(context).pushNamed(CustomRoute.home);
       }
-    });
+    });*/
+    signOut();
 
     getLocation().then((position) => AppData.position = position);
     getAddrInfo().then((result) => AppData.placemarks = result);
@@ -90,11 +94,15 @@ class _SignInScreenState extends State<SignInScreen> {
                         _password = passwordController.text.trim();
 
                         if (_email.isNotEmpty && _password.isNotEmpty) {
+                          await signOut();
                           FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: _email, password: _password)
                               .then((result) {
-                            AppData.user = result.user;
+                            AppData.user = UserModel(
+                                name: result.user.displayName,
+                                email: result.user.email,
+                                image: result.user.photoUrl);
                             loginLog(_email);
                             Navigator.pushNamed(context, CustomRoute.home);
                           }).catchError((e) {
@@ -140,10 +148,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: ButtonComponent(
                       text: "Şifremi unuttum?",
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgetPasswordScreen()));
+                        redirecTo(context, ForgetPasswordScreen());
                       },
                       color: Colors.transparent,
                       textColor: AppColor.text_color,
@@ -157,16 +162,17 @@ class _SignInScreenState extends State<SignInScreen> {
                       text: "Facebook ile giriş yap",
                       color: AppColor.facebook,
                       textColor: AppColor.white,
-                      onPressed: () {
-                        signInWithFacebook().then((user) {
-                          if (user != null) {
-                            Navigator.pushNamed(context, CustomRoute.home);
-                          }
-                        }).catchError((e) {
+                      onPressed: () async {
+                        await signOut();
+                        var user = await signInWithFacebookv2();
+                        if (user != null) {
+                          consoleMessage(user.toString());
+                          redirecTo(context, Home());
+                        } else {
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text("Facebook ile giriş yapamadınız"),
+                            content: Text("Facebook ile giriş yapamadınız."),
                           ));
-                        });
+                        }
                       },
                     ),
                   ),
@@ -177,12 +183,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColor.google,
                       textColor: AppColor.white,
                       onPressed: () async {
+                        await signOut();
                         signInWithGoogle().then((user) {
-                          AppData.user = user;
-                          Navigator.of(context).pushNamed(CustomRoute.home);
+                          consoleMessage(user.toString());
+                          if (user != null) redirecTo(context, Home());
                         }).catchError((e) {
                           if (e is PlatformException) {
-                            print(e.code);
+                            print(
+                                "Google Error Code: ${e.code}, Google Error Message: ${e.message}");
                             _scaffoldKey.currentState.showSnackBar(SnackBar(
                               content: Text("Google ile giriş yapamadınız."),
                             ));

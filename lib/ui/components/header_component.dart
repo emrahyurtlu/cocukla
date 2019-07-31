@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class HeaderComponent extends StatefulWidget {
-  String text;
-  MainAxisAlignment mainAxisAlignment;
-  CrossAxisAlignment crossAxisAlignment;
-  TextStyle style;
-  EdgeInsetsGeometry padding;
+  final String text;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+  final TextStyle style;
+  final EdgeInsetsGeometry padding;
 
-  double indent, endIndent;
+  final double indent, endIndent;
 
   HeaderComponent(this.text,
       {this.crossAxisAlignment = CrossAxisAlignment.center,

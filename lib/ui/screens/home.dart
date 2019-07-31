@@ -1,3 +1,4 @@
+import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/bottom_nav_component.dart';
 import 'package:cocukla/ui/components/drawer_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
@@ -19,7 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentTab = 0;
-  FirebaseUser user;
+  UserModel user;
 
   //static List<DocumentSnapshot> documents;
 
@@ -32,10 +33,13 @@ class _HomeState extends State<Home> {
       print("HOME");
       print(user.toString());
       print("-----------------------------------------");
-      if (user != null && user.email != null) {
-        AppData.user = user;
+      if (user != null) {
+        AppData.user = UserModel(
+            name: user.displayName,
+            image: user.photoUrl,
+            email: user.providerData[1].email);
         setState(() {
-          this.user = user;
+          this.user = AppData.user;
         });
       } else {
         Navigator.of(context).pushNamed(CustomRoute.signIn);

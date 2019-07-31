@@ -1,3 +1,4 @@
+/*
 import 'package:cocukla/utilities/city_info.dart';
 import 'package:flutter/material.dart';
 
@@ -16,11 +17,13 @@ class _GetCitiesState extends State<GetCities> {
           child: RaisedButton(
             child: Text("Get List From DB"),
             onPressed: () async {
-              /*getCityList().then((cityList) {
+              */
+/*getCityList().then((cityList) {
                 setState(() {
                   cities = cityList;
                 });
-              }).whenComplete(() => print(cities));*/
+              }).whenComplete(() => print(cities));*//*
+
               var dist = getDistrictList("İstanbul");
               print(dist);
             },
@@ -30,3 +33,4 @@ class _GetCitiesState extends State<GetCities> {
     );
   }
 }
+*/

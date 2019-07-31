@@ -16,7 +16,7 @@ class PlaceComponent extends StatefulWidget {
   final double rating;
   final List<PropertyComponent> properties;
   final GestureTapCallback onTap;
-  bool isFav;
+  final bool isFav;
 
   PlaceComponent(
       {Key key,

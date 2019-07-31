@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ButtonComponent extends StatefulWidget {
-  double width, height;
-  String text;
-  Widget icon;
-  VoidCallback onPressed;
-  Color color, textColor;
+  final double width, height;
+  final String text;
+  final Widget icon;
+  final VoidCallback onPressed;
+  final Color color, textColor;
 
   ButtonComponent(
       {this.width = 300,

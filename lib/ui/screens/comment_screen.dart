@@ -8,7 +8,6 @@ import 'package:cocukla/ui/screens/place_detail.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/route.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -139,7 +138,7 @@ class _CommentScreenState extends State<CommentScreen> {
                             Map<String, dynamic> temp = {
                               "content": comment,
                               "rating": _rating,
-                              "name": AppData.user.displayName,
+                              "name": AppData.user.name,
                               "owner": AppData.user.email,
                               "isApproved": false,
                               "timestamp": Timestamp.now()

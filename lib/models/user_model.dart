@@ -15,7 +15,7 @@ class UserModel {
       this.email,
       this.password,
       this.isActive,
-      this.role});
+      this.role, this.image});
 
   UserModel.fromFirebaseUser(FirebaseUser user)
       : documentID = user.uid,

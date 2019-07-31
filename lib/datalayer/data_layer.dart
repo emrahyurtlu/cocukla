@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DataLayer {
-  Future<void> insert(String collection, Map data) {
+  insert(String collection, Map data) {
     Firestore.instance
         .collection(collection)
         .add(data)
         .catchError((e) => print("DATABASE INSERT ERROR: " + e));
   }
 
-  Future<void> update(String collection, Map data, String documentPath) {
+  update(String collection, Map data, String documentPath) {
     Firestore.instance
         .collection(collection)
         .document(documentPath)
@@ -16,7 +16,7 @@ class DataLayer {
         .catchError((e) => print("DATABASE UPDATE ERROR: " + e));
   }
 
-  Future<void> delete(String collection, String documentPath) {
+  delete(String collection, String documentPath) {
     Firestore.instance
         .collection(collection)
         .document(documentPath)

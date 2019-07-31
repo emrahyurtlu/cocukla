@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/business/user_service.dart';
+import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/conditional_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DrawerComponent extends StatefulWidget {
-  final FirebaseUser user;
+  final UserModel user;
 
   const DrawerComponent({Key key, this.user}) : super(key: key);
 
@@ -34,9 +35,9 @@ class _DrawerComponentState extends State<DrawerComponent> {
           UserAccountsDrawerHeader(
             accountName: Text(
               (widget.user != null &&
-                      widget.user.displayName != null &&
-                      widget.user.displayName != "")
-                  ? widget.user.displayName
+                      widget.user.name != null &&
+                      widget.user.name != "")
+                  ? widget.user.name
                   : "Kullanıcı",
               style: TextStyle(color: AppColor.white),
             ),
@@ -45,8 +46,8 @@ class _DrawerComponentState extends State<DrawerComponent> {
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
                   child: CachedNetworkImage(
-                imageUrl: widget.user != null && widget.user.photoUrl != null
-                    ? widget.user.photoUrl
+                imageUrl: widget.user != null && widget.user.image != null
+                    ? widget.user.image
                     : "assets/images/user.png",
                 width: 86,
                 height: 86,

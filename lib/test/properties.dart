@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocukla/datalayer/collections.dart';
 import 'package:flutter/material.dart';
 
 class PropertyTest extends StatefulWidget {

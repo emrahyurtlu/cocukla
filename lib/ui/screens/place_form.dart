@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/models/place_model.dart';
+import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
 import 'package:cocukla/ui/components/conditional_component.dart';
@@ -27,7 +28,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'my_places.dart';
 
 class PlaceForm extends StatefulWidget {
-  Map<String, dynamic> data;
+  final Map<String, dynamic> data;
   final String documentID;
 
   PlaceForm({this.data, this.documentID = "INITIAL DOCUMENT"});
@@ -89,7 +90,8 @@ class _PlaceFormState extends State<PlaceForm> {
       print("DOCUMENT: ${widget.documentID}");
       print("-----------------------------------------");
       if (user != null && user.email != null) {
-        AppData.user = user;
+        AppData.user = UserModel(
+            name: user.displayName, email: user.email, image: user.photoUrl);
         setState(() {
           this.user = user;
         });

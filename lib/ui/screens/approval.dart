@@ -5,7 +5,6 @@ import 'package:cocukla/ui/components/property_component.dart';
 import 'package:cocukla/ui/components/search_form.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/ui/screens/place_form.dart';
-import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:flutter/material.dart';

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "97541673682-nj6m69ffr368q8k3isv2fednucuu5eh2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cocukla.app",
+            "certificate_hash": "31abb00f8f89ebc200ae0d78830bea742150f9a1"
+          }
+        },
+        {
           "client_id": "97541673682-cs8q363scbp9c5utvdhprtilid01dg58.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
