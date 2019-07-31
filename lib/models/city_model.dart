@@ -6,7 +6,7 @@ class CityModel {
 
   CityModel({this.name, this.plate, this.districts, this.documentID});
 
-  CityModel.fromJson(Map<String, dynamic> json)
+  CityModel.from(Map<String, dynamic> json)
       : name = json["name"],
         plate = json["plate"],
         documentID = json["documentID"],

@@ -1,23 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel {
   String documentID;
   String name;
   String email;
-  String password;
   String image;
-  bool isActive;
-  int role;
+  String city;
+  String district;
+  bool isAuthorized;
+  Timestamp insertDate;
+  Timestamp updateDate;
 
   UserModel(
       {this.documentID,
-      this.name,
       this.email,
-      this.password,
-      this.isActive,
-      this.role, this.image});
+      this.name,
+      this.image,
+      this.city,
+      this.district,
+      this.isAuthorized,
+      this.insertDate,
+      this.updateDate});
 
-  UserModel.fromFirebaseUser(FirebaseUser user)
+  UserModel.from(FirebaseUser user)
       : documentID = user.uid,
         name = user.displayName,
         email = user.email,
@@ -27,14 +33,16 @@ class UserModel {
         "documentID": documentID,
         "name": name,
         "email": email,
-        "password": password,
         "image": image,
-        "isActive": isActive,
-        "role": role,
+        "city": city,
+        "district": district,
+        "isAuthorized": isAuthorized,
+        "insertDate": insertDate,
+        "updateDate": updateDate,
       };
 
   @override
   String toString() {
-    return 'UserModel{documentID: $documentID, name: $name, email: $email, password: $password, image: $image, isActive: $isActive, role: $role}';
+    return 'UserModel{documentID: $documentID, name: $name, email: $email, image: $image, city: $city, district: $district, isAuthorized: $isAuthorized, insertDate: $insertDate, updateDate: $updateDate}';
   }
 }

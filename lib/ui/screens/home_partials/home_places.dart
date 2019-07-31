@@ -81,7 +81,7 @@ class _HomePlacesState extends State<HomePlaces> {
                                 documents[index]["properties"]),
                             isFav: fav,
                             onTap: () {
-                              redirecTo(
+                              redirectTo(
                                   context,
                                   PlaceDetail(
                                     documentID: documents[index].documentID,

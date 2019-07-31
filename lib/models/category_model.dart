@@ -6,7 +6,7 @@ class CategoryModel {
 
   CategoryModel({this.documentID, this.turn, this.image, this.title});
 
-  CategoryModel.fromJson(Map<String, dynamic> json)
+  CategoryModel.from(Map<String, dynamic> json)
       : documentID = json["documentID"],
         turn = json["turn"],
         image = json["image"],

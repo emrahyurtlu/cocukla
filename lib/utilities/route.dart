@@ -13,9 +13,13 @@ class CustomRoute {
   static String approval = "/approval";
 }
 
-redirecTo(BuildContext context, Widget screen) {
+redirectTo(BuildContext context, Widget screen) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => screen),
   );
+}
+
+redirectToRoute(BuildContext context, String routeName) {
+  Navigator.of(context).pushNamed(routeName);
 }

@@ -64,7 +64,7 @@ class _CocuklaAppState extends State<CocuklaApp> {
       backgroundColor: Colors.white,
       styleTextUnderTheLoader: TextStyle(),
       photoSize: 100.0,
-      onClick: () => redirecTo(context, SignInScreen()),
+      onClick: () => redirectTo(context, SignInScreen()),
       loaderColor: AppColor.pink,
     );
   }

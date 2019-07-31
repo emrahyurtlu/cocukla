@@ -19,7 +19,7 @@ class PropertyModel {
       this.color = AppColor.dark_gray,
       this.padding = const EdgeInsets.all(0)});
 
-  PropertyModel.fromJson(Map<String, dynamic> json)
+  PropertyModel.from(Map<String, dynamic> json)
       : turn = json["turn"],
         iconName = json["iconName"],
         documentID = json["documentID"],

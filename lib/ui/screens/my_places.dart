@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/ui/components/place_component.dart';
@@ -29,6 +30,7 @@ class _PlacesState extends State<Places> {
 
   @override
   Widget build(BuildContext context) {
+    redirectIfNotSignedIn(context);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -87,7 +89,7 @@ class _PlacesState extends State<Places> {
               properties: convertProperties(documents[index]["properties"]),
               isFav: documents[index].data["isFav"],
               onTap: () {
-                redirecTo(
+                redirectTo(
                     context,
                     PlaceForm(
                       documentID: documents[index].documentID,

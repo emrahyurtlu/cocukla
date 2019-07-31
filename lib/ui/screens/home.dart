@@ -4,10 +4,10 @@ import 'package:cocukla/ui/components/drawer_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
-import 'package:cocukla/utilities/route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cocukla/utilities/console_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cocukla/business/login_service.dart';
 
 import 'home_partials/home_explore.dart';
 import 'home_partials/home_favorites.dart';
@@ -28,23 +28,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    FirebaseAuth.instance.currentUser().then((user) {
-      print("-----------------------------------------");
-      print("HOME");
-      print(user.toString());
-      print("-----------------------------------------");
-      if (user != null) {
-        AppData.user = UserModel(
-            name: user.displayName,
-            image: user.photoUrl,
-            email: user.providerData[1].email);
-        setState(() {
-          this.user = AppData.user;
-        });
-      } else {
-        Navigator.of(context).pushNamed(CustomRoute.signIn);
-      }
-    });
+    consoleMessage("HOME SCREEN");
   }
 
   List<Widget> _tabContents = [
@@ -67,6 +51,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    redirectIfNotSignedIn(context);
     var title =
         _currentTab == 0 ? AppData.homeSelectedCategory : _titles[_currentTab];
     return SafeArea(
@@ -78,7 +63,7 @@ class _HomeState extends State<Home> {
           iconTheme: IconThemeData(color: AppColor.text_color),
         ),
         drawer: DrawerComponent(
-          user: user,
+          user: AppData.user,
         ),
         body: _tabContents[_currentTab],
         bottomNavigationBar: BottomNavigationComponent(

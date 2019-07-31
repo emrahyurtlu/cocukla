@@ -46,7 +46,7 @@ class PlaceModel {
       this.insertDate,
       this.updateDate});
 
-  PlaceModel.fromJson(Map<String, dynamic> json)
+  PlaceModel.from(Map<String, dynamic> json)
       : name = json["name"],
         digest = json["digest"],
         rating = json["rating"],

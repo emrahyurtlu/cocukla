@@ -5,7 +5,7 @@ class PhotoModel {
 
   PhotoModel({this.turn, this.image, this.documentID});
 
-  PhotoModel.fromJson(Map<String, dynamic> json)
+  PhotoModel.from(Map<String, dynamic> json)
       : turn = json["turn"],
         documentID = json["documentID"],
         image = json["image"];

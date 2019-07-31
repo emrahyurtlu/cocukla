@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/models/comment_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
@@ -8,6 +9,7 @@ import 'package:cocukla/ui/components/property_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:cocukla/utilities/console_message.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,7 +43,7 @@ class _PlaceDetailState extends State<PlaceDetail>
   @override
   void initState() {
     isFav = widget.data["isFav"];
-    print("Here is place detail screen with data: ${widget.data}");
+    consoleMessage("Here is place detail screen with data: ${widget.data}");
     images = List.castFrom(widget.data["images"]);
     properties = convertProperties(widget.data["properties"]);
     comments = convertComments(widget.data["comments"]);
@@ -54,6 +56,7 @@ class _PlaceDetailState extends State<PlaceDetail>
 
   @override
   Widget build(BuildContext context) {
+    redirectIfNotSignedIn(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -236,7 +239,7 @@ class _PlaceDetailState extends State<PlaceDetail>
                               ButtonComponent(
                                 text: "Yorum yapın",
                                 onPressed: () {
-                                  redirecTo(
+                                  redirectTo(
                                       context,
                                       CommentScreen(
                                         documentID: widget.documentID,

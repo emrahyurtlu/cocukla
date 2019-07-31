@@ -1,9 +1,9 @@
 import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/models/place_model.dart';
-import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
 import 'package:cocukla/ui/components/conditional_component.dart';
@@ -16,6 +16,7 @@ import 'package:cocukla/utilities/address_statics.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/city_info.dart';
+import 'package:cocukla/utilities/console_message.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -83,26 +84,11 @@ class _PlaceFormState extends State<PlaceForm> {
 
   @override
   void initState() {
-    FirebaseAuth.instance.currentUser().then((user) {
-      print("-----------------------------------------");
-      print("PLACE ADD/UPDATE FORM");
-      print(user.toString());
-      print("DOCUMENT: ${widget.documentID}");
-      print("-----------------------------------------");
-      if (user != null && user.email != null) {
-        AppData.user = UserModel(
-            name: user.displayName, email: user.email, image: user.photoUrl);
-        setState(() {
-          this.user = user;
-        });
-      } else {
-        Navigator.of(context).pushNamed(CustomRoute.signIn);
-      }
-    });
+    consoleMessage("PLACE ADD/UPDATE SCREEN");
     if (widget.data != null) appBarTitle = "Güncelle";
     if (widget.data != null) insertScreen = false;
     model =
-        widget.data != null ? PlaceModel.fromJson(widget.data) : PlaceModel();
+        widget.data != null ? PlaceModel.from(widget.data) : PlaceModel();
 
     model.owner = model.owner ??= AppData.user.email;
     model.rating = model.rating ??= "0";
@@ -163,6 +149,7 @@ class _PlaceFormState extends State<PlaceForm> {
 
   @override
   Widget build(BuildContext context) {
+    redirectIfNotSignedIn(context);
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -665,7 +652,7 @@ class _PlaceFormState extends State<PlaceForm> {
                                         .document(widget.documentID)
                                         .updateData({"isDeleted": true});
                                     Navigator.pop(context);
-                                    redirecTo(context, Places());
+                                    redirectTo(context, Places());
                                   },
                                 ),
                               ]).show();

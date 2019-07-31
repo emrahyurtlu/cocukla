@@ -16,7 +16,7 @@ class CommentModel {
       this.date,
       this.documentID});
 
-  CommentModel.fromJson(Map<String, dynamic> json)
+  CommentModel.from(Map<String, dynamic> json)
       : image = json["image"],
         name = json["name"],
         content = json["content"],

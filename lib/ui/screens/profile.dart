@@ -1,4 +1,4 @@
-import 'package:cocukla/models/user_model.dart';
+import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
 import 'package:cocukla/ui/components/text_input_component.dart';
@@ -7,7 +7,6 @@ import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
 import 'package:cocukla/utilities/processing.dart';
-import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,36 +33,20 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    FirebaseAuth.instance.currentUser().then((user) {
-      print("-----------------------------------------");
-      print("MY PROFILE");
-      print(user.toString());
-      print("-----------------------------------------");
-      if (user != null && user.email != null) {
-        user = user;
-        setState(() {
-          this.user = user;
-          AppData.user = UserModel(
-              name: user.displayName, email: user.email, image: user.photoUrl);
-        });
-        _nameController.text = _name = user.displayName;
-        emailController.text = user.email;
+    _nameController.text = _name = AppData.user.name;
+    emailController.text = AppData.user.email;
 
-        if (user.photoUrl != null) {
-          _avatar = Image.network(
-            user.photoUrl,
-            width: 86,
-          );
-        } else {
-          _avatar = Image.asset(
-            "assets/images/user.png",
-            width: 86,
-          );
-        }
-      } else {
-        Navigator.of(context).pushNamed(CustomRoute.signIn);
-      }
-    });
+    if (AppData.user.image != null) {
+      _avatar = Image.network(
+        AppData.user.image,
+        width: 86,
+      );
+    } else {
+      _avatar = Image.asset(
+        "assets/images/user.png",
+        width: 86,
+      );
+    }
 
     _assets = null;
 
@@ -80,6 +63,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    redirectIfNotSignedIn(context);
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,

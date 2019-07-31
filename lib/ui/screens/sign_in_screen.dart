@@ -27,14 +27,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-    /*FirebaseAuth.instance.currentUser().then((user) {
-      if (user != null && user.email != null) {
-        getLocation().then((position) => AppData.position = position);
-        getAddrInfo().then((result) => AppData.placemarks = result);
-
-        Navigator.of(context).pushNamed(CustomRoute.home);
-      }
-    });*/
     signOut();
 
     getLocation().then((position) => AppData.position = position);
@@ -148,7 +140,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: ButtonComponent(
                       text: "Şifremi unuttum?",
                       onPressed: () {
-                        redirecTo(context, ForgetPasswordScreen());
+                        redirectTo(context, ForgetPasswordScreen());
                       },
                       color: Colors.transparent,
                       textColor: AppColor.text_color,
@@ -164,10 +156,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       textColor: AppColor.white,
                       onPressed: () async {
                         await signOut();
-                        var user = await signInWithFacebookv2();
+                        var user = await signInWithFacebook();
                         if (user != null) {
                           consoleMessage(user.toString());
-                          redirecTo(context, Home());
+                          redirectTo(context, Home());
                         } else {
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
                             content: Text("Facebook ile giriş yapamadınız."),
@@ -186,7 +178,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         await signOut();
                         signInWithGoogle().then((user) {
                           consoleMessage(user.toString());
-                          if (user != null) redirecTo(context, Home());
+                          if (user != null) redirectTo(context, Home());
                         }).catchError((e) {
                           if (e is PlatformException) {
                             print(

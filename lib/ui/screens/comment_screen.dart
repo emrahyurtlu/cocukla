@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
@@ -35,6 +36,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    redirectIfNotSignedIn(context);
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -157,7 +159,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                 action: SnackBarAction(
                                   label: "Geri dön",
                                   onPressed: () {
-                                    redirecTo(
+                                    redirectTo(
                                         context,
                                         PlaceDetail(
                                           documentID: widget.documentID,
