@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     consoleMessage("HOME SCREEN");
+    consoleMessage("ACTIVE USER IS: ${AppData.user.toString()}");
   }
 
   List<Widget> _tabContents = [

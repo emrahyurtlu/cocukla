@@ -50,7 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    signOut();
+    //signOut();
 
     return Scaffold(
       key: _scaffoldKey,
@@ -97,9 +97,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   email: _email, password: _password)
                               .then((result) {
                             //Get data from users collection
-                            _userService
-                                .getByEmail(_email)
-                                .then((UserModel user) {
+                            _userService.get(_email).then((UserModel user) {
                               AppData.user = user;
                             });
                             loginLog(_email);
@@ -162,17 +160,17 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColor.facebook,
                       textColor: AppColor.white,
                       onPressed: () async {
-                        var user = await signInWithFacebook();
-                        if (user != null) {
-                          consoleMessage("FACEBOOK USER: ${user.toString()}");
-                          await _userService.insert(user);
+                        var facebookUser = await signInWithFacebook();
+                        if (facebookUser != null) {
+                          consoleMessage("FACEBOOK USER: ${facebookUser.toString()}");
+                          //Insert user if not exist
+                          await _userService.insert(facebookUser);
                           //Get data from users collection
-                          _userService
-                              .getByEmail(user.email)
-                              .then((UserModel user) {
-                            AppData.user = user;
-                          });
-                          redirectTo(context, Home());
+                          var activeUser = await _userService.get(facebookUser.email);
+                          if (activeUser != null) {
+                            AppData.user = activeUser;
+                            redirectTo(context, Home());
+                          }
                         } else {
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
                             content: Text("Facebook ile giriş yapamadınız."),
@@ -188,43 +186,22 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColor.google,
                       textColor: AppColor.white,
                       onPressed: () async {
-                        var user = await signInWithGoogle();
-                        if (user != null) {
-                          consoleMessage("GOOGLE USER: ${user.toString()}");
-                          _userService.insert(user);
+                        var googleUser = await signInWithGoogle();
+                        if (googleUser != null) {
+                          consoleMessage("GOOGLE USER: ${googleUser.toString()}");
+                          //Insert user if not exist
+                          await _userService.insert(googleUser);
                           //Get data from users collection
-                          _userService
-                              .getByEmail(user.email)
-                              .then((UserModel user) {
-                            AppData.user = user;
-                          });
-                          redirectTo(context, Home());
+                          var activeUser = await _userService.get(googleUser.email);
+                          if (activeUser != null) {
+                            AppData.user = activeUser;
+                            redirectTo(context, Home());
+                          }
                         } else {
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
                             content: Text("Google ile giriş yapamadınız."),
                           ));
                         }
-                        /*signInWithGoogle().then((user) {
-                          if (user != null) {
-                            consoleMessage(user.toString());
-                            _userService.insert(user);
-                            //Get data from users collection
-                            _userService
-                                .getByEmail(user.email)
-                                .then((UserModel user) {
-                              AppData.user = user;
-                            });
-                            redirectTo(context, Home());
-                          }
-                        }).catchError((e) {
-                          if (e is PlatformException) {
-                            print(
-                                "Google Error Code: ${e.code}, Google Error Message: ${e.message}");
-                            _scaffoldKey.currentState.showSnackBar(SnackBar(
-                              content: Text("Google ile giriş yapamadınız."),
-                            ));
-                          }
-                        });*/
                       }),
 
                   //Sign Up

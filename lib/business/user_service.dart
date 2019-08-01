@@ -47,10 +47,10 @@ class UserService {
   CollectionReference userRef =
       Firestore.instance.collection(Collections.Users);
 
-  insert(UserModel model) async {
+  Future<void> insert(UserModel model) async {
     var data = model.toJson();
     var isExist = await userExist(model.email);
-    if (!isExist) await userRef.add(data);
+    if (isExist == false) await userRef.add(data);
   }
 
   Future<bool> userExist(String email) async {
@@ -64,10 +64,10 @@ class UserService {
     return result;
   }
 
-  Future<UserModel> getByEmail(String email) async {
+  Future<UserModel> get(String email) async {
     UserModel userModel = UserModel.iniDefault();
     var result = await userRef.where("email", isEqualTo: email).getDocuments();
-    var data = result.documents[0].data;
+    var data = await result.documents[0].data;
     userModel = UserModel.from(data);
     return userModel;
   }

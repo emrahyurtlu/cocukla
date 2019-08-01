@@ -5,7 +5,6 @@ import 'package:cocukla/ui/components/conditional_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,12 +14,16 @@ class DrawerComponent extends StatefulWidget {
 }
 
 class _DrawerComponentState extends State<DrawerComponent> {
-  UserModel user;
+  UserModel user = AppData.user;
 
   @override
   void initState() {
-    user = AppData.user;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -86,10 +89,11 @@ class _DrawerComponentState extends State<DrawerComponent> {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text("Çıkış"),
-            onTap: () async {
+            onTap: () {
               if (AppData.user != null) logoutLog(AppData.user.email);
-              await signOut();
-              redirectToRoute(context, CustomRoute.home);
+              //signOut();
+              Navigator.of(context).pop();
+              redirectToRoute(context, CustomRoute.signIn);
             },
           ),
         ],
