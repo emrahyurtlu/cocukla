@@ -44,18 +44,27 @@ bool userCanApprove(String email) {
 }
 
 class UserService {
-  CollectionReference userRef =
+  CollectionReference _userRef =
       Firestore.instance.collection(Collections.Users);
 
   Future<void> insert(UserModel model) async {
     var data = model.toJson();
     var isExist = await userExist(model.email);
-    if (isExist == false) await userRef.add(data);
+    if (isExist == false) await _userRef.add(data);
+  }
+
+  Future<void> update(UserModel model) async {
+    var data = model.toJson();
+    var result =
+        await _userRef.where("email", isEqualTo: model.email).getDocuments();
+    var document = await result.documents[0];
+    if (document != null)
+      await _userRef.document(document.documentID).setData(data);
   }
 
   Future<bool> userExist(String email) async {
     bool result = false;
-    await userRef
+    await _userRef
         .where("email", isEqualTo: email)
         .getDocuments()
         .then((QuerySnapshot snapshot) {
@@ -66,7 +75,7 @@ class UserService {
 
   Future<UserModel> get(String email) async {
     UserModel userModel = UserModel.iniDefault();
-    var result = await userRef.where("email", isEqualTo: email).getDocuments();
+    var result = await _userRef.where("email", isEqualTo: email).getDocuments();
     var data = await result.documents[0].data;
     userModel = UserModel.from(data);
     return userModel;

@@ -24,7 +24,7 @@ Future<List<Asset>> pickImages({int maxImages = 5}) async {
 }
 
 Future<List<String>> uploadPickedImages() async {
-  assets = await MultiImagePicker.pickImages(maxImages: 5, enableCamera: true);
+  assets = await MultiImagePicker.pickImages(maxImages: 5);
   print(" ------------------------------------------------------------ ");
   print("Files are selected!");
   print(assets.length);
@@ -75,5 +75,7 @@ Future<dynamic> uploadSelectedAsset(Asset asset,
 
   StorageTaskSnapshot storageTaskSnapshot = await task.onComplete;
 
-  return storageTaskSnapshot.ref.getDownloadURL();
+  var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+
+  return downloadUrl;
 }

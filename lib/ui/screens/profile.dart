@@ -42,6 +42,8 @@ class _ProfileState extends State<Profile> {
   static List<String> _cities;
   static List<String> _districts;
 
+  UserService userService;
+
   @override
   void initState() {
     _nameController.text = _name = AppData.user.name;
@@ -61,10 +63,13 @@ class _ProfileState extends State<Profile> {
 
     _assets = null;
 
-    _citySelected = AppData.placemarks[0].administrativeArea;
-    _districtSelected = AppData.placemarks[0].subAdministrativeArea;
+    _citySelected =
+        AppData.user.city ?? AppData.placemarks[0].administrativeArea;
+    _districtSelected =
+        AppData.user.district ?? AppData.placemarks[0].subAdministrativeArea;
     _cities = AddressStatics.getCities();
     _districts = getDistrictList(_citySelected ?? "Ankara");
+    userService = UserService();
     super.initState();
   }
 
@@ -116,8 +121,12 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                     onTap: () async {
+                      var bytes;
                       var temp = await pickImages(maxImages: 1);
-                      var bytes = await temp[0].requestOriginal();
+                      if (temp != null) {
+                        bytes = await temp[0].requestOriginal();
+                      }
+
                       setState(() {
                         _assets = temp;
                         _avatar = Image.memory(
@@ -206,18 +215,18 @@ class _ProfileState extends State<Profile> {
                             });
                           }
 
-                          var info = UserUpdateInfo();
-                          info.displayName = _name;
-                          info.photoUrl = _tempUrl;
+                          if (_password != null && _password.length > 5) {
+                            var fbUser =
+                                await FirebaseAuth.instance.currentUser();
+                            if (fbUser != null)
+                              await fbUser.updatePassword(_password);
+                          } else {
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  "Şifreniz en az 6 karakterden oluşmalıdır."),
+                            ));
+                          }
 
-                          user.updateProfile(info).then((_) {
-                            dismiss = true;
-                            user.reload();
-                          }).catchError(
-                              (e) => print("PROFILE UPDATE ERROR: " + e));
-
-                          user.reload().then((_) => dismiss = true);
-                          dismiss = true;
                           var userModel = AppData.user;
                           userModel.name = _name;
                           userModel.city = _citySelected;
@@ -226,12 +235,12 @@ class _ProfileState extends State<Profile> {
                           userModel.updateDate = Timestamp.now();
 
                           //Users koleksiyonunu güncelle
-                          UserService userService = UserService();
-                          userService.insert(userModel);
+                          await userService.update(userModel);
                           AppData.user = userModel;
+                          Navigator.pop(context);
                         },
                       ),
-                      Divider(
+                      /*Divider(
                         indent: 20,
                         endIndent: 20,
                       ),
@@ -295,7 +304,7 @@ class _ProfileState extends State<Profile> {
                               ));
                         },
                         color: Colors.black,
-                      )
+                      )*/
                     ],
                   )),
                 )

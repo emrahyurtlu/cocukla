@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocukla/business/login_service.dart';
+import 'package:cocukla/models/enums/enums.dart';
 import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/conditional_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
@@ -57,12 +58,17 @@ class _DrawerComponentState extends State<DrawerComponent> {
             ),
             decoration: BoxDecoration(color: AppColor.pink),
           ),
-          ListTile(
-            leading: Icon(Icons.supervised_user_circle),
-            title: Text("Profilim"),
-            onTap: () {
-              Navigator.of(context).pushNamed("/my-profile");
-            },
+          ConditionalComponent(
+            condition: AppData.user.loginType == LoginType.Native,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.supervised_user_circle),
+                title: Text("Profilim"),
+                onTap: () {
+                  Navigator.of(context).pushNamed("/my-profile");
+                },
+              ),
+            ],
           ),
           Divider(),
           ListTile(

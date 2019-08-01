@@ -29,18 +29,18 @@ dependencies:
   geolocator: ^5.0.0
   flutter_swiper: ^1.1.6
   cloud_firestore:
-  firebase_auth:
+  firebase_auth: ^0.14.0
   firebase_storage:
   google_sign_in:
   flutter_facebook_login: ^2.0.1
   http:
-  image_picker: ^0.6.0+19
   path:
   uuid:
-  multi_image_picker: ^4.3.4
+  multi_image_picker:
   cached_network_image:
   rflutter_alert:
   url_launcher:
+  camera: ^0.5.2+2
   #shared_preferences:
 
 

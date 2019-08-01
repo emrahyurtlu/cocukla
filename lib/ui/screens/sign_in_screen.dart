@@ -92,19 +92,12 @@ class _SignInScreenState extends State<SignInScreen> {
                         _password = passwordController.text.trim();
 
                         if (_email.isNotEmpty && _password.isNotEmpty) {
-                          FirebaseAuth.instance
+                          var loginResult = await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
-                                  email: _email, password: _password)
-                              .then((result) {
-                            //Get data from users collection
-                            _userService.get(_email).then((UserModel user) {
-                              AppData.user = user;
-                            });
-                            loginLog(_email);
-                            redirectToRoute(context, CustomRoute.home);
-                          }).catchError((e) {
-                            if (e is PlatformException) {
-                              print(e);
+                                  email: _email, password: _password).catchError((e) {
+                            if (e is PlatformException){
+
+                              //ERROR_USER_NOT_FOUND
                               if (e.code == "ERROR_USER_NOT_FOUND") {
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                                   content: Text(
@@ -116,20 +109,38 @@ class _SignInScreenState extends State<SignInScreen> {
                                   ),
                                 ));
                               }
+
+                              //ERROR_WRONG_PASSWORD
                               if (e.code == "ERROR_WRONG_PASSWORD") {
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                                   content:
-                                      Text("Kullanıcı adı yada şifre yanlış!"),
+                                  Text("Kullanıcı adı yada şifre yanlış!"),
                                 ));
                               }
+
+                              //ERROR_INVALID_EMAIL
                               if (e.code == "ERROR_INVALID_EMAIL") {
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                                   content:
-                                      Text("Girdiğiniz eposta doğru değil!"),
+                                  Text("Girdiğiniz eposta doğru değil!"),
                                 ));
                               }
+
+
                             }
                           });
+
+                          var activeUser = UserModel.iniDefault();
+
+                          if (loginResult != null) {
+                            activeUser = await _userService.get(_email);
+                          }
+
+                          if (activeUser != null) {
+                            AppData.user = activeUser;
+                            loginLog(_email);
+                            redirectToRoute(context, CustomRoute.home);
+                          }
                         } else {
                           setState(() {});
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -162,11 +173,13 @@ class _SignInScreenState extends State<SignInScreen> {
                       onPressed: () async {
                         var facebookUser = await signInWithFacebook();
                         if (facebookUser != null) {
-                          consoleMessage("FACEBOOK USER: ${facebookUser.toString()}");
+                          consoleMessage(
+                              "FACEBOOK USER: ${facebookUser.toString()}");
                           //Insert user if not exist
                           await _userService.insert(facebookUser);
                           //Get data from users collection
-                          var activeUser = await _userService.get(facebookUser.email);
+                          var activeUser =
+                              await _userService.get(facebookUser.email);
                           if (activeUser != null) {
                             AppData.user = activeUser;
                             redirectTo(context, Home());
@@ -188,11 +201,13 @@ class _SignInScreenState extends State<SignInScreen> {
                       onPressed: () async {
                         var googleUser = await signInWithGoogle();
                         if (googleUser != null) {
-                          consoleMessage("GOOGLE USER: ${googleUser.toString()}");
+                          consoleMessage(
+                              "GOOGLE USER: ${googleUser.toString()}");
                           //Insert user if not exist
                           await _userService.insert(googleUser);
                           //Get data from users collection
-                          var activeUser = await _userService.get(googleUser.email);
+                          var activeUser =
+                              await _userService.get(googleUser.email);
                           if (activeUser != null) {
                             AppData.user = activeUser;
                             redirectTo(context, Home());
