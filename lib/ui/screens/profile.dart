@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/business/login_service.dart';
+import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
+import 'package:cocukla/ui/components/dropdown_component.dart';
 import 'package:cocukla/ui/components/text_input_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
+import 'package:cocukla/utilities/address_statics.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:cocukla/utilities/city_info.dart';
+import 'package:cocukla/utilities/console_message.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
 import 'package:cocukla/utilities/processing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,6 +37,11 @@ class _ProfileState extends State<Profile> {
   static String _tempUrl;
   FirebaseUser user;
 
+  static String _citySelected = "";
+  static String _districtSelected = "";
+  static List<String> _cities;
+  static List<String> _districts;
+
   @override
   void initState() {
     _nameController.text = _name = AppData.user.name;
@@ -50,6 +61,10 @@ class _ProfileState extends State<Profile> {
 
     _assets = null;
 
+    _citySelected = AppData.placemarks[0].administrativeArea;
+    _districtSelected = AppData.placemarks[0].subAdministrativeArea;
+    _cities = AddressStatics.getCities();
+    _districts = getDistrictList(_citySelected ?? "Ankara");
     super.initState();
   }
 
@@ -110,7 +125,7 @@ class _ProfileState extends State<Profile> {
                           width: 86,
                         );
                       });
-                      print("Files are selected!");
+                      consoleMessage("Files are selected!");
                     },
                   ),
                 ),
@@ -131,22 +146,57 @@ class _ProfileState extends State<Profile> {
                         enabled: false,
                       ),
 
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0, bottom: 10),
+                        child: Text(
+                          "Not: Eposta adresi güncellenmemektedir.",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+
                       TextInputComponent(
                         _passwordController,
                         labelText: "Şifre",
                         obscureText: true,
                       ),
 
+                      //City
+                      DropdownComponent(
+                        selected: _citySelected,
+                        options: _cities,
+                        hintText: "İl seçiniz",
+                        onChanged: (selected) {
+                          setState(() {
+                            _citySelected = selected;
+                            _districts = getDistrictList(selected);
+                            _districtSelected = _districts[0];
+                          });
+                        },
+                      ),
+
+                      //District
+                      DropdownComponent(
+                        selected: _districtSelected,
+                        options: _districts,
+                        hintText: "İlçe seçiniz",
+                        onChanged: (String selected) {
+                          setState(() {
+                            _districtSelected = selected;
+                          });
+                        },
+                      ),
+
                       ButtonComponent(
                         text: "Güncelle",
                         onPressed: () async {
-                          setState(() {
-                            _name = _nameController.text.trim();
-                            _password = _passwordController.text.trim();
-                          });
+                          _name = _nameController.text.trim();
+                          _password = _passwordController.text.trim();
+                          _citySelected = _citySelected.trim();
+                          _districtSelected = _districtSelected.trim();
+
                           var dismiss = false;
                           processing(context, dismiss: dismiss);
-
+                          //Upload image
                           if (_assets != null && _assets.length != 0) {
                             var res = await uploadSelectedAsset(
                                 _assets[0], "avatars");
@@ -155,6 +205,7 @@ class _ProfileState extends State<Profile> {
                               _tempUrl = res;
                             });
                           }
+
                           var info = UserUpdateInfo();
                           info.displayName = _name;
                           info.photoUrl = _tempUrl;
@@ -164,17 +215,87 @@ class _ProfileState extends State<Profile> {
                             user.reload();
                           }).catchError(
                               (e) => print("PROFILE UPDATE ERROR: " + e));
+
                           user.reload().then((_) => dismiss = true);
                           dismiss = true;
+                          var userModel = AppData.user;
+                          userModel.name = _name;
+                          userModel.city = _citySelected;
+                          userModel.district = _districtSelected;
+                          userModel.image = _tempUrl ?? AppData.user.image;
+                          userModel.updateDate = Timestamp.now();
+
+                          //Users koleksiyonunu güncelle
+                          UserService userService = UserService();
+                          userService.insert(userModel);
+                          AppData.user = userModel;
                         },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          "Not: Eposta adresi güncellenmemektedir.",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                      Divider(
+                        indent: 20,
+                        endIndent: 20,
                       ),
+
+                      ButtonComponent(
+                        text: "Hesabımı sil",
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              child: Center(
+                                child: Card(
+                                    margin: EdgeInsets.all(10),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: ListTile(
+                                            leading: Icon(Icons.delete),
+                                            title: Text(
+                                              'Hesabınızı silmek istediğinize emin misiniz?',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                        ButtonTheme.bar(
+                                          height: 30,
+                                          child: ButtonBar(
+                                            children: <Widget>[
+                                              FlatButton(
+                                                child: const Chip(
+                                                  label: Text(
+                                                    'Evet',
+                                                    style: TextStyle(
+                                                        color: AppColor.white),
+                                                  ),
+                                                  backgroundColor:
+                                                      AppColor.pink,
+                                                ),
+                                                onPressed: () {
+                                                  consoleMessage(
+                                                      "Hesap silindi");
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              FlatButton(
+                                                child: const Chip(
+                                                  label: Text('İptal'),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ));
+                        },
+                        color: Colors.black,
+                      )
                     ],
                   )),
                 )

@@ -41,6 +41,7 @@ dependencies:
   cached_network_image:
   rflutter_alert:
   url_launcher:
+  #shared_preferences:
 
 
 dev_dependencies:

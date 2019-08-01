@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cocukla/business/login_service.dart';
-import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/conditional_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
@@ -11,18 +10,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DrawerComponent extends StatefulWidget {
-  final UserModel user;
-
-  const DrawerComponent({Key key, this.user}) : super(key: key);
-
   @override
   _DrawerComponentState createState() => _DrawerComponentState();
 }
 
 class _DrawerComponentState extends State<DrawerComponent> {
+  UserModel user;
+
   @override
   void initState() {
-    userCanApprove(AppData.user.email);
+    user = AppData.user;
     super.initState();
   }
 
@@ -34,20 +31,18 @@ class _DrawerComponentState extends State<DrawerComponent> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text(
-              (widget.user != null &&
-                      widget.user.name != null &&
-                      widget.user.name != "")
-                  ? widget.user.name
+              (user != null && user.name != null && user.name != "")
+                  ? user.name
                   : "Kullanıcı",
               style: TextStyle(color: AppColor.white),
             ),
-            accountEmail: Text(widget.user != null ? widget.user.email : "",
+            accountEmail: Text(user != null ? user.email : "",
                 style: TextStyle(color: AppColor.white)),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
                   child: CachedNetworkImage(
-                imageUrl: widget.user != null && widget.user.image != null
-                    ? widget.user.image
+                imageUrl: user != null && user.image != null
+                    ? user.image
                     : "assets/images/user.png",
                 width: 86,
                 height: 86,
@@ -75,7 +70,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
             },
           ),
           ConditionalComponent(
-            condition: AppData.canApprove,
+            condition: AppData.user?.isAuthorized,
             children: <Widget>[
               Divider(),
               ListTile(
@@ -91,12 +86,10 @@ class _DrawerComponentState extends State<DrawerComponent> {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text("Çıkış"),
-            onTap: () {
+            onTap: () async {
               if (AppData.user != null) logoutLog(AppData.user.email);
-              FirebaseAuth.instance.signOut().then((_) {
-                AppData.user = null;
-                Navigator.of(context).pushNamed(CustomRoute.signIn);
-              });
+              await signOut();
+              redirectToRoute(context, CustomRoute.home);
             },
           ),
         ],

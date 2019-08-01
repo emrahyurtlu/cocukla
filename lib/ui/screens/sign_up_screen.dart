@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cocukla/datalayer/collections.dart';
+import 'package:cocukla/business/user_service.dart';
+import 'package:cocukla/models/enums/enums.dart';
 import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/dropdown_component.dart';
@@ -30,6 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   static String _districtSelected = "";
   static List<String> _cities;
   static List<String> _districts;
+  UserService _userService;
 
   @override
   void initState() {
@@ -40,6 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _districtSelected = AppData.placemarks[0].subAdministrativeArea;
     _cities = AddressStatics.getCities();
     _districts = getDistrictList(_citySelected ?? "Ankara");
+    _userService = UserService();
     super.initState();
   }
 
@@ -48,6 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -148,16 +154,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 name: name,
                                 email: email,
                                 image: "",
-                                isAuthorized: false,
                                 city: city,
                                 district: district,
                                 insertDate: Timestamp.now(),
-                                updateDate: Timestamp.now());
-                            Firestore.instance
-                                .collection(Collections.Users)
-                                .add(userModel.toJson())
-                                .then((_) {
-                              redirectToRoute(context, CustomRoute.signIn);
+                                updateDate: Timestamp.now(),
+                                loginType: LoginType.Native);
+                            _userService.insert(userModel);
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text(
+                                  "Hesabınız oluşturuldu. Giriş ekranına yönlendiriliyorsunuz."),
+                            ));
+                            Timer(Duration(seconds: 2), () {
+                              Navigator.of(context).pop();
                             });
                           }).catchError((e) {
                             if (e is PlatformException) {

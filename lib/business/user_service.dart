@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/datalayer/collections.dart';
+import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/utilities/app_data.dart';
 
 bool favorite(String email, String documentID) {
@@ -40,4 +41,34 @@ bool userCanApprove(String email) {
     }
   });
   return AppData.canApprove;
+}
+
+class UserService {
+  CollectionReference userRef =
+      Firestore.instance.collection(Collections.Users);
+
+  insert(UserModel model) async {
+    var data = model.toJson();
+    var isExist = await userExist(model.email);
+    if (!isExist) await userRef.add(data);
+  }
+
+  Future<bool> userExist(String email) async {
+    bool result = false;
+    await userRef
+        .where("email", isEqualTo: email)
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      result = snapshot.documents.length > 0;
+    });
+    return result;
+  }
+
+  Future<UserModel> getByEmail(String email) async {
+    UserModel userModel = UserModel.iniDefault();
+    var result = await userRef.where("email", isEqualTo: email).getDocuments();
+    var data = result.documents[0].data;
+    userModel = UserModel.from(data);
+    return userModel;
+  }
 }

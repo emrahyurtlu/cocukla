@@ -1,4 +1,4 @@
-import 'package:cocukla/models/user_model.dart';
+import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/ui/components/bottom_nav_component.dart';
 import 'package:cocukla/ui/components/drawer_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
@@ -7,7 +7,6 @@ import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/console_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cocukla/business/login_service.dart';
 
 import 'home_partials/home_explore.dart';
 import 'home_partials/home_favorites.dart';
@@ -20,7 +19,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentTab = 0;
-  UserModel user;
 
   //static List<DocumentSnapshot> documents;
 
@@ -63,8 +61,8 @@ class _HomeState extends State<Home> {
           iconTheme: IconThemeData(color: AppColor.text_color),
         ),
         drawer: DrawerComponent(
-          user: AppData.user,
-        ),
+            //user: AppData.user,
+            ),
         body: _tabContents[_currentTab],
         bottomNavigationBar: BottomNavigationComponent(
           currentIndex: _currentTab,

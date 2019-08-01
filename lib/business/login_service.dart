@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/datalayer/collections.dart';
+import 'package:cocukla/models/enums/enums.dart';
 import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/console_message.dart';
@@ -33,14 +34,16 @@ Future<UserModel> signInWithGoogle() async {
   var user = UserModel(
       name: result.user.displayName,
       image: result.user.photoUrl,
-      email: result.user.providerData[1].email);
-  AppData.user = user;
+      email: result.user.providerData[1].email,
+      loginType: LoginType.Google,
+      insertDate: Timestamp.now(),
+      updateDate: Timestamp.now());
 
   return user;
 }
 
 Future<UserModel> signInWithFacebook() async {
-  UserModel userModel;
+  UserModel userModel = UserModel.iniDefault();
   final login = FacebookLogin();
   login.loginBehavior = FacebookLoginBehavior.nativeOnly;
 
@@ -51,12 +54,14 @@ Future<UserModel> signInWithFacebook() async {
         accessToken: result.accessToken.token);
 
     await _auth.signInWithCredential(credential).then((AuthResult result) {
+      consoleMessage("FACEBOOK LOGIN IS SUCCESSFULL");
       userModel = UserModel(
           name: result.user.displayName,
           image: result.user.photoUrl + "?height=500",
-          email: result.user.providerData[1].email);
-      AppData.user = userModel;
-      consoleMessage(userModel.toString());
+          email: result.user.providerData[1].email,
+          loginType: LoginType.Facebook,
+          insertDate: Timestamp.now(),
+          updateDate: Timestamp.now());
       return userModel;
     }).catchError((e) {
       if (e is PlatformException) {
@@ -81,8 +86,8 @@ Future<void> logoutLog(String email) async {
       .add({"email": email, "action_date": DateTime.now(), "type": "logout"});
 }
 
-signOut() {
-  FirebaseAuth.instance.signOut().then((_) {
+signOut() async {
+  await FirebaseAuth.instance.signOut().then((_) {
     consoleMessage("USER SIGN OUT SUCCESFULLY");
     AppData.user = null;
     AppData.canApprove = false;

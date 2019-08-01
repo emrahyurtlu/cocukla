@@ -52,6 +52,7 @@ class _PlaceDetailState extends State<PlaceDetail>
   @override
   void dispose() {
     _scrollController.dispose();
+    super.dispose();
   }
 
   @override

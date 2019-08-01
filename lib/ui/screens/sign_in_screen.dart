@@ -1,4 +1,5 @@
 import 'package:cocukla/business/login_service.dart';
+import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/text_input_component.dart';
@@ -25,28 +26,32 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  UserService _userService;
+
   @override
   void initState() {
-    signOut();
-
     getLocation().then((position) => AppData.position = position);
     getAddrInfo().then((result) => AppData.placemarks = result);
 
     emailController = TextEditingController();
     passwordController = TextEditingController();
 
+    _userService = UserService();
+
     super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     emailController.dispose();
     passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    signOut();
+
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
@@ -70,6 +75,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   TextInputComponent(
                     emailController,
                     labelText: "Eposta",
+                    inputType: TextInputType.emailAddress,
                   ),
                   //Password TextField
                   TextInputComponent(
@@ -86,17 +92,18 @@ class _SignInScreenState extends State<SignInScreen> {
                         _password = passwordController.text.trim();
 
                         if (_email.isNotEmpty && _password.isNotEmpty) {
-                          await signOut();
                           FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: _email, password: _password)
                               .then((result) {
-                            AppData.user = UserModel(
-                                name: result.user.displayName,
-                                email: result.user.email,
-                                image: result.user.photoUrl);
+                            //Get data from users collection
+                            _userService
+                                .getByEmail(_email)
+                                .then((UserModel user) {
+                              AppData.user = user;
+                            });
                             loginLog(_email);
-                            Navigator.pushNamed(context, CustomRoute.home);
+                            redirectToRoute(context, CustomRoute.home);
                           }).catchError((e) {
                             if (e is PlatformException) {
                               print(e);
@@ -155,10 +162,16 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColor.facebook,
                       textColor: AppColor.white,
                       onPressed: () async {
-                        await signOut();
                         var user = await signInWithFacebook();
                         if (user != null) {
-                          consoleMessage(user.toString());
+                          consoleMessage("FACEBOOK USER: ${user.toString()}");
+                          await _userService.insert(user);
+                          //Get data from users collection
+                          _userService
+                              .getByEmail(user.email)
+                              .then((UserModel user) {
+                            AppData.user = user;
+                          });
                           redirectTo(context, Home());
                         } else {
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -175,10 +188,34 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColor.google,
                       textColor: AppColor.white,
                       onPressed: () async {
-                        await signOut();
-                        signInWithGoogle().then((user) {
-                          consoleMessage(user.toString());
-                          if (user != null) redirectTo(context, Home());
+                        var user = await signInWithGoogle();
+                        if (user != null) {
+                          consoleMessage("GOOGLE USER: ${user.toString()}");
+                          _userService.insert(user);
+                          //Get data from users collection
+                          _userService
+                              .getByEmail(user.email)
+                              .then((UserModel user) {
+                            AppData.user = user;
+                          });
+                          redirectTo(context, Home());
+                        } else {
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text("Google ile giriş yapamadınız."),
+                          ));
+                        }
+                        /*signInWithGoogle().then((user) {
+                          if (user != null) {
+                            consoleMessage(user.toString());
+                            _userService.insert(user);
+                            //Get data from users collection
+                            _userService
+                                .getByEmail(user.email)
+                                .then((UserModel user) {
+                              AppData.user = user;
+                            });
+                            redirectTo(context, Home());
+                          }
                         }).catchError((e) {
                           if (e is PlatformException) {
                             print(
@@ -187,7 +224,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               content: Text("Google ile giriş yapamadınız."),
                             ));
                           }
-                        });
+                        });*/
                       }),
 
                   //Sign Up
