@@ -10,6 +10,7 @@ import 'package:cocukla/ui/screens/sign_up_screen.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/console_message.dart';
 import 'package:cocukla/utilities/device_location.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +93,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         _password = passwordController.text.trim();
 
                         if (_email.isNotEmpty && _password.isNotEmpty) {
+                          processing(context);
                           var loginResult = await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: _email, password: _password).catchError((e) {
@@ -99,6 +101,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                               //ERROR_USER_NOT_FOUND
                               if (e.code == "ERROR_USER_NOT_FOUND") {
+                                Navigator.pop(context);
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                                   content: Text(
                                       "Kullanıcı bulunamadı. Lütfen üye olunuz."),
@@ -112,6 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                               //ERROR_WRONG_PASSWORD
                               if (e.code == "ERROR_WRONG_PASSWORD") {
+                                Navigator.pop(context);
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                                   content:
                                   Text("Kullanıcı adı yada şifre yanlış!"),
@@ -120,6 +124,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                               //ERROR_INVALID_EMAIL
                               if (e.code == "ERROR_INVALID_EMAIL") {
+                                Navigator.of(context).pop();
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                                   content:
                                   Text("Girdiğiniz eposta doğru değil!"),
@@ -130,7 +135,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             }
                           });
 
-                          var activeUser = UserModel.iniDefault();
+                          UserModel activeUser;
 
                           if (loginResult != null) {
                             activeUser = await _userService.get(_email);
@@ -141,6 +146,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             loginLog(_email);
                             redirectToRoute(context, CustomRoute.home);
                           }
+                          //Navigator.pop(context);
                         } else {
                           setState(() {});
                           _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -171,6 +177,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColor.facebook,
                       textColor: AppColor.white,
                       onPressed: () async {
+                        processing(context);
                         var facebookUser = await signInWithFacebook();
                         if (facebookUser != null) {
                           consoleMessage(
@@ -199,6 +206,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColor.google,
                       textColor: AppColor.white,
                       onPressed: () async {
+                        processing(context);
                         var googleUser = await signInWithGoogle();
                         if (googleUser != null) {
                           consoleMessage(

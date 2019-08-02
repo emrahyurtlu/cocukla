@@ -8,6 +8,7 @@ import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/ui/screens/place_detail.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -137,6 +138,7 @@ class _CommentScreenState extends State<CommentScreen> {
                         onPressed: () {
                           var comment = commentController.text.trim();
                           if (comment.isNotEmpty) {
+                            processing(context);
                             Map<String, dynamic> temp = {
                               "content": comment,
                               "rating": _rating,
@@ -145,8 +147,6 @@ class _CommentScreenState extends State<CommentScreen> {
                               "isApproved": false,
                               "timestamp": Timestamp.now()
                             };
-                            /*var comments = List.of(widget.data["comments"]);
-                            comments.add(temp);*/
 
                             Firestore.instance
                                 .collection(Collections.Places)
@@ -168,6 +168,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                   },
                                 ),
                               ));
+                              Navigator.of(context).pop();
                             });
                             //.updateData({"comments": comments});
                           } else {

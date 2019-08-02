@@ -23,7 +23,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+//import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'my_places.dart';
@@ -65,7 +65,7 @@ class _PlaceFormState extends State<PlaceForm> {
     "Sağlık",
     "Alışveriş"
   ];
-  static List<Asset> _assets;
+//  static List<Asset> _assets;
   static String _imageSelectedInfo = "Herhangi bir resim seçilmedi";
 
   //Properties
@@ -104,7 +104,7 @@ class _PlaceFormState extends State<PlaceForm> {
     _districtSelected =
         model.district ??= AppData.placemarks[0].subAdministrativeArea;
     _cities = AddressStatics.getCities();
-    _assets = List<Asset>();
+//    _assets = List<Asset>();
     /*****************************************************/
     if (model.properties != null) {
       for (var element in model.properties) {
@@ -198,11 +198,11 @@ class _PlaceFormState extends State<PlaceForm> {
                       ButtonComponent(
                         text: "Fotoğraf seçiniz",
                         onPressed: () async {
-                          var temp = await pickImages();
+//                          var temp = await pickImages();
                           setState(() {
-                            _assets = temp;
-                            _imageSelectedInfo =
-                                "${_assets.length} adet fotoğraf seçildi.";
+//                            _assets = temp;
+                            /*_imageSelectedInfo =
+                                "${_assets.length} adet fotoğraf seçildi.";*/
                           });
                           print("Files are selected!");
                         },
@@ -442,11 +442,12 @@ class _PlaceFormState extends State<PlaceForm> {
                           model.updateDate = Timestamp.fromDate(DateTime.now());
 
                           //Validation
+                          // ||
+                          //                                  (_assets != null && _assets.length > 0)
                           if (model.name.isNotEmpty &&
                               model.category.isNotEmpty &&
                               ((model.images != null &&
-                                      model.images.length > 0) ||
-                                  (_assets != null && _assets.length > 0)) &&
+                                      model.images.length > 0)) &&
                               (_cocukMenusu ||
                                   _oyunAblasi ||
                                   _oyunAlani ||
@@ -543,9 +544,9 @@ class _PlaceFormState extends State<PlaceForm> {
                             model.comments = model.comments ??= [];
 
                             List<String> urlList;
-                            if (_assets.length > 0)
+                            /*if (_assets.length > 0)
                               urlList =
-                                  await uploadSelectedAssets(_assets, "places");
+                                  await uploadSelectedAssets(_assets, "places");*/
                             if (urlList != null) {
                               print("PHOTOS: " + urlList.toString());
                               model.images = urlList;

@@ -1,12 +1,13 @@
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+//import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
-
+/*
 File file;
 var assets = List<Asset>();
 var links = List<String>();
@@ -79,3 +80,4 @@ Future<dynamic> uploadSelectedAsset(Asset asset,
 
   return downloadUrl;
 }
+*/

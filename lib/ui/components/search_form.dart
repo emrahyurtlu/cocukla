@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 class SearchFormComponent extends StatefulWidget {
   final TextEditingController controller;
   final VoidCallback onPressed;
+  final String labelText;
 
   const SearchFormComponent(
-      {Key key, @required this.controller, @required this.onPressed})
+      {Key key,
+      @required this.controller,
+      @required this.onPressed,
+      this.labelText = "Mekan arayın"})
       : super(key: key);
 
   @override
@@ -49,7 +53,7 @@ class _SearchFormComponentState extends State<SearchFormComponent> {
                             keyboardType: TextInputType.text,
                             decoration: new InputDecoration(
                               labelStyle: TextStyle(color: AppColor.text_color),
-                              labelText: "Mekan arayın",
+                              labelText: widget.labelText,
                               //hintText: "Ara",
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.only(left: 25, top: 5),

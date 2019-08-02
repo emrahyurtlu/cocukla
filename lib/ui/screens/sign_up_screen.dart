@@ -12,7 +12,7 @@ import 'package:cocukla/utilities/address_statics.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/city_info.dart';
-import 'package:cocukla/utilities/route.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -145,6 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         if (name.isNotEmpty &&
                             email.isNotEmpty &&
                             (password.isNotEmpty && password.length > 5)) {
+                          processing(context);
                           //FirebaseAuth kullanıcısını oluştur
                           FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
@@ -164,6 +165,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               content: Text(
                                   "Hesabınız oluşturuldu. Giriş ekranına yönlendiriliyorsunuz."),
                             ));
+
+                            Navigator.of(context).pop();
+
                             Timer(Duration(seconds: 2), () {
                               Navigator.of(context).pop();
                             });

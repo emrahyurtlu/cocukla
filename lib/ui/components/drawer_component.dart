@@ -68,9 +68,10 @@ class _DrawerComponentState extends State<DrawerComponent> {
                   Navigator.of(context).pushNamed("/my-profile");
                 },
               ),
+              Divider(),
             ],
           ),
-          Divider(),
+
           ListTile(
             leading: Icon(Icons.place),
             title: Text("Mekanlarım"),
@@ -78,10 +79,11 @@ class _DrawerComponentState extends State<DrawerComponent> {
               Navigator.of(context).pushNamed(CustomRoute.myPlaces);
             },
           ),
+          Divider(),
           ConditionalComponent(
             condition: AppData.user?.isAuthorized,
             children: <Widget>[
-              Divider(),
+
               ListTile(
                 leading: Icon(Icons.gavel),
                 title: Text("Onay Bekleyenler"),
@@ -89,9 +91,10 @@ class _DrawerComponentState extends State<DrawerComponent> {
                   Navigator.of(context).pushNamed(CustomRoute.approval);
                 },
               ),
+              Divider(),
             ],
           ),
-          Divider(),
+          //Divider(),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text("Çıkış"),

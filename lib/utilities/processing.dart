@@ -2,7 +2,7 @@ import 'package:cocukla/ui/config/app_color.dart';
 import 'package:flutter/material.dart';
 
 void processing(BuildContext context,
-    {String message = "İşleminiz devam ediyor", bool dismiss = false}) {
+    {String message = "İşleminiz devam ediyor"}) {
   showDialog(
       context: context,
       builder: (context) {
@@ -19,6 +19,5 @@ void processing(BuildContext context,
             ],
           ),
         );
-      },
-      barrierDismissible: dismiss);
+      });
 }

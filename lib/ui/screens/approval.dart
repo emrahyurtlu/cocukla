@@ -43,6 +43,7 @@ class _ApprovalState extends State<Approval> {
               //Search
               SearchFormComponent(
                 controller: _controller,
+                labelText: "Onay bekleyen arayın",
                 onPressed: () {},
               ),
               //End Search
@@ -56,15 +57,6 @@ class _ApprovalState extends State<Approval> {
           onRefresh: () async {
             print("PENDING APPROVAL PAGE IS REFRESHING.");
             getData();
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PlaceForm()),
-            );
           },
         ),
       ),

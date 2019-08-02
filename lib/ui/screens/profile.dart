@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/business/user_service.dart';
@@ -11,13 +13,12 @@ import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/city_info.dart';
 import 'package:cocukla/utilities/console_message.dart';
-import 'package:cocukla/utilities/image_uploader.dart';
+import 'package:cocukla/utilities/image_uploaderv2.dart';
 import 'package:cocukla/utilities/processing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _ProfileState extends State<Profile> {
   final _nameController = TextEditingController();
   final emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  static List<Asset> _assets;
+
   static Image _avatar;
   static String _name;
   static String _password;
@@ -44,14 +45,17 @@ class _ProfileState extends State<Profile> {
 
   UserService userService;
 
+  static File _temp;
+
   @override
   void initState() {
+    consoleMessage("PROFILE SCREEN: ${AppData.user.toString()}");
     _nameController.text = _name = AppData.user.name;
     emailController.text = AppData.user.email;
-
-    if (AppData.user.image != null) {
+    _tempUrl = AppData.user.image;
+    if (_tempUrl.isNotEmpty) {
       _avatar = Image.network(
-        AppData.user.image,
+        _tempUrl,
         width: 86,
       );
     } else {
@@ -61,7 +65,7 @@ class _ProfileState extends State<Profile> {
       );
     }
 
-    _assets = null;
+//    _assets = null;
 
     _citySelected =
         AppData.user.city ?? AppData.placemarks[0].administrativeArea;
@@ -121,20 +125,19 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                     onTap: () async {
-                      var bytes;
-                      var temp = await pickImages(maxImages: 1);
-                      if (temp != null) {
-                        bytes = await temp[0].requestOriginal();
+                      var image = await getImage();
+                      if (image != null) {
+                        setState(() {
+                          _temp = image;
+                          _avatar = Image.file(
+                            _temp,
+                            fit: BoxFit.cover,
+                            width: 86,
+                            height: 86,
+                          );
+                        });
+                        consoleMessage("Files are selected!");
                       }
-
-                      setState(() {
-                        _assets = temp;
-                        _avatar = Image.memory(
-                          bytes.buffer.asUint8List(),
-                          width: 86,
-                        );
-                      });
-                      consoleMessage("Files are selected!");
                     },
                   ),
                 ),
@@ -203,35 +206,34 @@ class _ProfileState extends State<Profile> {
                           _citySelected = _citySelected.trim();
                           _districtSelected = _districtSelected.trim();
 
-                          var dismiss = false;
-                          processing(context, dismiss: dismiss);
+                          processing(context);
                           //Upload image
-                          if (_assets != null && _assets.length != 0) {
-                            var res = await uploadSelectedAsset(
-                                _assets[0], "avatars");
-                            _assets.clear();
+                          if (_temp != null) {
+                            var url = await uploadFile(_temp);
                             setState(() {
-                              _tempUrl = res;
+                              _tempUrl = url;
                             });
                           }
 
-                          if (_password != null && _password.length > 5) {
-                            var fbUser =
-                                await FirebaseAuth.instance.currentUser();
-                            if (fbUser != null)
-                              await fbUser.updatePassword(_password);
-                          } else {
-                            _scaffoldKey.currentState.showSnackBar(SnackBar(
-                              content: Text(
-                                  "Şifreniz en az 6 karakterden oluşmalıdır."),
-                            ));
+                          if (_password.isNotEmpty) {
+                            if (_password.length > 5) {
+                              var fbUser =
+                                  await FirebaseAuth.instance.currentUser();
+                              if (fbUser != null)
+                                await fbUser.updatePassword(_password);
+                            } else {
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                content: Text(
+                                    "Şifreniz en az 6 karakterden oluşmalıdır."),
+                              ));
+                            }
                           }
 
                           var userModel = AppData.user;
                           userModel.name = _name;
                           userModel.city = _citySelected;
                           userModel.district = _districtSelected;
-                          userModel.image = _tempUrl ?? AppData.user.image;
+                          userModel.image = _tempUrl;
                           userModel.updateDate = Timestamp.now();
 
                           //Users koleksiyonunu güncelle

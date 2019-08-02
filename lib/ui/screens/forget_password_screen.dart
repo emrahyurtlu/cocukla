@@ -2,6 +2,7 @@ import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/text_input_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -59,9 +60,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       onPressed: () {
                         var email = _emailController.text.trim();
                         if (email != null) {
+                          processing(context);
                           FirebaseAuth.instance
                               .sendPasswordResetEmail(email: email)
                               .then((result) {
+                            Navigator.of(context).pop();
                             _scaffoldKey.currentState.showSnackBar(SnackBar(
                               content: Text(
                                   "Eposta adresinize şifre hatırlatma postası gönderildi."),
