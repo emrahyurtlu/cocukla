@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ConditionalComponent extends StatefulWidget {
-  final List<Widget> children;
+  final Widget child;
   final bool condition;
+  final Widget otherWise;
 
   const ConditionalComponent(
-      {Key key, @required this.condition, @required this.children})
+      {Key key,
+      @required this.condition,
+      @required this.child,
+      this.otherWise})
       : super(key: key);
 
   @override
@@ -13,19 +17,18 @@ class ConditionalComponent extends StatefulWidget {
 }
 
 class _ConditionalComponentState extends State<ConditionalComponent> {
+  Widget nullWidget = SizedBox(
+    width: 0,
+    height: 0,
+    child: Text(""),
+  );
+
   @override
   Widget build(BuildContext context) {
     if (widget.condition) {
-      return Column(
-        /*crossAxisAlignment: CrossAxisAlignment.start,*/
-        children: widget.children,
-      );
+      return widget.child;
     } else {
-      return SizedBox(
-        width: 0,
-        height: 0,
-        child: Text(""),
-      );
+      return widget.otherWise ?? nullWidget;
     }
   }
 }

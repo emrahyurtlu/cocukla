@@ -60,16 +60,18 @@ class _DrawerComponentState extends State<DrawerComponent> {
           ),
           ConditionalComponent(
             condition: AppData.user.loginType == LoginType.Native,
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.supervised_user_circle),
-                title: Text("Profilim"),
-                onTap: () {
-                  Navigator.of(context).pushNamed("/my-profile");
-                },
-              ),
-              Divider(),
-            ],
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.supervised_user_circle),
+                  title: Text("Profilim"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/my-profile");
+                  },
+                ),
+                Divider(),
+              ],
+            ),
           ),
 
           ListTile(
@@ -82,17 +84,18 @@ class _DrawerComponentState extends State<DrawerComponent> {
           Divider(),
           ConditionalComponent(
             condition: AppData.user?.isAuthorized,
-            children: <Widget>[
-
-              ListTile(
-                leading: Icon(Icons.gavel),
-                title: Text("Onay Bekleyenler"),
-                onTap: () {
-                  Navigator.of(context).pushNamed(CustomRoute.approval);
-                },
-              ),
-              Divider(),
-            ],
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.gavel),
+                  title: Text("Onay Bekleyenler"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(CustomRoute.approval);
+                  },
+                ),
+                Divider(),
+              ],
+            ),
           ),
           //Divider(),
           ListTile(

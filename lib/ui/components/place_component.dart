@@ -4,6 +4,7 @@ import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/ui/components/property_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
+import 'package:cocukla/utilities/console_message.dart';
 import 'package:cocukla/utilities/dimension_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -17,6 +18,7 @@ class PlaceComponent extends StatefulWidget {
   final List<PropertyComponent> properties;
   final GestureTapCallback onTap;
   final bool isFav;
+  final VoidCallback favoriteOnPressedCallback;
 
   PlaceComponent(
       {Key key,
@@ -24,6 +26,7 @@ class PlaceComponent extends StatefulWidget {
       @required this.onTap,
       @required this.title,
       @required this.image,
+      @required this.favoriteOnPressedCallback,
       this.rating = 0,
       this.properties,
       this.isFav,
@@ -35,10 +38,16 @@ class PlaceComponent extends StatefulWidget {
 }
 
 class _PlaceComponentState extends State<PlaceComponent> {
-  bool isFav;
+  bool isFav = false;
+  IconData iconData;
+  UserService _userService;
+
   @override
   void initState() {
-    isFav = widget.isFav;
+    isFav = widget.isFav ? widget.isFav : false;
+    consoleLog("Fav State of Place: $isFav");
+    setIconData(isFav);
+    _userService = UserService();
     super.initState();
   }
 
@@ -105,15 +114,14 @@ class _PlaceComponentState extends State<PlaceComponent> {
                                 color: AppColor.text_color),
                           ),
                         ),
+                        //Favorite Button
                         Positioned(
                           width: 30,
                           height: 30,
                           child: Container(
                             color: Colors.white,
                             child: IconButton(
-                              icon: Icon(isFav
-                                  ? Icons.favorite
-                                  : Icons.favorite_border),
+                              icon: Icon(iconData),
                               iconSize: 24,
                               padding: EdgeInsets.all(0),
                               onPressed: favOnPress,
@@ -169,10 +177,21 @@ class _PlaceComponentState extends State<PlaceComponent> {
     );
   }
 
-  void favOnPress() {
-    print("Fav documentID is " + widget.documentID.toString());
+  void favOnPress() async {
+    var result =
+        await _userService.favorite(AppData.user.email, widget.documentID);
+    var user = await _userService.getUser(AppData.user.email);
+    consoleLog("Fav result: $result");
+    consoleLog("Place isFav: $result");
     setState(() {
-      isFav = favorite(AppData.user.email, widget.documentID);
+      isFav = result;
+      setIconData(result);
+      AppData.user = user;
     });
+    widget.favoriteOnPressedCallback();
+  }
+
+  setIconData(bool isFav) {
+    this.iconData = isFav ? Icons.favorite : Icons.favorite_border;
   }
 }

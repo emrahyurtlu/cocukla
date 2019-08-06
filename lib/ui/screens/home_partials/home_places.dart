@@ -28,6 +28,7 @@ class _HomePlacesState extends State<HomePlaces> {
   void initState() {
     data = getData();
     print("Here is home_places.dart");
+    super.initState();
   }
 
   Future<QuerySnapshot> getData() {
@@ -69,9 +70,8 @@ class _HomePlacesState extends State<HomePlaces> {
                     return ListView.builder(
                         itemCount: documents.length,
                         itemBuilder: (BuildContext context, int index) {
-                          fav = List<String>.from(
-                                  documents[index].data["favorites"])
-                              .contains(AppData.user.email);
+                          fav = AppData.user.favorites
+                              .contains(documents[index].documentID);
                           return PlaceComponent(
                             documentID: documents[index].documentID,
                             title: documents[index]["name"],
@@ -87,6 +87,9 @@ class _HomePlacesState extends State<HomePlaces> {
                                     documentID: documents[index].documentID,
                                     data: documents[index].data.cast(),
                                   ));
+                            },
+                            favoriteOnPressedCallback: () async {
+                              await getData();
                             },
                           );
                         });

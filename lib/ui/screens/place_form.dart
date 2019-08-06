@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/business/login_service.dart';
@@ -18,12 +19,12 @@ import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/city_info.dart';
 import 'package:cocukla/utilities/console_message.dart';
 import 'package:cocukla/utilities/image_uploader.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-//import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'my_places.dart';
@@ -49,7 +50,7 @@ class _PlaceFormState extends State<PlaceForm> {
   static TextEditingController _nameController = TextEditingController();
   static TextEditingController _digestController = TextEditingController();
   static TextEditingController _phoneController = TextEditingController();
-  static TextEditingController _faxController = TextEditingController();
+//  static TextEditingController _faxController = TextEditingController();
   static TextEditingController _addressController = TextEditingController();
   static TextEditingController _emailController = TextEditingController();
   static TextEditingController _coordinateController =
@@ -65,6 +66,7 @@ class _PlaceFormState extends State<PlaceForm> {
     "Sağlık",
     "Alışveriş"
   ];
+
 //  static List<Asset> _assets;
   static String _imageSelectedInfo = "Herhangi bir resim seçilmedi";
 
@@ -82,20 +84,27 @@ class _PlaceFormState extends State<PlaceForm> {
   static bool _yemekliToplanti = false;
   FirebaseUser user;
 
+  /*******************************************/
+  List<File> files = List<File>();
+  List<String> fileUrls = List<String>();
+
+  /*******************************************/
+
   @override
   void initState() {
-    consoleMessage("PLACE ADD/UPDATE SCREEN");
+    consoleLog("PLACE ADD/UPDATE SCREEN");
     if (widget.data != null) appBarTitle = "Güncelle";
     if (widget.data != null) insertScreen = false;
-    model =
-        widget.data != null ? PlaceModel.from(widget.data) : PlaceModel();
+    model = widget.data != null
+        ? PlaceModel.from(data: widget.data, documentID: widget.documentID)
+        : PlaceModel();
 
     model.owner = model.owner ??= AppData.user.email;
     model.rating = model.rating ??= "0";
     _nameController.text = model.name ??= "";
     _digestController.text = model.digest ??= "";
     _phoneController.text = model.phone ??= "";
-    _faxController.text = model.fax ??= "";
+//    _faxController.text = model.fax ??= "";
     _emailController.text = model.email ??= "";
     _addressController.text = model.address ??= "";
     _coordinateController.text = model.location ??= AppData.coordinate;
@@ -198,12 +207,14 @@ class _PlaceFormState extends State<PlaceForm> {
                       ButtonComponent(
                         text: "Fotoğraf seçiniz",
                         onPressed: () async {
-//                          var temp = await pickImages();
-                          setState(() {
-//                            _assets = temp;
-                            /*_imageSelectedInfo =
-                                "${_assets.length} adet fotoğraf seçildi.";*/
-                          });
+                          var temp = await getImage();
+                          consoleLog(temp.path);
+                          if (temp != null)
+                            setState(() {
+                              files.add(temp);
+                              _imageSelectedInfo =
+                                  "${files.length} adet fotoğraf seçildi.";
+                            });
                           print("Files are selected!");
                         },
                       ),
@@ -434,7 +445,7 @@ class _PlaceFormState extends State<PlaceForm> {
                           model.city = _citySelected.trim();
                           model.district = _districtSelected.trim();
                           model.phone = _phoneController.text.trim();
-                          model.fax = _faxController.text.trim();
+                          //model.fax = _faxController.text.trim();
                           model.email = _emailController.text.trim();
                           model.address = _addressController.text.trim();
                           model.insertDate = model.insertDate ??=
@@ -446,8 +457,8 @@ class _PlaceFormState extends State<PlaceForm> {
                           //                                  (_assets != null && _assets.length > 0)
                           if (model.name.isNotEmpty &&
                               model.category.isNotEmpty &&
-                              ((model.images != null &&
-                                      model.images.length > 0)) &&
+                              ((model.images != null ||
+                                  (files != null && files.length > 0))) &&
                               (_cocukMenusu ||
                                   _oyunAblasi ||
                                   _oyunAlani ||
@@ -463,6 +474,8 @@ class _PlaceFormState extends State<PlaceForm> {
                               model.city.isNotEmpty &&
                               model.district.isNotEmpty &&
                               model.location.isNotEmpty) {
+                            processing(context);
+
                             if (_cocukMenusu)
                               properties.add({
                                 "content": "Çocuk menüsü",
@@ -536,20 +549,24 @@ class _PlaceFormState extends State<PlaceForm> {
                               });
 
                             model.properties = properties;
-
-                            //model.rating = 0.0;
-                            model.isActive = false;
-                            model.isApproved = false;
-                            model.isFav = false;
                             model.comments = model.comments ??= [];
 
-                            List<String> urlList;
-                            /*if (_assets.length > 0)
-                              urlList =
-                                  await uploadSelectedAssets(_assets, "places");*/
-                            if (urlList != null) {
-                              print("PHOTOS: " + urlList.toString());
-                              model.images = urlList;
+                            if (files.length > 0) {
+                              for (var image in files) {
+                                if (image != null) {
+                                  var tempUrl =
+                                      await uploadFile(image, "places");
+                                  if (tempUrl.isNotEmpty)
+                                    setState(() {
+                                      fileUrls.add(tempUrl);
+                                    });
+                                }
+                              }
+                            }
+
+                            if (fileUrls.length > 0) {
+                              print("PHOTOS: " + fileUrls.toString());
+                              model.images = fileUrls;
                             }
 
                             /**********************************************/
@@ -567,6 +584,7 @@ class _PlaceFormState extends State<PlaceForm> {
 
                             //Validation
                             print(model.toString());
+                            Navigator.pop(context);
                           } else {
                             Alert(
                                 context: context,
@@ -588,79 +606,92 @@ class _PlaceFormState extends State<PlaceForm> {
                       ),
 
                       ConditionalComponent(
-                        condition: AppData.canApprove && insertScreen,
-                        children: <Widget>[
-                          Divider(
-                            indent: 20,
-                            endIndent: 20,
-                          ),
-                          ButtonComponent(
-                            text: approveBtnText,
-                            onPressed: () {
-                              Firestore.instance
-                                  .collection(Collections.Places)
-                                  .document(widget.documentID)
-                                  .updateData({
-                                "isApproved": widget.data["isApproved"] == true
-                                    ? false
-                                    : true
-                              }).then((_) {
-                                print("${widget.documentID} is approved!");
-                                setState(() {
-                                  approveBtnText =
+                        condition: AppData.user.isAuthorized && insertScreen,
+                        child: Column(
+                          children: <Widget>[
+                            Divider(
+                              indent: 20,
+                              endIndent: 20,
+                            ),
+                            ButtonComponent(
+                              text: approveBtnText,
+                              onPressed: () {
+                                Firestore.instance
+                                    .collection(Collections.Places)
+                                    .document(widget.documentID)
+                                    .updateData({
+                                  "isApproved":
                                       widget.data["isApproved"] == true
-                                          ? "Onayı iptal et"
-                                          : "Onayla";
+                                          ? false
+                                          : true
+                                }).then((_) {
+                                  print("${widget.documentID} is approved!");
+                                  setState(() {
+                                    approveBtnText =
+                                        widget.data["isApproved"] == true
+                                            ? "Onayı iptal et"
+                                            : "Onayla";
+                                  });
                                 });
-                              });
-                            },
-                          )
-                        ],
+                              },
+                            )
+                          ],
+                        ),
                       ),
 
-                      Divider(
-                        indent: 20,
-                        endIndent: 20,
+                      ConditionalComponent(
+                        condition: widget.data != null,
+                        child: Column(
+                          children: <Widget>[
+                            Divider(
+                              indent: 20,
+                              endIndent: 20,
+                            ),
+                            //Delete Record
+                            ButtonComponent(
+                              onPressed: () {
+                                Alert(
+                                    context: context,
+                                    title: "Dikkat",
+                                    desc:
+                                        "Bu kaydı silmek istediğinize emin misiniz?",
+                                    type: AlertType.warning,
+                                    buttons: <DialogButton>[
+                                      DialogButton(
+                                        child: Text(
+                                          "Hayır",
+                                          style:
+                                              TextStyle(color: AppColor.white),
+                                        ),
+                                        onPressed: () => Navigator.pop(context),
+                                        color: AppColor.dark_gray,
+                                      ),
+                                      DialogButton(
+                                        child: Text(
+                                          "Evet",
+                                          style:
+                                              TextStyle(color: AppColor.white),
+                                        ),
+                                        onPressed: () {
+                                          print(
+                                              "DELETED DOCUMENT: ${widget.documentID}");
+                                          Firestore.instance
+                                              .collection(Collections.Places)
+                                              .document(widget.documentID)
+                                              .updateData({"isDeleted": true});
+                                          Navigator.pop(context);
+                                          redirectTo(context, Places());
+                                        },
+                                      ),
+                                    ]).show();
+                              },
+                              text: "Kaydı sil",
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
                       ),
-                      //Delete Record
-                      ButtonComponent(
-                        onPressed: () {
-                          Alert(
-                              context: context,
-                              title: "Dikkat",
-                              desc:
-                                  "Bu kaydı silmek istediğinize emin misiniz?",
-                              type: AlertType.warning,
-                              buttons: <DialogButton>[
-                                DialogButton(
-                                  child: Text(
-                                    "Hayır",
-                                    style: TextStyle(color: AppColor.white),
-                                  ),
-                                  onPressed: () => Navigator.pop(context),
-                                  color: AppColor.dark_gray,
-                                ),
-                                DialogButton(
-                                  child: Text(
-                                    "Evet",
-                                    style: TextStyle(color: AppColor.white),
-                                  ),
-                                  onPressed: () {
-                                    print(
-                                        "DELETED DOCUMENT: ${widget.documentID}");
-                                    Firestore.instance
-                                        .collection(Collections.Places)
-                                        .document(widget.documentID)
-                                        .updateData({"isDeleted": true});
-                                    Navigator.pop(context);
-                                    redirectTo(context, Places());
-                                  },
-                                ),
-                              ]).show();
-                        },
-                        text: "Kaydı sil",
-                        color: Colors.black,
-                      ),
+
                       //Approve Button
                     ],
                   )),

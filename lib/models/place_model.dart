@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PlaceModel {
+  String documentID;
   String name;
   String digest;
   String rating;
@@ -24,7 +25,8 @@ class PlaceModel {
   Timestamp updateDate;
 
   PlaceModel(
-      {this.name,
+      {this.documentID,
+      this.name,
       this.digest,
       this.rating = "0",
       this.properties,
@@ -46,30 +48,32 @@ class PlaceModel {
       this.insertDate,
       this.updateDate});
 
-  PlaceModel.from(Map<String, dynamic> json)
-      : name = json["name"],
-        digest = json["digest"],
-        rating = json["rating"],
-        properties = json["properties"],
-        comments = json["comments"],
-        images = json["images"],
-        isFav = json["isFav"],
-        isApproved = json["isApproved"],
-        isActive = json["isActive"],
-        owner = json["owner"],
-        category = json["category"],
-        phone = json["phone"],
-        email = json["email"],
-        fax = json["fax"],
-        address = json["address"],
-        city = json["city"],
-        district = json["district"],
-        location = json["position"],
-        isDeleted = json["isDeleted"],
-        insertDate = json["insertDate"],
-        updateDate = json["updateDate"];
+  PlaceModel.from({Map<String, dynamic> data, String documentID = ""})
+      : documentID = documentID,
+        name = data["name"],
+        digest = data["digest"],
+        rating = data["rating"],
+        properties = data["properties"],
+        comments = data["comments"],
+        images = data["images"],
+        isFav = data["isFav"],
+        isApproved = data["isApproved"],
+        isActive = data["isActive"],
+        owner = data["owner"],
+        category = data["category"],
+        phone = data["phone"],
+        email = data["email"],
+        fax = data["fax"],
+        address = data["address"],
+        city = data["city"],
+        district = data["district"],
+        location = data["position"],
+        isDeleted = data["isDeleted"],
+        insertDate = data["insertDate"],
+        updateDate = data["updateDate"];
 
   Map<String, dynamic> toJson() => {
+        'documentID': documentID,
         'name': name,
         'digest': digest,
         'properties': properties,
@@ -95,6 +99,6 @@ class PlaceModel {
 
   @override
   String toString() {
-    return 'PlaceModel{name: $name, digest: $digest, rating: $rating, properties: $properties, comments: $comments, images: $images, isFav: $isFav, isApproved: $isApproved, isActive: $isActive, isDeleted: $isDeleted, owner: $owner, category: $category, phone: $phone, email: $email, fax: $fax, address: $address, city: $city, district: $district, location: $location, insertDate: $insertDate, updateDate: $updateDate}';
+    return 'PlaceModel{documentID: $documentID, name: $name, digest: $digest, rating: $rating, properties: $properties, comments: $comments, images: $images, isFav: $isFav, isApproved: $isApproved, isActive: $isActive, isDeleted: $isDeleted, owner: $owner, category: $category, phone: $phone, email: $email, fax: $fax, address: $address, city: $city, district: $district, location: $location, insertDate: $insertDate, updateDate: $updateDate}';
   }
 }

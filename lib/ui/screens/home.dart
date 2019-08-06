@@ -5,6 +5,7 @@ import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/console_message.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   int _currentTab = 0;
 
   //static List<DocumentSnapshot> documents;
@@ -26,8 +28,11 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    consoleMessage("HOME SCREEN");
-    consoleMessage("ACTIVE USER IS: ${AppData.user.toString()}");
+    consoleLog("HOME SCREEN");
+    consoleLog("ACTIVE USER IS: ${AppData.user.toString()}");
+    _firebaseMessaging.getToken().then((token) {
+      consoleLog("Firebase Messaging Token: $token");
+    });
   }
 
   List<Widget> _tabContents = [

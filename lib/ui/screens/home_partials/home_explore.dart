@@ -64,6 +64,7 @@ class _HomeExploreState extends State<HomeExplore> {
               print("Clicked on emekte bir yer!");
             }),
         flat: true));
+    super.initState();
   }
 
   @override

@@ -84,7 +84,9 @@ class _ApprovalState extends State<Approval> {
                       documentID: documents[index].documentID,
                       data: documents[index].data,
                     ));
-              },
+              }, favoriteOnPressedCallback: () async {
+                getData();
+            },
             );
           });
     } else {

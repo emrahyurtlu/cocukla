@@ -54,7 +54,7 @@ Future<UserModel> signInWithFacebook() async {
         accessToken: result.accessToken.token);
 
     await _auth.signInWithCredential(credential).then((AuthResult result) {
-      consoleMessage("FACEBOOK LOGIN IS SUCCESSFULL");
+      consoleLog("FACEBOOK LOGIN IS SUCCESSFULL");
       userModel = UserModel(
           name: result.user.displayName,
           image: result.user.photoUrl + "?height=500",
@@ -65,7 +65,7 @@ Future<UserModel> signInWithFacebook() async {
       return userModel;
     }).catchError((e) {
       if (e is PlatformException) {
-        consoleMessage(
+        consoleLog(
             "Facebook Error Code: ${e.code}, Facebook Error Message: ${e.message}");
       }
       return userModel;
@@ -88,7 +88,7 @@ Future<void> logoutLog(String email) async {
 
 signOut() async {
   await FirebaseAuth.instance.signOut().then((_) {
-    consoleMessage("USER SIGN OUT SUCCESFULLY");
+    consoleLog("USER SIGN OUT SUCCESFULLY");
     AppData.user = null;
     AppData.canApprove = false;
     AppData.coordinate = null;

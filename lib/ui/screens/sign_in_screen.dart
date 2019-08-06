@@ -138,7 +138,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           UserModel activeUser;
 
                           if (loginResult != null) {
-                            activeUser = await _userService.get(_email);
+                            activeUser = await _userService.getUser(_email);
                           }
 
                           if (activeUser != null) {
@@ -180,13 +180,13 @@ class _SignInScreenState extends State<SignInScreen> {
                         processing(context);
                         var facebookUser = await signInWithFacebook();
                         if (facebookUser != null) {
-                          consoleMessage(
+                          consoleLog(
                               "FACEBOOK USER: ${facebookUser.toString()}");
                           //Insert user if not exist
                           await _userService.insert(facebookUser);
                           //Get data from users collection
                           var activeUser =
-                              await _userService.get(facebookUser.email);
+                              await _userService.getUser(facebookUser.email);
                           if (activeUser != null) {
                             AppData.user = activeUser;
                             redirectTo(context, Home());
@@ -209,13 +209,13 @@ class _SignInScreenState extends State<SignInScreen> {
                         processing(context);
                         var googleUser = await signInWithGoogle();
                         if (googleUser != null) {
-                          consoleMessage(
+                          consoleLog(
                               "GOOGLE USER: ${googleUser.toString()}");
                           //Insert user if not exist
                           await _userService.insert(googleUser);
                           //Get data from users collection
                           var activeUser =
-                              await _userService.get(googleUser.email);
+                              await _userService.getUser(googleUser.email);
                           if (activeUser != null) {
                             AppData.user = activeUser;
                             redirectTo(context, Home());

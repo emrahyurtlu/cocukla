@@ -11,6 +11,7 @@ class UserModel {
   bool isAuthorized;
   Timestamp insertDate;
   Timestamp updateDate;
+  List<String> favorites;
 
   UserModel(
       {this.email,
@@ -21,7 +22,8 @@ class UserModel {
       this.isAuthorized = false,
       this.insertDate,
       this.updateDate,
-      this.loginType});
+      this.loginType,
+      this.favorites});
 
   UserModel.from(Map<String, dynamic> map)
       : email = map["email"],
@@ -32,7 +34,8 @@ class UserModel {
         isAuthorized = map["isAuthorized"],
         insertDate = map["insertDate"],
         updateDate = map["updateDate"],
-        loginType = LoginType.values[map["loginType"]];
+        loginType = LoginType.values[map["loginType"]],
+        favorites = map["favorites"] != null ? List<String>.from(map["favorites"]) : [];
 
   UserModel.iniDefault() {
     this.email = "hesap@domain.com";
@@ -44,6 +47,7 @@ class UserModel {
     this.insertDate = Timestamp.now();
     this.updateDate = Timestamp.now();
     this.loginType = LoginType.None;
+    this.favorites = [];
   }
 
   Map<String, dynamic> toJson() => {
@@ -55,11 +59,14 @@ class UserModel {
         "isAuthorized": isAuthorized,
         "insertDate": insertDate,
         "updateDate": updateDate,
-        "loginType": loginType.index
+        "loginType": loginType.index,
+        "favorites": favorites,
       };
 
   @override
   String toString() {
-    return 'UserModel{name: $name, email: $email, image: $image, city: $city, district: $district, loginType: $loginType, isAuthorized: $isAuthorized, insertDate: $insertDate, updateDate: $updateDate}';
+    return 'UserModel{name: $name, email: $email, image: $image, city: $city, district: $district, loginType: $loginType, isAuthorized: $isAuthorized, insertDate: $insertDate, updateDate: $updateDate, favorites: $favorites}';
   }
+
+
 }

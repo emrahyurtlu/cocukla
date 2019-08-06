@@ -13,7 +13,7 @@ import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/city_info.dart';
 import 'package:cocukla/utilities/console_message.dart';
-import 'package:cocukla/utilities/image_uploaderv2.dart';
+import 'package:cocukla/utilities/image_uploader.dart';
 import 'package:cocukla/utilities/processing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,7 +49,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    consoleMessage("PROFILE SCREEN: ${AppData.user.toString()}");
+    consoleLog("PROFILE SCREEN: ${AppData.user.toString()}");
     _nameController.text = _name = AppData.user.name;
     emailController.text = AppData.user.email;
     _tempUrl = AppData.user.image;
@@ -136,7 +136,7 @@ class _ProfileState extends State<Profile> {
                             height: 86,
                           );
                         });
-                        consoleMessage("Files are selected!");
+                        consoleLog("Files are selected!");
                       }
                     },
                   ),
@@ -209,7 +209,7 @@ class _ProfileState extends State<Profile> {
                           processing(context);
                           //Upload image
                           if (_temp != null) {
-                            var url = await uploadFile(_temp);
+                            var url = await uploadFile(_temp, "avatars");
                             setState(() {
                               _tempUrl = url;
                             });

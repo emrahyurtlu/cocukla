@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/business/login_service.dart';
-import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/ui/components/place_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
@@ -24,7 +23,6 @@ class _PlacesState extends State<Places> {
   @override
   void initState() {
     getData();
-    userCanApprove(AppData.user.email);
     super.initState();
   }
 
@@ -95,6 +93,9 @@ class _PlacesState extends State<Places> {
                       documentID: documents[index].documentID,
                       data: documents[index].data,
                     ));
+              },
+              favoriteOnPressedCallback: () async {
+                getData();
               },
             );
           });

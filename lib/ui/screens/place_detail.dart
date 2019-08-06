@@ -39,14 +39,19 @@ class _PlaceDetailState extends State<PlaceDetail>
   List<String> images;
   List<PropertyComponent> properties;
   List<CommentComponent> comments;
+  UserService _userService;
+  IconData iconData;
 
   @override
   void initState() {
-    isFav = widget.data["isFav"];
-    consoleMessage("Here is place detail screen with data: ${widget.data}");
+    isFav = AppData.user.favorites.contains(widget.documentID);
+    consoleLog("Here is place detail screen with data: ${widget.data}");
     images = List.castFrom(widget.data["images"]);
     properties = convertProperties(widget.data["properties"]);
     comments = convertComments(widget.data["comments"]);
+    consoleLog("Fav State of Place: $isFav");
+    _userService = UserService();
+    setIconData(isFav);
   }
 
   @override
@@ -279,11 +284,20 @@ class _PlaceDetailState extends State<PlaceDetail>
     );
   }
 
-  void favOnPress() {
-    print("Place is setting as fav.");
+  void favOnPress() async {
+    var result = await _userService.favorite(AppData.user.email, widget.documentID);
+    var user = await _userService.getUser(AppData.user.email);
+    consoleLog("Fav result: $result");
+    consoleLog("Place isFav: $result");
     setState(() {
-      widget.data["isFav"] = favorite(AppData.user.email, widget.documentID);
+      isFav = result;
+      setIconData(result);
+      AppData.user = user;
     });
+  }
+
+  setIconData(bool isFav) {
+    this.iconData = isFav ? Icons.favorite : Icons.favorite_border;
   }
 
   List<PropertyComponent> convertProperties(List properties) {
