@@ -1,4 +1,5 @@
 import 'package:cocukla/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 
 class AppData {
@@ -10,8 +11,7 @@ class AppData {
 
   static UserModel user;
 
-  //static FirebaseUser user;
-  static String documentID;
+  static FirebaseUser firebaseUser;
+
   static String homeSelectedCategory = "Mekanlar";
-  static bool canApprove = false;
 }

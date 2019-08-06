@@ -31,6 +31,7 @@ Future<UserModel> signInWithGoogle() async {
   );
   var result = await _auth.signInWithCredential(credential);
   assert(result != null);
+  AppData.firebaseUser = result.user;
   var user = UserModel(
       name: result.user.displayName,
       image: result.user.photoUrl,
@@ -55,6 +56,7 @@ Future<UserModel> signInWithFacebook() async {
 
     await _auth.signInWithCredential(credential).then((AuthResult result) {
       consoleLog("FACEBOOK LOGIN IS SUCCESSFULL");
+      AppData.firebaseUser = result.user;
       userModel = UserModel(
           name: result.user.displayName,
           image: result.user.photoUrl + "?height=500",
@@ -90,9 +92,7 @@ signOut() async {
   await FirebaseAuth.instance.signOut().then((_) {
     consoleLog("USER SIGN OUT SUCCESFULLY");
     AppData.user = null;
-    AppData.canApprove = false;
     AppData.coordinate = null;
-    AppData.documentID = "";
     AppData.homeSelectedCategory = "Mekanlar";
   });
 }

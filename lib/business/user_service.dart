@@ -94,4 +94,26 @@ class UserService {
     }
     return places;
   }
+
+  Future<void> addMessagingToken(String token, String email) async {
+    var user = _userRef.document(email);
+
+    await user.get().then((DocumentSnapshot snapshot) {
+      var tokens = snapshot.data["messagingTokens"] != null
+          ? List<String>.from(snapshot.data["messagingTokens"])
+          : List<String>();
+      if (!tokens.contains(token))
+        user.updateData({
+          "messagingTokens": FieldValue.arrayUnion([token])
+        });
+    });
+  }
+
+  Future<void> updateName(String name, String email) async {
+    var user = _userRef.document(email);
+
+    await user.get().then((DocumentSnapshot snapshot) {
+      user.updateData({"name": name});
+    });
+  }
 }

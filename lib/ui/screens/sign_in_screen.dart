@@ -139,6 +139,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                           if (loginResult != null) {
                             activeUser = await _userService.getUser(_email);
+                            AppData.firebaseUser = loginResult.user;
                           }
 
                           if (activeUser != null) {
