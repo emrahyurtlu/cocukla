@@ -7,6 +7,7 @@ import 'package:cocukla/ui/components/search_form.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/ui/screens/place_form.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +17,14 @@ class Approval extends StatefulWidget {
 }
 
 class _ApprovalState extends State<Approval> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _controller;
   List<DocumentSnapshot> documents;
 
   @override
   void initState() {
     getData();
+    _controller = TextEditingController();
     super.initState();
   }
 
@@ -29,6 +32,7 @@ class _ApprovalState extends State<Approval> {
   Widget build(BuildContext context) {
     redirectIfNotSignedIn(context);
     return SafeArea(
+      key: _scaffoldKey,
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
@@ -43,8 +47,18 @@ class _ApprovalState extends State<Approval> {
               //Search
               SearchFormComponent(
                 controller: _controller,
-                labelText: "Onay bekleyen arayın",
-                onPressed: () {},
+                labelText: "Onay bekleyenlerde arayın",
+                onPressed: () async {
+                  var keyword = _controller.text?.trim();
+                  processing(context);
+                  getData(keyword);
+                  Navigator.pop(context);
+                },
+                onChanged: (String text) {
+                  if (text.length == 0) {
+                    getData();
+                  }
+                },
               ),
               //End Search
 
@@ -84,9 +98,10 @@ class _ApprovalState extends State<Approval> {
                       documentID: documents[index].documentID,
                       data: documents[index].data,
                     ));
-              }, favoriteOnPressedCallback: () async {
+              },
+              favoriteOnPressedCallback: () async {
                 getData();
-            },
+              },
             );
           });
     } else {
@@ -96,21 +111,26 @@ class _ApprovalState extends State<Approval> {
     }
   }
 
-  void getData() {
+  Future<QuerySnapshot> getData([String keyword = ""]) async {
     print("DATA IS GETTING...");
-    Firestore.instance
+    var result = await Firestore.instance
         .collection(Collections.Places)
         .where("isApproved", isEqualTo: false)
-        .getDocuments()
-        .then((result) {
+        .getDocuments();
+    if (keyword.isNotEmpty) {
       if (result.documents.length > 0) {
-        setState(() {
-          documents = result.documents;
-        });
-        print("DOCUMENTS LENGTH: " + documents.length.toString());
-        print("DOCUMENT SAMPLE: " + documents[0].data.toString());
+        result.documents.removeWhere((doc) => !doc.data["name"]
+            .toString()
+            .toLowerCase()
+            .contains(keyword.toLowerCase()));
       }
+    }
+
+    setState(() {
+      documents = result.documents;
     });
+
+    return result;
   }
 
   List<PropertyComponent> convertProperties(List properties) {

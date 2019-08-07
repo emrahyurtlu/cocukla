@@ -8,18 +8,18 @@ class SearchFormComponent extends StatefulWidget {
   final String labelText;
 
   SearchFormComponent(
-      {Key key,
-      @required this.controller,
+      {@required this.controller,
       @required this.onPressed,
       this.onChanged,
-      this.labelText})
-      : super(key: key);
+      this.labelText});
 
   @override
   _SearchFormComponentState createState() => _SearchFormComponentState();
 }
 
 class _SearchFormComponentState extends State<SearchFormComponent> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +39,7 @@ class _SearchFormComponentState extends State<SearchFormComponent> {
       child: Row(
         children: <Widget>[
           Form(
-            key: GlobalKey(),
+            key: _formKey,
             child: Center(
                 child: Column(
               children: <Widget>[

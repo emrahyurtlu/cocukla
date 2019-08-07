@@ -20,6 +20,7 @@ class Places extends StatefulWidget {
 }
 
 class _PlacesState extends State<Places> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _controller;
   List<DocumentSnapshot> documents;
 
@@ -34,8 +35,9 @@ class _PlacesState extends State<Places> {
   Widget build(BuildContext context) {
     redirectIfNotSignedIn(context);
     return SafeArea(
+      key: _scaffoldKey,
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text("Mekanlarım", style: AppStyle.AppBarTextStyle),
           backgroundColor: AppColor.white,
@@ -128,7 +130,7 @@ class _PlacesState extends State<Places> {
     } else {
       return Column(
         children: <Widget>[
-          CircularProgressIndicator(),
+          //CircularProgressIndicator(),
           Center(
             child: Text("İçerik bulunamadı."),
           ),

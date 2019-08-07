@@ -45,7 +45,7 @@ class _PlaceComponentState extends State<PlaceComponent> {
   @override
   void initState() {
     isFav = widget.isFav ? widget.isFav : false;
-    consoleLog("Fav State of Place: $isFav");
+    //consoleLog("Fav State of Place: $isFav");
     setIconData(isFav);
     _userService = UserService();
     super.initState();

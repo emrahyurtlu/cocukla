@@ -4,6 +4,7 @@ import 'package:cocukla/models/enums/enums.dart';
 import 'package:cocukla/models/user_model.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/console_message.dart';
+import 'package:cocukla/utilities/device_location.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,14 +32,16 @@ Future<UserModel> signInWithGoogle() async {
   );
   var result = await _auth.signInWithCredential(credential);
   assert(result != null);
+  var city = await getCityName();
+  var district = await getDistrictName();
   AppData.firebaseUser = result.user;
   var user = UserModel(
       name: result.user.displayName,
       image: result.user.photoUrl,
       email: result.user.providerData[1].email,
       loginType: LoginType.Google,
-      city: AppData.placemarks?.first.administrativeArea ?? "",
-      district: AppData.placemarks?.first.subAdministrativeArea ?? "",
+      city: city ?? "",
+      district: district ?? "",
       insertDate: Timestamp.now(),
       updateDate: Timestamp.now());
 
@@ -56,16 +59,20 @@ Future<UserModel> signInWithFacebook() async {
     final AuthCredential credential = FacebookAuthProvider.getCredential(
         accessToken: result.accessToken.token);
 
+    var city = await getCityName();
+    var district = await getDistrictName();
+
     await _auth.signInWithCredential(credential).then((AuthResult result) {
       consoleLog("FACEBOOK LOGIN IS SUCCESSFULL");
       AppData.firebaseUser = result.user;
+
       userModel = UserModel(
           name: result.user.displayName,
           image: result.user.photoUrl + "?height=500",
           email: result.user.providerData[1].email,
           loginType: LoginType.Facebook,
-          city: AppData.placemarks.first.administrativeArea ?? "",
-          district: AppData.placemarks.first.subAdministrativeArea ?? "",
+          city: city ?? "",
+          district: district ?? "",
           insertDate: Timestamp.now(),
           updateDate: Timestamp.now());
       return userModel;
