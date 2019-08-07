@@ -23,21 +23,7 @@ class _HomeExploreState extends State<HomeExplore> {
 
   @override
   void initState() {
-    allMarkers.add(Marker(
-      markerId: MarkerId("Buradasınız"),
-      draggable: false,
-      consumeTapEvents: false,
-      onTap: () => print("Tapped to marker"),
-      position: LatLng(AppData.position.latitude, AppData.position.longitude),
-      visible: true,
-      icon: _markerIcon,
-      infoWindow: InfoWindow(
-          title: "Buradasınız",
-          onTap: () {
-            print("Clicked on buradasınız!");
-          }),
-    ));
-
+    getData();
     super.initState();
   }
 
@@ -65,6 +51,24 @@ class _HomeExploreState extends State<HomeExplore> {
 
   getData() async {
     var markers = List<Marker>();
+
+    var currenLocation = (Marker(
+      markerId: MarkerId("Buradasınız"),
+      draggable: false,
+      consumeTapEvents: false,
+      onTap: () => print("Tapped to marker"),
+      position: LatLng(AppData.position.latitude, AppData.position.longitude),
+      visible: true,
+      icon: _markerIcon,
+      infoWindow: InfoWindow(
+          title: "Buradasınız",
+          onTap: () {
+            print("Clicked on buradasınız!");
+          }),
+    ));
+
+    markers.add(currenLocation);
+
     var result = await Firestore.instance
         .collection(Collections.Places)
         .where("isActive", isEqualTo: true)
