@@ -7,6 +7,7 @@ import 'package:cocukla/ui/components/search_form.dart';
 import 'package:cocukla/ui/config/font_family.dart';
 import 'package:cocukla/ui/screens/home_partials/home_categories.dart';
 import 'package:cocukla/utilities/app_data.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +30,10 @@ class _HomePlacesState extends State<HomePlaces> {
     super.initState();
   }
 
-  Future<QuerySnapshot> getData([String keyword = ""]) {
+  Future<QuerySnapshot> getData([String keyword = ""]) async {
     print("DATA IS GETTING: home_places.dart");
-    return Firestore.instance
+    Future<QuerySnapshot> result;
+    result = Firestore.instance
         .collection(Collections.Places)
         .where("isActive", isEqualTo: true)
         .where("isApproved", isEqualTo: true)
@@ -39,6 +41,19 @@ class _HomePlacesState extends State<HomePlaces> {
         .where("category", isEqualTo: AppData.homeSelectedCategory)
         .orderBy("updateDate", descending: true)
         .getDocuments();
+
+    if (keyword.isNotEmpty) {
+      result.then((QuerySnapshot snapshot) {
+        if (snapshot.documents.length > 0) {
+          snapshot.documents.removeWhere((doc) => !doc.data["name"]
+              .toString()
+              .toLowerCase()
+              .contains(keyword.toLowerCase()));
+        }
+      });
+    }
+
+    return result;
   }
 
   @override
@@ -57,16 +72,35 @@ class _HomePlacesState extends State<HomePlaces> {
               controller: _controller,
               labelText: "Ara: ${AppData.homeSelectedCategory}",
               onPressed: () async {
-                var keyword = _controller.text;
-                if (keyword.isNotEmpty) {
-                  setState(() {
-                    data = getData(keyword);
-                  });
+                var keyword = _controller.text.trim();
+                setState(() {
+                  processing(context);
+                  data = getData(keyword);
+                  Navigator.pop(context);
+                });
+              },
+              onChanged: (String text) {
+                if (text.length == 0) {
+                  data = getData();
                 }
               },
             ),
             //End Search
-
+            Row(
+              children: <Widget>[
+                HeaderComponent(
+                  "Kategoriler",
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  showDivider: false,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontFamily.MontserratLight),
+                  padding: EdgeInsets.only(top: 10, bottom: 0, left: 10),
+                ),
+              ],
+            ),
             //Categories
             HomeCategories(
               onCategoryTap: () async {
@@ -88,6 +122,7 @@ class _HomePlacesState extends State<HomePlaces> {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       fontFamily: FontFamily.MontserratLight),
+                  padding: EdgeInsets.only(top: 10, bottom: 0, left: 10),
                 ),
               ],
             ),

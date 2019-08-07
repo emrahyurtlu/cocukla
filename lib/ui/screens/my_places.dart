@@ -10,6 +10,7 @@ import 'package:cocukla/ui/screens/place_form.dart';
 import 'package:cocukla/ui/screens/waiting_to_approve.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
+import 'package:cocukla/utilities/processing.dart';
 import 'package:cocukla/utilities/route.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,7 @@ class _PlacesState extends State<Places> {
   @override
   void initState() {
     getData();
+    _controller = TextEditingController();
     super.initState();
   }
 
@@ -46,7 +48,18 @@ class _PlacesState extends State<Places> {
               //Search
               SearchFormComponent(
                 controller: _controller,
-                onPressed: () {},
+                labelText: "Mekanlarımda arayın",
+                onPressed: () async {
+                  var keyword = _controller.text?.trim();
+                  processing(context);
+                  getData(keyword);
+                  Navigator.pop(context);
+                },
+                onChanged: (String text) {
+                  if (text.length == 0) {
+                    getData();
+                  }
+                },
               ),
               //End Search
 
@@ -80,7 +93,9 @@ class _PlacesState extends State<Places> {
       return ListView.builder(
           itemCount: documents.length,
           itemBuilder: (BuildContext context, int index) {
-            var obj = PlaceModel.from(data: documents[index].data, documentID: documents[index].documentID);
+            var obj = PlaceModel.from(
+                data: documents[index].data,
+                documentID: documents[index].documentID);
             return PlaceComponent(
               documentID: documents[index].documentID,
               title: documents[index]["name"],
@@ -89,7 +104,7 @@ class _PlacesState extends State<Places> {
               properties: convertProperties(documents[index]["properties"]),
               isFav: documents[index].data["isFav"],
               onTap: () {
-                if(obj.isApproved){
+                if (obj.isApproved) {
                   redirectTo(
                       context,
                       PlaceForm(
@@ -101,7 +116,7 @@ class _PlacesState extends State<Places> {
                       context,
                       WaitingToApprove(
                         documentID: obj.documentID,
-                        data:obj.toJson(),
+                        data: obj.toJson(),
                       ));
                 }
               },
@@ -111,28 +126,37 @@ class _PlacesState extends State<Places> {
             );
           });
     } else {
-      return Center(
-        child: Text("İçerik bulunamadı."),
+      return Column(
+        children: <Widget>[
+          CircularProgressIndicator(),
+          Center(
+            child: Text("İçerik bulunamadı."),
+          ),
+        ],
       );
     }
   }
 
-  void getData() {
+  Future<QuerySnapshot> getData([String keyword = ""]) async {
     print("DATA IS GETTING...");
-    Firestore.instance
+    var result = await Firestore.instance
         .collection(Collections.Places)
         .where("owner", isEqualTo: AppData.user.email)
         .where("isDeleted", isEqualTo: false)
-        .getDocuments()
-        .then((result) {
+        .getDocuments();
+    if (keyword.isNotEmpty) {
       if (result.documents.length > 0) {
-        setState(() {
-          documents = result.documents;
-        });
-        print("DOCUMENTS LENGTH: " + documents.length.toString());
-        print("DOCUMENT SAMPLE: " + documents[0].data.toString());
+        result.documents.removeWhere((doc) => !doc.data["name"]
+            .toString()
+            .toLowerCase()
+            .contains(keyword.toLowerCase()));
       }
+    }
+
+    setState(() {
+      documents = result.documents;
     });
+    return result;
   }
 
   List<PropertyComponent> convertProperties(List properties) {

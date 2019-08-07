@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class SearchFormComponent extends StatefulWidget {
   final TextEditingController controller;
   final VoidCallback onPressed;
+  final ValueChanged<String> onChanged;
   final String labelText;
 
   SearchFormComponent(
       {Key key,
       @required this.controller,
       @required this.onPressed,
+      this.onChanged,
       this.labelText})
       : super(key: key);
 
@@ -56,6 +58,7 @@ class _SearchFormComponentState extends State<SearchFormComponent> {
                           child: TextField(
                             controller: widget.controller,
                             keyboardType: TextInputType.text,
+                            onChanged: widget.onChanged,
                             decoration: new InputDecoration(
                               labelStyle: TextStyle(color: AppColor.text_color),
                               labelText: widget.labelText,

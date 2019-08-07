@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -85,5 +87,15 @@ class _HomeExploreState extends State<HomeExplore> {
         ),
       ),
     );
+  }
+
+  getData() async {
+    var result = Firestore.instance
+        .collection(Collections.Places)
+        .where("isActive", isEqualTo: true)
+        .where("isApproved", isEqualTo: true)
+        .where("city", isEqualTo: AppData.placemarks.first.administrativeArea)
+        .getDocuments();
+    return result;
   }
 }

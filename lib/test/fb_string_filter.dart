@@ -52,7 +52,7 @@ class _FirebaseStringFilterState extends State<FirebaseStringFilter> {
       body: Container(
           child: Center(
         child: ListView.builder(itemBuilder: (BuildContext context, int index) {
-          var item = _list[index];
+//          var item = _list[index];
           return ListTile(
             title: Text("deneme"),
           );
