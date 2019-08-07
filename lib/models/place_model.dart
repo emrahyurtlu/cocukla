@@ -20,7 +20,7 @@ class PlaceModel {
   String address;
   String city;
   String district;
-  String location;
+  String position;
   Timestamp insertDate;
   Timestamp updateDate;
 
@@ -44,7 +44,7 @@ class PlaceModel {
       this.address,
       this.city,
       this.district,
-      this.location,
+      this.position,
       this.insertDate,
       this.updateDate});
 
@@ -67,7 +67,7 @@ class PlaceModel {
         address = data["address"],
         city = data["city"],
         district = data["district"],
-        location = data["position"],
+        position = data["position"],
         isDeleted = data["isDeleted"],
         insertDate = data["insertDate"],
         updateDate = data["updateDate"];
@@ -90,7 +90,7 @@ class PlaceModel {
         'address': address,
         'city': city,
         'district': district,
-        'position': location,
+        'position': position,
         'insertDate': insertDate,
         'updateDate': updateDate,
         'email': email,
@@ -99,6 +99,6 @@ class PlaceModel {
 
   @override
   String toString() {
-    return 'PlaceModel{documentID: $documentID, name: $name, digest: $digest, rating: $rating, properties: $properties, comments: $comments, images: $images, isFav: $isFav, isApproved: $isApproved, isActive: $isActive, isDeleted: $isDeleted, owner: $owner, category: $category, phone: $phone, email: $email, fax: $fax, address: $address, city: $city, district: $district, location: $location, insertDate: $insertDate, updateDate: $updateDate}';
+    return 'PlaceModel{documentID: $documentID, name: $name, digest: $digest, rating: $rating, properties: $properties, comments: $comments, images: $images, isFav: $isFav, isApproved: $isApproved, isActive: $isActive, isDeleted: $isDeleted, owner: $owner, category: $category, phone: $phone, email: $email, fax: $fax, address: $address, city: $city, district: $district, location: $position, insertDate: $insertDate, updateDate: $updateDate}';
   }
 }

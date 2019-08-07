@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/business/user_service.dart';
 import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/ui/components/conditional_component.dart';

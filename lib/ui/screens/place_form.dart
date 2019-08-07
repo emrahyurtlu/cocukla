@@ -107,7 +107,7 @@ class _PlaceFormState extends State<PlaceForm> {
 //    _faxController.text = model.fax ??= "";
     _emailController.text = model.email ??= "";
     _addressController.text = model.address ??= "";
-    _coordinateController.text = model.location ??= AppData.coordinate;
+    _coordinateController.text = model.position ??= AppData.coordinate;
     _categorySelected = model.category ?? _categories[0];
     _citySelected = model.city ??= AppData.placemarks[0].administrativeArea;
     _districtSelected =
@@ -454,7 +454,7 @@ class _PlaceFormState extends State<PlaceForm> {
                           model.name = _nameController.text.trim();
                           model.digest = _digestController.text.trim();
                           model.category = _categorySelected.trim();
-                          model.location = _coordinateController.text.trim();
+                          model.position = _coordinateController.text.trim();
                           model.city = _citySelected.trim();
                           model.district = _districtSelected.trim();
                           model.phone = _phoneController.text.trim();
@@ -486,7 +486,7 @@ class _PlaceFormState extends State<PlaceForm> {
                               model.email.isNotEmpty &&
                               model.city.isNotEmpty &&
                               model.district.isNotEmpty &&
-                              model.location.isNotEmpty) {
+                              model.position.isNotEmpty) {
                             processing(context);
 
                             if (_cocukMenusu)
