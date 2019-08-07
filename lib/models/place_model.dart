@@ -34,7 +34,7 @@ class PlaceModel {
       this.images,
       this.isFav = false,
       this.isApproved = false,
-      this.isActive = false,
+      this.isActive = true,
       this.isDeleted = false,
       this.owner,
       this.category,

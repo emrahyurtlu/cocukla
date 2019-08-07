@@ -68,31 +68,31 @@ class _PlaceFormState extends State<PlaceForm> {
   ];
 
 //  static List<Asset> _assets;
-  static String _imageSelectedInfo = "Herhangi bir resim seçilmedi";
+  static String _imageSelectedInfo;
 
   //Properties
-  static bool _oyunAblasi = false;
-  static bool _organizasyon = false;
-  static bool _cocukMenusu = false;
-  static bool _bebekBakimOdasi = false;
-  static bool _atolye = false;
-  static bool _oyunAlani = false;
-  static bool _tuvalet = false;
-  static bool _masaSandalye = false;
-  static bool _randevu = false;
-  static bool _alkol = false;
-  static bool _yemekliToplanti = false;
+  static bool _oyunAblasi;
+  static bool _organizasyon;
+  static bool _cocukMenusu;
+  static bool _bebekBakimOdasi;
+  static bool _atolye;
+  static bool _oyunAlani;
+  static bool _tuvalet;
+  static bool _masaSandalye;
+  static bool _randevu;
+  static bool _alkol;
+  static bool _yemekliToplanti;
   FirebaseUser user;
 
-  /*******************************************/
+
   List<File> files = List<File>();
   List<String> fileUrls = List<String>();
 
-  /*******************************************/
 
   @override
   void initState() {
     consoleLog("PLACE ADD/UPDATE SCREEN");
+    _imageSelectedInfo = "Herhangi bir resim seçilmedi";
     if (widget.data != null) appBarTitle = "Güncelle";
     if (widget.data != null) insertScreen = false;
     model = widget.data != null
@@ -115,6 +115,18 @@ class _PlaceFormState extends State<PlaceForm> {
     _cities = AddressStatics.getCities();
 //    _assets = List<Asset>();
     /*****************************************************/
+    _oyunAblasi = false;
+    _organizasyon = false;
+    _cocukMenusu = false;
+    _bebekBakimOdasi = false;
+    _atolye = false;
+    _oyunAlani = false;
+    _tuvalet = false;
+    _masaSandalye = false;
+    _randevu = false;
+    _alkol = false;
+    _yemekliToplanti = false;
+
     if (model.properties != null) {
       for (var element in model.properties) {
         if (element["content"] == "Çocuk menüsü") _cocukMenusu = true;
@@ -434,6 +446,7 @@ class _PlaceFormState extends State<PlaceForm> {
                         indent: 20,
                         endIndent: 20,
                       ),
+                      //Save Button
                       ButtonComponent(
                         text: "Kaydet",
                         onPressed: () async {
@@ -580,6 +593,9 @@ class _PlaceFormState extends State<PlaceForm> {
                               _update(context, json, widget.documentID);
                             }
 
+                            files.clear();
+                            fileUrls.clear();
+
                             /**********************************************/
 
                             //Validation
@@ -605,8 +621,9 @@ class _PlaceFormState extends State<PlaceForm> {
                         },
                       ),
 
+                      //Approve Button
                       ConditionalComponent(
-                        condition: AppData.user.isAuthorized && insertScreen,
+                        condition: AppData.user.isAuthorized && insertScreen == false,
                         child: Column(
                           children: <Widget>[
                             Divider(
@@ -616,6 +633,7 @@ class _PlaceFormState extends State<PlaceForm> {
                             ButtonComponent(
                               text: approveBtnText,
                               onPressed: () {
+                                processing(context);
                                 Firestore.instance
                                     .collection(Collections.Places)
                                     .document(widget.documentID)
@@ -623,7 +641,7 @@ class _PlaceFormState extends State<PlaceForm> {
                                   "isApproved":
                                       widget.data["isApproved"] == true
                                           ? false
-                                          : true
+                                          : true,
                                 }).then((_) {
                                   print("${widget.documentID} is approved!");
                                   setState(() {
@@ -632,6 +650,8 @@ class _PlaceFormState extends State<PlaceForm> {
                                             ? "Onayı iptal et"
                                             : "Onayla";
                                   });
+                                  Navigator.pop(context);
+                                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("İçerik onaylandı."),));
                                 });
                               },
                             )

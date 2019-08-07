@@ -6,11 +6,11 @@ class SearchFormComponent extends StatefulWidget {
   final VoidCallback onPressed;
   final String labelText;
 
-  const SearchFormComponent(
+  SearchFormComponent(
       {Key key,
       @required this.controller,
       @required this.onPressed,
-      this.labelText = "Mekan arayın"})
+      this.labelText})
       : super(key: key);
 
   @override
@@ -18,6 +18,11 @@ class SearchFormComponent extends StatefulWidget {
 }
 
 class _SearchFormComponentState extends State<SearchFormComponent> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,13 +53,13 @@ class _SearchFormComponentState extends State<SearchFormComponent> {
                             borderRadius: BorderRadius.circular(50),
                             color: AppColor.light_gray,
                           ),
-                          child: TextFormField(
+                          child: TextField(
                             controller: widget.controller,
                             keyboardType: TextInputType.text,
                             decoration: new InputDecoration(
                               labelStyle: TextStyle(color: AppColor.text_color),
                               labelText: widget.labelText,
-                              //hintText: "Ara",
+                              hintText: "Birşeyler yazın",
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.only(left: 25, top: 5),
                               prefixIcon: Icon(Icons.search),

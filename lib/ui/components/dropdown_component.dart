@@ -53,7 +53,7 @@ class _DropdownComponentState extends State<DropdownComponent> {
                         style: TextStyle(color: AppColor.text_color),
                       ),
                       onChanged: widget.onChanged,
-                      isExpanded: true,
+                      //isExpanded: false,
                       items: widget.options
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(

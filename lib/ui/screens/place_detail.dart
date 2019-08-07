@@ -22,7 +22,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'comment_screen.dart';
 
 class PlaceDetail extends StatefulWidget {
-  Map<String, dynamic> data;
+  final Map<String, dynamic> data;
   final String documentID;
 
   PlaceDetail({Key key, this.documentID, this.data}) : super(key: key);
@@ -52,6 +52,7 @@ class _PlaceDetailState extends State<PlaceDetail>
     consoleLog("Fav State of Place: $isFav");
     _userService = UserService();
     setIconData(isFav);
+    super.initState();
   }
 
   @override
@@ -322,7 +323,7 @@ class _PlaceDetailState extends State<PlaceDetail>
             rating: double.parse(item["rating"].toString()),
             name: item["name"],
             content: item["content"],
-            date: item["date"]);
+            timestamp: item["date"]);
         var temp = CommentComponent(
           model: model,
         );

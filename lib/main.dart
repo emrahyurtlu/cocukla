@@ -1,3 +1,4 @@
+import 'package:cocukla/test/set_place_rating.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/ui/config/font_family.dart';
 import 'package:cocukla/ui/screens/approval.dart';
@@ -48,6 +49,8 @@ class CocuklaApp extends StatefulWidget {
 class _CocuklaAppState extends State<CocuklaApp> {
   @override
   Widget build(BuildContext context) {
+//    return SetPlaceRating();
+
     return SplashScreen(
       seconds: 2,
       navigateAfterSeconds: SignInScreen(),

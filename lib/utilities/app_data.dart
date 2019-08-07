@@ -14,4 +14,6 @@ class AppData {
   static FirebaseUser firebaseUser;
 
   static String homeSelectedCategory = "Mekanlar";
+
+  static String homeAppBarTitle = "Çocukla";
 }

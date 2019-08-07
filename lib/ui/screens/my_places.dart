@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/business/login_service.dart';
 import 'package:cocukla/datalayer/collections.dart';
+import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/ui/components/place_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
 import 'package:cocukla/ui/components/search_form.dart';
 import 'package:cocukla/ui/config/app_color.dart';
 import 'package:cocukla/ui/screens/place_form.dart';
+import 'package:cocukla/ui/screens/waiting_to_approve.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/app_text_styles.dart';
 import 'package:cocukla/utilities/route.dart';
@@ -78,7 +80,7 @@ class _PlacesState extends State<Places> {
       return ListView.builder(
           itemCount: documents.length,
           itemBuilder: (BuildContext context, int index) {
-            //test(documents[index]);
+            var obj = PlaceModel.from(data: documents[index].data, documentID: documents[index].documentID);
             return PlaceComponent(
               documentID: documents[index].documentID,
               title: documents[index]["name"],
@@ -87,12 +89,21 @@ class _PlacesState extends State<Places> {
               properties: convertProperties(documents[index]["properties"]),
               isFav: documents[index].data["isFav"],
               onTap: () {
-                redirectTo(
-                    context,
-                    PlaceForm(
-                      documentID: documents[index].documentID,
-                      data: documents[index].data,
-                    ));
+                if(obj.isApproved){
+                  redirectTo(
+                      context,
+                      PlaceForm(
+                        documentID: documents[index].documentID,
+                        data: documents[index].data,
+                      ));
+                } else {
+                  redirectTo(
+                      context,
+                      WaitingToApprove(
+                        documentID: obj.documentID,
+                        data:obj.toJson(),
+                      ));
+                }
               },
               favoriteOnPressedCallback: () async {
                 getData();

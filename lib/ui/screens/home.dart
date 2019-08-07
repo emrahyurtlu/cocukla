@@ -31,8 +31,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    consoleLog("HOME SCREEN");
-    consoleLog("ACTIVE USER IS: ${AppData.user.toString()}");
+    consoleLog("HOME SCREEN: ${AppData.user.toString()}");
     _userService = UserService();
     _firebaseMessaging.requestNotificationPermissions();
     _firebaseMessaging.getToken().then((token) {
@@ -48,6 +47,9 @@ class _HomeState extends State<Home> {
         });
       });
     }
+
+    AppData.homeAppBarTitle = _titles[0];
+    super.initState();
   }
 
   List<Widget> _tabContents = [
@@ -65,18 +67,17 @@ class _HomeState extends State<Home> {
   void onTabTapped(int index) {
     setState(() {
       _currentTab = index;
+      AppData.homeAppBarTitle = _titles[index];
     });
   }
 
   @override
   Widget build(BuildContext context) {
     redirectIfNotSignedIn(context);
-    var title =
-        _currentTab == 0 ? AppData.homeSelectedCategory : _titles[_currentTab];
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(title, style: AppStyle.AppBarTextStyle),
+          title: Text(AppData.homeAppBarTitle, style: AppStyle.AppBarTextStyle),
           backgroundColor: AppColor.white,
           centerTitle: true,
           iconTheme: IconThemeData(color: AppColor.text_color),

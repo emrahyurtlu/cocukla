@@ -37,6 +37,8 @@ Future<UserModel> signInWithGoogle() async {
       image: result.user.photoUrl,
       email: result.user.providerData[1].email,
       loginType: LoginType.Google,
+      city: AppData.placemarks?.first.administrativeArea ?? "",
+      district: AppData.placemarks?.first.subAdministrativeArea ?? "",
       insertDate: Timestamp.now(),
       updateDate: Timestamp.now());
 
@@ -62,6 +64,8 @@ Future<UserModel> signInWithFacebook() async {
           image: result.user.photoUrl + "?height=500",
           email: result.user.providerData[1].email,
           loginType: LoginType.Facebook,
+          city: AppData.placemarks.first.administrativeArea ?? "",
+          district: AppData.placemarks.first.subAdministrativeArea ?? "",
           insertDate: Timestamp.now(),
           updateDate: Timestamp.now());
       return userModel;

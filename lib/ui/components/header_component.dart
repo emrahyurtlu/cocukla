@@ -1,3 +1,4 @@
+import 'package:cocukla/ui/components/conditional_component.dart';
 import 'package:flutter/material.dart';
 
 class HeaderComponent extends StatefulWidget {
@@ -6,6 +7,7 @@ class HeaderComponent extends StatefulWidget {
   final CrossAxisAlignment crossAxisAlignment;
   final TextStyle style;
   final EdgeInsetsGeometry padding;
+  final bool showDivider;
 
   final double indent, endIndent;
 
@@ -15,7 +17,8 @@ class HeaderComponent extends StatefulWidget {
       this.style = const TextStyle(fontWeight: FontWeight.bold),
       this.padding = const EdgeInsets.all(8.0),
       this.indent = 0,
-      this.endIndent = 0});
+      this.endIndent = 0,
+      this.showDivider = true});
 
   @override
   _HeaderComponentState createState() => _HeaderComponentState();
@@ -24,7 +27,7 @@ class HeaderComponent extends StatefulWidget {
 class _HeaderComponentState extends State<HeaderComponent> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ConditionalComponent(condition: widget.showDivider, child: Column(
       mainAxisAlignment: widget.mainAxisAlignment,
       crossAxisAlignment: widget.crossAxisAlignment,
       children: <Widget>[
@@ -40,6 +43,20 @@ class _HeaderComponentState extends State<HeaderComponent> {
           endIndent: widget.endIndent,
         ),
       ],
-    );
+    ),
+    otherWise: Column(
+      mainAxisAlignment: widget.mainAxisAlignment,
+      crossAxisAlignment: widget.crossAxisAlignment,
+      children: <Widget>[
+        Padding(
+          padding: widget.padding,
+          child: Text(
+            widget.text,
+            style: widget.style,
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ],
+    ),);
   }
 }

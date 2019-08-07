@@ -4,7 +4,6 @@ import 'package:cocukla/models/place_model.dart';
 import 'package:cocukla/ui/components/conditional_component.dart';
 import 'package:cocukla/ui/components/place_component.dart';
 import 'package:cocukla/ui/components/property_component.dart';
-import 'package:cocukla/ui/components/search_form.dart';
 import 'package:cocukla/utilities/app_data.dart';
 import 'package:cocukla/utilities/console_message.dart';
 import 'package:cocukla/utilities/route.dart';
@@ -25,13 +24,12 @@ class _HomeFavoritesState extends State<HomeFavorites> {
 
   @override
   void initState() {
-    consoleLog("Initstated of user favorites is fired!");
+    consoleLog("Initiated of user favorites is fired!");
     getData().then((List<PlaceModel> result) {
       favorites = result;
     });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -89,9 +87,10 @@ class _HomeFavoritesState extends State<HomeFavorites> {
             ),
             //Product List
           ],
-        ), onRefresh: () async {
+        ),
+        onRefresh: () async {
           await getData();
-      },
+        },
       ),
     );
   }

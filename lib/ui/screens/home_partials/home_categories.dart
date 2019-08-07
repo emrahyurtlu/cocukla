@@ -1,8 +1,12 @@
 import 'package:cocukla/ui/components/category_component.dart';
 import 'package:cocukla/ui/config/app_color.dart';
+import 'package:cocukla/utilities/app_data.dart';
 import 'package:flutter/material.dart';
 
 class HomeCategories extends StatefulWidget {
+  final VoidCallback onCategoryTap;
+
+  const HomeCategories({Key key, @required this.onCategoryTap}) : super(key: key);
   @override
   _HomeCategoriesState createState() => _HomeCategoriesState();
 }
@@ -28,7 +32,10 @@ class _HomeCategoriesState extends State<HomeCategories> {
               title: "Mekanlar",
             ),
             onTap: () {
-              //setTitle("Mekanlar");
+              setState(() {
+                AppData.homeSelectedCategory = "Mekanlar";
+              });
+              widget.onCategoryTap();
             },
           ),
           GestureDetector(
@@ -37,7 +44,10 @@ class _HomeCategoriesState extends State<HomeCategories> {
               title: "Aktiviteler",
             ),
             onTap: () {
-              //setTitle("Aktiviteler");
+              setState(() {
+                AppData.homeSelectedCategory = "Aktiviteler";
+              });
+              widget.onCategoryTap();
             },
           ),
           GestureDetector(
@@ -46,7 +56,10 @@ class _HomeCategoriesState extends State<HomeCategories> {
                 title: "Sağlık",
               ),
               onTap: () {
-                //setTitle("Sağlık");
+                setState(() {
+                  AppData.homeSelectedCategory = "Sağlık";
+                });
+                widget.onCategoryTap();
               }),
           GestureDetector(
               child: Category(
@@ -54,7 +67,10 @@ class _HomeCategoriesState extends State<HomeCategories> {
                 title: "Alışveriş",
               ),
               onTap: () {
-                //setTitle("Alışveriş");
+                setState(() {
+                  AppData.homeSelectedCategory = "Alışveriş";
+                });
+                widget.onCategoryTap();
               }),
         ],
       ),

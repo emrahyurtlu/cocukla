@@ -56,7 +56,7 @@ class _ApprovalState extends State<Approval> {
           ),
           onRefresh: () async {
             print("PENDING APPROVAL PAGE IS REFRESHING.");
-            getData();
+            await getData();
           },
         ),
       ),

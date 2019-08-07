@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cocukla/business/login_service.dart';
+import 'package:cocukla/business/place_service.dart';
 import 'package:cocukla/datalayer/collections.dart';
 import 'package:cocukla/ui/components/button_component.dart';
 import 'package:cocukla/ui/components/card_component.dart';
@@ -29,10 +30,13 @@ class _CommentScreenState extends State<CommentScreen> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController commentController;
   double _rating = 1;
+  PlaceService _placeService;
 
   @override
   void initState() {
     commentController = TextEditingController();
+    _placeService = PlaceService();
+    super.initState();
   }
 
   @override
@@ -135,7 +139,7 @@ class _CommentScreenState extends State<CommentScreen> {
                       ),
                       ButtonComponent(
                         text: "Tamam",
-                        onPressed: () {
+                        onPressed: () async {
                           var comment = commentController.text.trim();
                           if (comment.isNotEmpty) {
                             processing(context);
@@ -144,14 +148,14 @@ class _CommentScreenState extends State<CommentScreen> {
                               "rating": _rating,
                               "name": AppData.user.name,
                               "owner": AppData.user.email,
-                              "isApproved": false,
+                              "isApproved": true,
                               "timestamp": Timestamp.now()
                             };
 
-                            Firestore.instance
+                            await Firestore.instance
                                 .collection(Collections.Places)
                                 .document(widget.documentID)
-                                .setData({"comments": temp}, merge: true).then(
+                                .updateData({"comments": FieldValue.arrayUnion([temp])}).then(
                                     (_) {
                               _scaffoldKey.currentState.showSnackBar(SnackBar(
                                 content: Text(
@@ -170,7 +174,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               ));
                               Navigator.of(context).pop();
                             });
-                            //.updateData({"comments": comments});
+                            await _placeService.setRating(widget.documentID);
                           } else {
                             Alert(
                                 context: context,

@@ -2,39 +2,37 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentModel {
   String documentID;
-  String image;
+  String owner;
   String name;
+  bool isApproved;
   String content;
   double rating;
-  Timestamp date;
+  Timestamp timestamp;
 
   CommentModel(
-      {this.image,
-      this.name,
-      this.content,
-      this.rating,
-      this.date,
-      this.documentID});
+      {this.name, this.owner, this.isApproved, this.rating, this.content, this.timestamp});
 
-  CommentModel.from(Map<String, dynamic> json)
-      : image = json["image"],
+
+  CommentModel.from(Map<dynamic, dynamic> json, [String documentID])
+      : documentID = documentID,
+        owner = json["owner"],
         name = json["name"],
+        isApproved = json["isApproved"],
         content = json["content"],
-        rating = double.parse(json["rating"]),
-        date = json["date"],
-        documentID = json["documentID"];
+        rating = double.parse(json["rating"].toString()),
+        timestamp = json["timestamp"];
 
-  Map<String, dynamic> toJson() => {
-        "image": image,
+  Map<String, dynamic> toJson() =>
+      {
         "name": name,
         "content": content,
         "rating": rating,
-        "date": date,
+        "date": timestamp,
         "documentID": documentID,
       };
 
   @override
   String toString() {
-    return 'CommentModel{documentID: $documentID, image: $image, name: $name, content: $content, rating: $rating, date: $date}';
+    return 'CommentModel{documentID: $documentID, name: $name, content: $content, rating: $rating, date: $timestamp}';
   }
 }
